@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client
+package pl.grzybdev.openmic.client.activities.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.FragmentFirstBinding
 
 /**

@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client
+package pl.grzybdev.openmic.client.activities
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
