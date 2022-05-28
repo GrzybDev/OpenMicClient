@@ -1,22 +1,53 @@
 package pl.grzybdev.openmic.client.network
 
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonContentPolymorphicSerializer
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonObject
+import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.BuildConfig
-import pl.grzybdev.openmic.client.network.messages.client.Message
+import pl.grzybdev.openmic.client.network.messages.client.ClientMessage
 import pl.grzybdev.openmic.client.network.messages.client.packets.ClientPacket
-import pl.grzybdev.openmic.client.network.messages.client.packets.SystemHello
+import pl.grzybdev.openmic.client.network.messages.server.ServerMessage
+import pl.grzybdev.openmic.client.network.messages.server.packets.BasePacket
+import pl.grzybdev.openmic.client.network.messages.server.packets.ErrorPacket
+import pl.grzybdev.openmic.client.network.messages.server.packets.ServerPacket
+import pl.grzybdev.openmic.client.network.messages.server.packets.SystemPacket
+import pl.grzybdev.openmic.client.network.messages.client.packets.SystemHello as cSystemHello
 
 
-class Command {
+class Handler {
 
     companion object {
-        fun Get(type: Message) : String {
-            val messageContent: ClientPacket = when (type) {
-                Message.SYSTEM_HELLO -> SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)
+
+        object PacketSerializer : JsonContentPolymorphicSerializer<ServerPacket>(ServerPacket::class) {
+            override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out ServerPacket> {
+                if (element.jsonObject.containsKey("type")) {
+                    return if (element.jsonObject.containsKey("error"))
+                        ErrorPacket.serializer()
+                    else
+                        BasePacket.serializer()
+                }
+
+                throw Exception("Invalid packet: Key 'type' not found")
+            }
+        }
+
+        fun GetPacket(type: ClientMessage) : String {
+            val clientMessageContent: ClientPacket = when (type) {
+                ClientMessage.SYSTEM_HELLO -> cSystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)
             }
 
-            return Json.encodeToString(messageContent)
+            return Json.encodeToString(clientMessageContent)
+        }
+
+        fun HandlePacket(webSocket: WebSocket, type: ServerMessage, data: String) {
+            when (type) {
+                ServerMessage.SYSTEM_HELLO -> SystemPacket.handle(type, data, webSocket)
+                else -> {}
+            }
         }
     }
 }
