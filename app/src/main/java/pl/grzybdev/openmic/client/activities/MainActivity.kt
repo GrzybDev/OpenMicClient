@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
 
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
+    private val openmic: OpenMic = OpenMic(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
