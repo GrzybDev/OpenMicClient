@@ -4,6 +4,7 @@ import android.util.Log
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import pl.grzybdev.openmic.client.network.messages.client.Message
 
 class Client : WebSocketListener() {
 
@@ -12,7 +13,7 @@ class Client : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         isListening = true
 
-        Log.d(javaClass.name, "onMessage")
+        webSocket.send(Command.Get(Message.SYSTEM_HELLO))
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
