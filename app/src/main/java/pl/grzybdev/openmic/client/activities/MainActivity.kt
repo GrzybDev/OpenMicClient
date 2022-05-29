@@ -1,6 +1,9 @@
 package pl.grzybdev.openmic.client.activities
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -19,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val openmic: OpenMic = OpenMic(this)
+    private lateinit var appPreferences: SharedPreferences
+    private lateinit var openmic: OpenMic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -39,6 +43,9 @@ class MainActivity : AppCompatActivity() {
                     .setAnchorView(R.id.fab)
                     .setAction("Action", null).show()
         }
+
+        appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
+        openmic = OpenMic(appPreferences, applicationContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

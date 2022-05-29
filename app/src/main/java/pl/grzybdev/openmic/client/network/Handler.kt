@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import okhttp3.WebSocket
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.network.messages.client.ClientMessage
 import pl.grzybdev.openmic.client.network.messages.client.packets.ClientPacket
@@ -15,7 +16,7 @@ import pl.grzybdev.openmic.client.network.messages.server.packets.BasePacket
 import pl.grzybdev.openmic.client.network.messages.server.packets.ErrorPacket
 import pl.grzybdev.openmic.client.network.messages.server.packets.ServerPacket
 import pl.grzybdev.openmic.client.network.messages.server.packets.SystemPacket
-import pl.grzybdev.openmic.client.network.messages.client.packets.SystemHello as cSystemHello
+import pl.grzybdev.openmic.client.network.messages.client.packets.SystemHello
 
 
 class Handler {
@@ -37,7 +38,7 @@ class Handler {
 
         fun GetPacket(type: ClientMessage) : String {
             val clientMessageContent: ClientPacket = when (type) {
-                ClientMessage.SYSTEM_HELLO -> cSystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME)
+                ClientMessage.SYSTEM_HELLO -> SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, AppData.deviceID)
             }
 
             return Json.encodeToString(clientMessageContent)

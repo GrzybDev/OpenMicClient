@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 @SerialName("System_Hello")
 class SystemHello(
     val clientApp: String,
-    val clientVersion: String
+    val clientVersion: String,
+    val clientID: String
 ) : ClientPacket()

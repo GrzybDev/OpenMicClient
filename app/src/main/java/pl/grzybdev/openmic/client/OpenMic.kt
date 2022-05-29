@@ -1,18 +1,41 @@
 package pl.grzybdev.openmic.client
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Resources
+import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
-import pl.grzybdev.openmic.client.activities.MainActivity
 import pl.grzybdev.openmic.client.network.Client
+import java.util.*
 import java.util.concurrent.TimeUnit
 
-class OpenMic(private val parent: MainActivity) {
+class OpenMic(preferences: SharedPreferences, context: Context) {
 
     private val client: Client = Client()
     private lateinit var webSocket: WebSocket
 
+    private val deviceID: String
+
     init {
+        val deviceIDKey = context.getString(R.string.PREFERENCE_APP_DEVICE_ID)
+
+        if (!preferences.contains(deviceIDKey)) {
+            val newID = UUID.randomUUID()
+            Log.d(javaClass.name, "Device ID was not set, generated new one: $newID")
+
+            with (preferences.edit()) {
+                putString(deviceIDKey, newID.toString())
+                apply()
+            }
+        }
+
+        deviceID = preferences.getString(deviceIDKey, "").toString()
+        Log.d(javaClass.name, "Device ID: $deviceID")
+
+        AppData.deviceID = deviceID
+
         RestartClient();
     }
 
@@ -21,7 +44,8 @@ class OpenMic(private val parent: MainActivity) {
             webSocket.close(1001, null)
 
         val httpClient = OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .pingInterval(20, TimeUnit.SECONDS)
             .build()
 
         val webRequest = Request.Builder()

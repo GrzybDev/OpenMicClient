@@ -12,7 +12,8 @@ data class SystemHello(override val type: String,
                        val serverApp: String,
                        val serverVersion: String,
                        val serverOS: String,
-                       val serverName: String): ServerPacket()
+                       val serverName: String,
+                       val serverID: String): ServerPacket()
 
 class SystemPacket {
     companion object {
@@ -26,7 +27,7 @@ class SystemPacket {
         private fun handleHello(data: String, socket: WebSocket) {
             val packet: SystemHello = Json.decodeFromString(data)
 
-            Log.d(javaClass.name, "Connected to: " + packet.serverName)
+            Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
 
         }
     }
