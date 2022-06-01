@@ -13,7 +13,8 @@ data class SystemHello(override val type: String,
                        val serverVersion: String,
                        val serverOS: String,
                        val serverName: String,
-                       val serverID: String): ServerPacket()
+                       val serverID: String,
+                       val needAuth: Boolean): ServerPacket()
 
 class SystemPacket {
     companion object {
