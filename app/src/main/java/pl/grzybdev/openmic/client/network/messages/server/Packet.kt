@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client.network.messages.server.packets
+package pl.grzybdev.openmic.client.network.messages.server
 
 import kotlinx.serialization.Serializable
 

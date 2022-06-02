@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client.network.messages.client.packets
+package pl.grzybdev.openmic.client.network.messages.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -9,4 +9,10 @@ class SystemHello(
     val clientApp: String,
     val clientVersion: String,
     val clientID: String
-) : ClientPacket()
+    ) : ClientPacket()
+
+@Serializable
+@SerialName("System_Goodbye")
+class SystemGoodbye(
+    val exitCode: Int,
+    ) : ClientPacket()

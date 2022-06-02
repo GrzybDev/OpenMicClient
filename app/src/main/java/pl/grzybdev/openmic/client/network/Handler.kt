@@ -1,22 +1,15 @@
 package pl.grzybdev.openmic.client.network
 
 import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import okhttp3.WebSocket
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.BuildConfig
-import pl.grzybdev.openmic.client.network.messages.client.ClientMessage
-import pl.grzybdev.openmic.client.network.messages.client.packets.ClientPacket
-import pl.grzybdev.openmic.client.network.messages.server.ServerMessage
-import pl.grzybdev.openmic.client.network.messages.server.packets.BasePacket
-import pl.grzybdev.openmic.client.network.messages.server.packets.ErrorPacket
-import pl.grzybdev.openmic.client.network.messages.server.packets.ServerPacket
-import pl.grzybdev.openmic.client.network.messages.server.packets.SystemPacket
-import pl.grzybdev.openmic.client.network.messages.client.packets.SystemHello
+import pl.grzybdev.openmic.client.network.messages.Message
+import pl.grzybdev.openmic.client.network.messages.server.BasePacket
+import pl.grzybdev.openmic.client.network.messages.server.ErrorPacket
+import pl.grzybdev.openmic.client.network.messages.server.ServerPacket
+import pl.grzybdev.openmic.client.network.messages.server.SystemPacket
 
 
 class Handler {
@@ -36,18 +29,10 @@ class Handler {
             }
         }
 
-        fun GetPacket(type: ClientMessage) : String {
-            val clientMessageContent: ClientPacket = when (type) {
-                ClientMessage.SYSTEM_HELLO -> SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, AppData.deviceID)
-            }
-
-            return Json.encodeToString(clientMessageContent)
-        }
-
-        fun HandlePacket(webSocket: WebSocket, type: ServerMessage, data: String) {
+        fun handlePacket(webSocket: WebSocket, type: Message, data: String) {
             when (type) {
-                ServerMessage.SYSTEM_HELLO -> SystemPacket.handle(type, data, webSocket)
-                else -> {}
+                Message.SYSTEM_HELLO -> SystemPacket.handle(type, data, webSocket)
+                Message.SYSTEM_GOODBYE -> SystemPacket.handle(type, data, webSocket)
             }
         }
     }

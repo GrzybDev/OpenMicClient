@@ -44,7 +44,13 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
 
+    <!-- Auth Dialog -->
+    <string name="AuthDialog_Title">Please enter code you see on your computer screen</string>
+    <string name="AuthDialog_Button_OK">Verify</string>
+    <string name="AuthDialog_Button_Cancel">Cancel</string>
+
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>
+    <string name="PREFERENCE_APP_KNOWN_DEVICES" translatable="false">KnownDevices</string>
 </resources>
