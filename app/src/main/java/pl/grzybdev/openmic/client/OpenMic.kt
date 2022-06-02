@@ -1,8 +1,6 @@
 package pl.grzybdev.openmic.client
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.res.Resources
 import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,7 +9,7 @@ import pl.grzybdev.openmic.client.network.Client
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class OpenMic(preferences: SharedPreferences, context: Context) {
+class OpenMic(context: Context) {
 
     private val client: Client = Client()
     private lateinit var webSocket: WebSocket
@@ -21,17 +19,17 @@ class OpenMic(preferences: SharedPreferences, context: Context) {
     init {
         val deviceIDKey = context.getString(R.string.PREFERENCE_APP_DEVICE_ID)
 
-        if (!preferences.contains(deviceIDKey)) {
+        if (!AppData.appPreferences?.contains(deviceIDKey)!!) {
             val newID = UUID.randomUUID()
             Log.d(javaClass.name, "Device ID was not set, generated new one: $newID")
 
-            with (preferences.edit()) {
+            with (AppData.appPreferences!!.edit()) {
                 putString(deviceIDKey, newID.toString())
                 apply()
             }
         }
 
-        deviceID = preferences.getString(deviceIDKey, "").toString()
+        deviceID = AppData.appPreferences!!.getString(deviceIDKey, "").toString()
         Log.d(javaClass.name, "Device ID: $deviceID")
 
         AppData.deviceID = deviceID

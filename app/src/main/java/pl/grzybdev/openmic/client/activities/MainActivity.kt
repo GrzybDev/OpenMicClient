@@ -13,6 +13,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
@@ -22,7 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private lateinit var appPreferences: SharedPreferences
     private lateinit var openmic: OpenMic
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +44,10 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
-        appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
-        openmic = OpenMic(appPreferences, applicationContext)
+        AppData.appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
+        AppData.mainActivity = this
+
+        openmic = OpenMic(applicationContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
