@@ -105,7 +105,8 @@ class SystemPacket {
                         }
                     }
 
-                    builder.show()
+                    AppData.currentDialog = builder.create()
+                    AppData.currentDialog?.show()
                 }
             }
         }
@@ -114,6 +115,9 @@ class SystemPacket {
             val packet: SystemGoodbye = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Server says goodbye, exit code ${packet.exitCode}")
+
+            if (AppData.currentDialog?.isShowing == true)
+                AppData.currentDialog?.dismiss()
 
             // TODO: Properly handle disconnect
             socket.close(1000, "Normal disconnect")
