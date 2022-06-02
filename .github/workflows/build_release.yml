@@ -27,7 +27,7 @@ jobs:
         ./gradlew assembleRelease
         ./gradlew bundleRelease
         mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release.apk
-    
+
     - uses: r0adkll/sign-android-release@v1
       name: Sign app APK
       id: sign_apk
@@ -37,7 +37,7 @@ jobs:
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
-    
+
     - uses: r0adkll/sign-android-release@v1
       name: Sign app bundle
       id: sign_bundle
@@ -47,13 +47,13 @@ jobs:
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
-    
+
     - name: Upload a Build Artifact (APK)
       uses: actions/upload-artifact@v3.0.0
       with:
         name: signedAPK
         path: ${{steps.sign_apk.outputs.signedReleaseFile}}
-    
+
     - name: Upload a Build Artifact (Bundle)
       uses: actions/upload-artifact@v3.0.0
       with:
