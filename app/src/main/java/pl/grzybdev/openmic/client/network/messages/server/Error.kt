@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ErrorPacket(override val type: String,
-                       val error: String,
+                       val error: Int,
                        val message: String): ServerPacket()
