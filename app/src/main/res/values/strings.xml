@@ -49,6 +49,9 @@
     <string name="AuthDialog_Button_OK">Verify</string>
     <string name="AuthDialog_Button_Cancel">Cancel</string>
 
+    <!-- Error Dialog -->
+    <string name="ErrorDialog_Title">Server returned error!</string>
+
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>

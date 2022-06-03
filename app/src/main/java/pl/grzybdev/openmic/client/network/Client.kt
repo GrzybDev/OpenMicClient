@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client.network
 
+import android.app.AlertDialog
 import android.util.Log
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -8,10 +9,12 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.network.messages.Message
 import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
 import pl.grzybdev.openmic.client.network.messages.client.SystemHello
 import pl.grzybdev.openmic.client.network.messages.server.BasePacket
+import pl.grzybdev.openmic.client.network.messages.server.ErrorPacket
 import pl.grzybdev.openmic.client.network.messages.server.ServerPacket
 
 class Client : WebSocketListener() {
@@ -39,8 +42,15 @@ class Client : WebSocketListener() {
                 webSocket.close(1003, "Unknown message type")
             }
         } else {
-            Log.e(javaClass.name, "Received error packet, disconnecting...")
-            webSocket.close(1006, "Received error packet")
+            Log.e(javaClass.name, "Received error packet, showing dialog...")
+            val error = pBase as ErrorPacket
+
+            AppData.mainActivity?.runOnUiThread {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(AppData.mainActivity)
+                builder.setTitle(AppData.mainActivity?.getString(R.string.ErrorDialog_Title))
+                builder.setMessage(error.message)
+                builder.show()
+            }
         }
     }
 
