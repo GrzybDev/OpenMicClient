@@ -2,6 +2,7 @@ package pl.grzybdev.openmic.client.network
 
 import android.app.AlertDialog
 import android.util.Log
+import com.gazman.signals.Signals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.Response
@@ -9,7 +10,10 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.interfaces.IError
+import pl.grzybdev.openmic.client.network.messages.ErrorCode
 import pl.grzybdev.openmic.client.network.messages.Message
 import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
 import pl.grzybdev.openmic.client.network.messages.client.SystemHello
@@ -43,12 +47,23 @@ class Client : WebSocketListener() {
             }
         } else {
             Log.e(javaClass.name, "Received error packet, showing dialog...")
-            val error = pBase as ErrorPacket
+            val packet = pBase as ErrorPacket
+            val errorSignal = Signals.signal(IError::class)
+            val errorType: ErrorCode? = ErrorCode.values().find { it.code == packet.error }
 
-            AppData.mainActivity?.runOnUiThread {
-                val builder: AlertDialog.Builder = AlertDialog.Builder(AppData.mainActivity)
-                builder.setTitle(AppData.mainActivity?.getString(R.string.ErrorDialog_Title))
-                builder.setMessage(error.message)
+            if (errorType == null) {
+                Log.e(javaClass.name, "Unknown error code! (${packet.error}), disconnecting...")
+                webSocket.close(1003, "Unknown error code")
+                return
+            }
+
+            errorSignal.dispatcher.onErrorMessage(errorType)
+
+            OpenMic.App.mainActivity?.runOnUiThread {
+                val builder: AlertDialog.Builder = AlertDialog.Builder(OpenMic.App.mainActivity)
+                builder.setTitle(OpenMic.App.mainActivity?.getString(R.string.ErrorDialog_Title))
+                builder.setMessage(packet.message)
+                builder.setPositiveButton(OpenMic.App.mainActivity?.getString(R.string.ErrorDialog_Button_OK)) { _, _ -> Log.d(javaClass.name, "User closed error dialog") }
                 builder.show()
             }
         }
