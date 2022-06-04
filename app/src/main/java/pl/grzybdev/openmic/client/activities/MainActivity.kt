@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
-        AppData.appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
-        AppData.mainActivity = this
+        OpenMic.App.appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
+        OpenMic.App.mainActivity = this
 
         openmic = OpenMic(applicationContext)
     }
