@@ -6,9 +6,6 @@ import pl.grzybdev.openmic.client.activities.MainActivity
 
 object AppData {
 
-
-    var currentDialog: AlertDialog? = null
-
     var deviceID: String = ""
 
 }
