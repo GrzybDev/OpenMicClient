@@ -37,6 +37,9 @@ class OpenMic(context: Context) {
 
         AppData.deviceID = deviceID
 
+        // Init dialogs
+        AuthDialog()
+
         RestartClient();
     }
 
