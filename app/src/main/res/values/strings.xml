@@ -51,9 +51,12 @@
 
     <!-- Error Dialog -->
     <string name="ErrorDialog_Title">Server returned error!</string>
+    <string name="ErrorDialog_Button_OK">OK</string>
 
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>
     <string name="PREFERENCE_APP_KNOWN_DEVICES" translatable="false">KnownDevices</string>
+
+    <string name="SERVER_APP_NAME">OpenMic Server</string>
 </resources>
