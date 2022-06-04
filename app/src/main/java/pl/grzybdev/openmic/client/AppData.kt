@@ -6,8 +6,6 @@ import pl.grzybdev.openmic.client.activities.MainActivity
 
 object AppData {
 
-    var appPreferences: SharedPreferences? = null
-    var mainActivity: MainActivity? = null
 
     var currentDialog: AlertDialog? = null
 
