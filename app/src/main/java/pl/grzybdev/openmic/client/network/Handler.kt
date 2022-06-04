@@ -6,10 +6,7 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.network.messages.Message
-import pl.grzybdev.openmic.client.network.messages.server.BasePacket
-import pl.grzybdev.openmic.client.network.messages.server.ErrorPacket
-import pl.grzybdev.openmic.client.network.messages.server.ServerPacket
-import pl.grzybdev.openmic.client.network.messages.server.SystemPacket
+import pl.grzybdev.openmic.client.network.messages.server.*
 
 
 class Handler {
@@ -31,8 +28,8 @@ class Handler {
 
         fun handlePacket(webSocket: WebSocket, type: Message, data: String) {
             when (type) {
-                Message.SYSTEM_HELLO -> SystemPacket.handle(type, data, webSocket)
-                Message.SYSTEM_GOODBYE -> SystemPacket.handle(type, data, webSocket)
+                Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE -> SystemPacket.handle(type, data, webSocket)
+                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(type, data, webSocket)
             }
         }
     }
