@@ -1,11 +1,13 @@
 package pl.grzybdev.openmic.client
 
-import android.app.AlertDialog
-import android.content.SharedPreferences
-import pl.grzybdev.openmic.client.activities.MainActivity
+import pl.grzybdev.openmic.client.enumerators.ServerOS
 
 object AppData {
 
     var deviceID: String = ""
 
+    // Server data
+    var serverName: String = ""
+    var serverID: String = ""
+    var serverOS: ServerOS = ServerOS.OTHER
 }
