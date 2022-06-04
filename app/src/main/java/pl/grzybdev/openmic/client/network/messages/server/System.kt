@@ -1,24 +1,18 @@
 package pl.grzybdev.openmic.client.network.messages.server
 
-import android. app.AlertDialog
-import android.text.Editable
-import android.text.InputType
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.EditText
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.AppData
+import pl.grzybdev.openmic.client.BuildConfig
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.network.messages.ExitCode
+import pl.grzybdev.openmic.client.dialogs.AuthDialog
+import pl.grzybdev.openmic.client.dialogs.DialogShared
+import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.network.messages.Message
-import pl.grzybdev.openmic.client.network.messages.client.AuthCodeVerify
-import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
-import pl.grzybdev.openmic.client.network.messages.client.SystemGoodbye as ClientSystemGoodbye
 
 @Serializable
 data class SystemHello(
@@ -43,6 +37,7 @@ class SystemPacket {
             when (type) {
                 Message.SYSTEM_HELLO -> handleHello(data, socket)
                 Message.SYSTEM_GOODBYE -> handleGoodbye(data, socket)
+                else -> {}
             }
         }
 
@@ -50,6 +45,23 @@ class SystemPacket {
             val packet: SystemHello = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
+
+            if (packet.serverApp == OpenMic.App.mainActivity?.getString(R.string.SERVER_APP_NAME)) {
+                // It's official app, check if versions match
+
+                if (packet.serverVersion != BuildConfig.VERSION_NAME) {
+                    Log.d(SystemPacket::class.java.name, "Version mismatch, not initializing...")
+
+                    // Server should respond with error so client can show error message.
+                    // Skip initialization, or wait till we get valid Hello packet
+                    // It's the server who should drop connection
+                    return
+                }
+            }
+
+            AppData.serverName = packet.serverName
+            AppData.serverID = packet.serverID
+            AppData.serverOS = ServerOS.values().find { it.kernelType == packet.serverOS }!!
 
             if (!packet.needAuth) {
                 // Server recognizes us, make sure that we recognize server too
@@ -59,10 +71,10 @@ class SystemPacket {
                 )
 
                 val knownDevicesKey: String =
-                    AppData.mainActivity?.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES) ?: ""
+                    OpenMic.App.mainActivity?.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES) ?: ""
 
                 val knownDevices: Set<String> =
-                    AppData.appPreferences?.getStringSet(knownDevicesKey, null) as Set<String>
+                    OpenMic.App.appPreferences?.getStringSet(knownDevicesKey, mutableSetOf()) as Set<String>
 
                 if (knownDevices.contains(packet.serverID)) {
                     // We recognize the server!
@@ -86,8 +98,8 @@ class SystemPacket {
 
             Log.d(SystemPacket::class.java.name, "Server says goodbye, exit code ${packet.exitCode}")
 
-            if (AppData.currentDialog?.isShowing == true)
-                AppData.currentDialog?.dismiss()
+            if (DialogShared.current?.isShowing == true)
+                DialogShared.current?.dismiss()
 
             // TODO: Properly handle disconnect
             socket.close(1000, "Normal disconnect")
