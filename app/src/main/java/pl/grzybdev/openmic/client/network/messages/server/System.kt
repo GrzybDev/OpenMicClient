@@ -12,6 +12,7 @@ import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
 import pl.grzybdev.openmic.client.enumerators.ServerOS
+import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
 
 @Serializable
@@ -78,8 +79,8 @@ class SystemPacket {
 
                 if (knownDevices.contains(packet.serverID)) {
                     // We recognize the server!
-                    // TODO: Setup audio and start transmitting
                     Log.d(SystemPacket::class.java.name, "Server is in known devices list!")
+                    Audio.initAudio(socket)
                 } else {
                     // We don't recognize the server
                     Log.d(
