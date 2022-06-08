@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Klient OpenMic</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="main_ready">Gotowy do akcji! 😎</string>
+    <string name="main_readyExplanation">Aplikacja szuka teraz serwerów 🖥\n\nTelefon połączy się z twoim komputerem z uruchomionym Serwerem OpenMic przez:</string>
+    <string name="type_USB">Przewodowo (USB)</string>
+    <string name="type_WiFi">Bezprzewodowo (Wi-Fi)</string>
+    <string name="type_BT">Bezprzewodowo (Bluetooth)</string>
+    <string name="AuthDialog_Title">Wprowadź kod który widzisz na ekranie swojego komputera</string>
+    <string name="AuthDialog_Button_OK">Weryfikuj</string>
+    <string name="AuthDialog_Button_Cancel">Anuluj</string>
+    <string name="ErrorDialog_Title">Serwer zwrócił błąd!</string>
+    <string name="ErrorDialog_Button_OK">OK</string>
+    <string name="main_footerText">Wskazówka: Kliknij dowolną ikonę statusu aby zobaczyć więcej informacji</string>
+    <string name="main_readyDesc">OpenMic szuka teraz serwerów…</string>
+</resources>
