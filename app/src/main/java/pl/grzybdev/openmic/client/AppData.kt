@@ -1,10 +1,14 @@
 package pl.grzybdev.openmic.client
 
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ServerOS
 
 object AppData {
 
     var deviceID: String = ""
+
+    var connectLock: Boolean = false
+    var currentConn: Connector? = null
 
     // Server data
     var serverName: String = ""
