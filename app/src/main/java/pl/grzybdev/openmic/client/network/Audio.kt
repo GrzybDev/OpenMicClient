@@ -3,8 +3,12 @@ package pl.grzybdev.openmic.client.network
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import com.gazman.signals.Signals
 import okhttp3.WebSocket
 import okio.ByteString.Companion.toByteString
+import pl.grzybdev.openmic.client.AppData
+import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.interfaces.IConnector
 import kotlin.concurrent.thread
 
 
@@ -23,6 +27,10 @@ class Audio {
 
         fun initAudio(socket: WebSocket) {
             Data.socket = socket
+
+            val signal = Signals.signal(IConnector::class)
+            AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTED) }
+
             audioLoop()
         }
 
