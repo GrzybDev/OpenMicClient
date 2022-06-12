@@ -6,7 +6,10 @@
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
     <string name="main_readyExplanation">App is now looking for servers 🖥\n\nPhone will connect automatically to your computer with OpenMic Server launched over:</string>
-    <string name="main_footerText">Pro-tip: Tap on any of the status icon to show more information</string>
+    <string name="main_footerText">Pro-tip: Long-press on any of the status icon to show more information</string>
+    <string name="main_usbRetry">Retry</string>
+    <string name="main_wifiSelect">Select server</string>
+    <string name="main_btConnect">Connect</string>
 
     <string name="type_USB">Wired (USB)</string>
     <string name="type_WiFi">Wireless (Wi-Fi)</string>
@@ -21,9 +24,21 @@
     <string name="ErrorDialog_Title">Server returned error!</string>
     <string name="ErrorDialog_Button_OK">OK</string>
 
+    <!-- WebSocket Close Messages -->
+    <string name="WebSocket_Restart">OpenMic Client is restarting</string>
+
+    <!-- Status Messages -->
+    <string name="Status_USB_InitFailed">Failed to initialize! In order to use this method, You need to restart OpenMic Client.</string>
+    <string name="Status_USB_Disabled">Phone is not connected to USB device! Connect phone to PC via USB cable to enable USB support.</string>
+    <string name="Status_USB_Connecting">Connecting to OpenMic Server via USB…</string>
+    <string name="Status_USB_Need_Launch">Connected to USB device, but we failed to find OpenMic Server instance.</string>
+    <string name="Status_USB_Connected">Connected to OpenMic Server via USB!</string>
+
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>
     <string name="PREFERENCE_APP_KNOWN_DEVICES" translatable="false">KnownDevices</string>
+    <string name="PREFERENCE_APP_PORT" translatable="false">Port</string>
+    <string name="PREFERENCE_APP_USB_ENABLE" translatable="false">EnableUSB</string>
     <string name="SERVER_APP_NAME" translatable="false">OpenMic Server</string>
 </resources>
