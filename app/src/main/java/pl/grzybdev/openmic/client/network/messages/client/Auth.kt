@@ -8,3 +8,7 @@ import kotlinx.serialization.Serializable
 class AuthCodeVerify(
     val authCode: Int
 ) : ClientPacket()
+
+@Serializable
+@SerialName("Auth_ClientSide")
+class AuthClientSide() : ClientPacket()
