@@ -1,8 +1,10 @@
 package pl.grzybdev.openmic.client.network.messages.server
 
 import android.util.Log
+import com.gazman.signals.Signals
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.AppData
@@ -11,9 +13,13 @@ import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
+import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.enumerators.ServerOS
+import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
+import pl.grzybdev.openmic.client.network.messages.client.AuthClientSide
+import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
 
 @Serializable
 data class SystemHello(
@@ -79,7 +85,7 @@ class SystemPacket {
 
                 if (knownDevices.contains(packet.serverID)) {
                     // We recognize the server!
-                    Log.d(SystemPacket::class.java.name, "Server is in known devices list!")
+                    Log.d(SystemPacket::class.java.name, "Server is in known devices list! Starting audio stream...")
                     Audio.initAudio(socket)
                 } else {
                     // We don't recognize the server
@@ -87,6 +93,14 @@ class SystemPacket {
                         SystemPacket::class.java.name,
                         "Server is not in known devices list! Sending auth request..."
                     )
+
+                    val signal = Signals.signal(IConnector::class)
+                    AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTING) }
+
+                    val response: ClientPacket = AuthClientSide()
+                    socket.send(Json.encodeToString(response))
+
+                    AuthDialog.show(socket)
                 }
             } else {
                 Log.d(SystemPacket::class.java.name, "Server need auth, showing auth popup...")
