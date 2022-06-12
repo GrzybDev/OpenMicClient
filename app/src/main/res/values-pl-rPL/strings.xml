@@ -12,6 +12,15 @@
     <string name="AuthDialog_Button_Cancel">Anuluj</string>
     <string name="ErrorDialog_Title">Serwer zwrócił błąd!</string>
     <string name="ErrorDialog_Button_OK">OK</string>
-    <string name="main_footerText">Wskazówka: Kliknij dowolną ikonę statusu aby zobaczyć więcej informacji</string>
+    <string name="main_footerText">Wskazówka: Kliknij i przytrzymaj dowolną ikonę statusu aby zobaczyć więcej informacji</string>
     <string name="main_readyDesc">OpenMic szuka teraz serwerów…</string>
+    <string name="WebSocket_Restart">Klient OpenMic się restartuje</string>
+    <string name="Status_USB_Disabled">Telefon nie jest połączony z urządzeniem USB! Połącz telefon z komputerem przez kabel USB.</string>
+    <string name="main_wifiSelect">Wybierz serwer</string>
+    <string name="main_usbRetry">Ponów</string>
+    <string name="main_btConnect">Połącz</string>
+    <string name="Status_USB_Connecting">Łączenie z Serwerem OpenMic za pomocą USB…</string>
+    <string name="Status_USB_Need_Launch">Połączono z urządzeniem USB, ale nie udało się znaleźć instancji Serwera OpenMic.</string>
+    <string name="Status_USB_Connected">Połączono z Serwerem OpenMic przez USB!</string>
+    <string name="Status_USB_InitFailed">Nie udana inicjalizacja! Aby użyć tej metody wymagany jest restart Klienta OpenMic.</string>
 </resources>
