@@ -5,6 +5,7 @@ import pl.grzybdev.openmic.client.enumerators.ServerOS
 
 object AppData {
 
+    var communicationPort = 10000
     var deviceID: String = ""
 
     var connectLock: Boolean = false

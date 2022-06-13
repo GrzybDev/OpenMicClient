@@ -4,7 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.util.Base64
 import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
 import com.gazman.signals.Signals
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -16,8 +21,12 @@ import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Client
 import pl.grzybdev.openmic.client.receivers.USBReceiver
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.concurrent.thread
 
 
 class OpenMic(context: Context) {
@@ -26,6 +35,7 @@ class OpenMic(context: Context) {
     private lateinit var webSocket: WebSocket
 
     private val connectSignal = Signals.signal(IConnector::class)
+    private var broadcastThread: Thread? = null
 
     private val deviceID: String
 
@@ -62,6 +72,41 @@ class OpenMic(context: Context) {
         if (this::webSocket.isInitialized && client.isConnected)
             webSocket.close(1012, App.mainActivity?.getString(R.string.WebSocket_Restart))
 
+        AppData.communicationPort = App.appPreferences?.getInt(
+            App.mainActivity?.getString(R.string.PREFERENCE_APP_PORT),
+            10000
+        )!!
+
+        initUSB()
+        initWiFi()
+    }
+
+    private fun connectTo(connector: Connector, address: String)
+    {
+        if (AppData.connectLock) {
+            return
+        }
+
+        AppData.connectLock = true
+        Log.d(javaClass.name, "Trying to connect to $address...")
+
+        client = Client(connector)
+
+        val httpClient = OkHttpClient.Builder()
+            .readTimeout(20, TimeUnit.SECONDS)
+            .pingInterval(20, TimeUnit.SECONDS)
+            .build()
+
+        val webRequest = Request.Builder()
+            .url("ws://$address:${AppData.communicationPort}")
+            .build()
+
+        webSocket = httpClient.newWebSocket(webRequest, client)
+        httpClient.dispatcher.executorService.shutdown()
+    }
+
+    private fun initUSB()
+    {
         connectSignal.addListener { connector, event -> run {
             if (connector == Connector.USB) {
                 when (event) {
@@ -82,32 +127,48 @@ class OpenMic(context: Context) {
         App.mainActivity?.registerReceiver(USBReceiver(), IntentFilter(Intent.ACTION_BATTERY_CHANGED))
     }
 
-    private fun connectTo(connector: Connector, address: String)
+    private fun initWiFi()
     {
-        if (AppData.connectLock) {
-            return
+        connectSignal.dispatcher.onEvent(Connector.WiFi, if (checkWifiOnAndConnected()) ConnectorEvent.CONNECTED else ConnectorEvent.DISABLED)
+        broadcastThread?.interrupt()
+
+        val socket = DatagramSocket(AppData.communicationPort, InetAddress.getByName("0.0.0.0"))
+        socket.broadcast = true
+
+        val buf = ByteArray(1024)
+        val packet = DatagramPacket(buf, buf.size)
+
+        broadcastThread = thread(start = true) {
+            while (!Thread.interrupted()) {
+                Log.d(javaClass.name, "Waiting for broadcast on port ${AppData.communicationPort}...")
+                socket.receive(packet)
+                handleBroadcast(packet.data)
+            }
+        }
+    }
+
+    private fun checkWifiOnAndConnected(): Boolean {
+        var result = false
+        val connectivityManager = App.mainActivity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+            result = actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+        } else {
+            connectivityManager.run {
+                connectivityManager.activeNetworkInfo?.run {
+                    result = type == ConnectivityManager.TYPE_WIFI
+                }
+            }
         }
 
-        AppData.connectLock = true
-        Log.d(javaClass.name, "Trying to connect to $address...")
+        return result
+    }
 
-        client = Client(connector)
-
-        val httpClient = OkHttpClient.Builder()
-            .readTimeout(20, TimeUnit.SECONDS)
-            .pingInterval(20, TimeUnit.SECONDS)
-            .build()
-
-        val port = App.appPreferences?.getInt(
-            App.mainActivity?.getString(R.string.PREFERENCE_APP_PORT),
-            10000
-        )
-
-        val webRequest = Request.Builder()
-            .url("ws://$address:$port")
-            .build()
-
-        webSocket = httpClient.newWebSocket(webRequest, client)
-        httpClient.dispatcher.executorService.shutdown()
+    private fun handleBroadcast(encodedData: ByteArray)
+    {
+        Log.d(javaClass.name, "Received broadcast, analyzing it...")
+        val decodedData = String(Base64.decode(encodedData, Base64.DEFAULT))
     }
 }
