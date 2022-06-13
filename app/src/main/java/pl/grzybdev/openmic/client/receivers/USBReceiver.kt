@@ -13,7 +13,7 @@ import pl.grzybdev.openmic.client.interfaces.IConnector
 
 class USBReceiver : BroadcastReceiver() {
 
-    private var lastState: Boolean = false
+    private var lastState: Boolean? = null
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
