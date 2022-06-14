@@ -11,14 +11,13 @@ import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
 
 
-class USBReceiver : BroadcastReceiver() {
+class USBStateReceiver : BroadcastReceiver() {
 
+    private val connectSignal = Signals.signal(IConnector::class)
     private var lastState: Boolean? = null
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
-            val connectSignal = Signals.signal(IConnector::class)
-
             // Are we charging / charged?
             val status: Int = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
             val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
