@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client
 
+import pl.grzybdev.openmic.client.dataclasses.ServerEntry
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ServerOS
 
@@ -15,4 +16,6 @@ object AppData {
     var serverName: String = ""
     var serverID: String = ""
     var serverOS: ServerOS = ServerOS.OTHER
+
+    val foundServers: MutableMap<String, ServerEntry> = mutableMapOf()
 }
