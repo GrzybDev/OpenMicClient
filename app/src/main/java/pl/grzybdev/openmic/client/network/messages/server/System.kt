@@ -14,6 +14,7 @@ import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
 import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Audio
@@ -53,22 +54,19 @@ class SystemPacket {
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
 
-            if (packet.serverApp == OpenMic.App.mainActivity?.getString(R.string.SERVER_APP_NAME)) {
-                // It's official app, check if versions match
+            val serverCompat = OpenMic.getServerCompatibility(packet.serverApp, packet.serverVersion)
 
-                if (packet.serverVersion != BuildConfig.VERSION_NAME) {
-                    Log.d(SystemPacket::class.java.name, "Version mismatch, not initializing...")
-
-                    // Server should respond with error so client can show error message.
-                    // Skip initialization, or wait till we get valid Hello packet
-                    // It's the server who should drop connection
-                    return
-                }
+            if (serverCompat == ServerCompatibility.NOT_SUPPORTED) {
+                Log.d(SystemPacket::class.java.name, "Version mismatch, not initializing...")
+                // Server should respond with error so client can show error message.
+                // Skip initialization, or wait till we get valid Hello packet
+                // It's the server who should drop connection
+                return
             }
 
             AppData.serverName = packet.serverName
             AppData.serverID = packet.serverID
-            AppData.serverOS = ServerOS.values().find { it.kernelType == packet.serverOS }!!
+            AppData.serverOS = OpenMic.getServerOS(packet.serverOS)
 
             if (!packet.needAuth) {
                 // Server recognizes us, make sure that we recognize server too
