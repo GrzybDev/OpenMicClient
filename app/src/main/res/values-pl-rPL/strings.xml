@@ -22,5 +22,12 @@
     <string name="Status_USB_Connecting">Łączenie z Serwerem OpenMic za pomocą USB…</string>
     <string name="Status_USB_Need_Launch">Połączono z urządzeniem USB, ale nie udało się znaleźć instancji Serwera OpenMic.</string>
     <string name="Status_USB_Connected">Połączono z Serwerem OpenMic przez USB!</string>
-    <string name="Status_USB_InitFailed">Nie udana inicjalizacja! Aby użyć tej metody wymagany jest restart Klienta OpenMic.</string>
+    <string name="Status_InitFailed">Nie udana inicjalizacja! Aby użyć tej metody wymagany jest restart Klienta OpenMic.</string>
+    <string name="ServerSelect_Title">Wybierz serwer</string>
+    <string name="ServerSelect_Desc">W twojej sieci obecnie jest aktywna więcej niż jedna instancja Serwera OpenMic, wybierz do jakiego serwera chcesz się połączyć</string>
+    <string name="Icon_Server">Ikona serwera</string>
+    <string name="Status_WiFi_Disabled">Telefon nie jest połączony z siecią Wi-Fi! Połącz telefon z siecią Wi-Fi aby włączyć tą funkcje.</string>
+    <string name="Status_WiFi_Connecting">Łączenie z Serwerem OpenMic przez Wi-Fi…</string>
+    <string name="Status_WiFi_Need_Launch">Znaleziono wiele Serwerów OpenMic w twojej sieci, wybierz serwer aby kontynuować.</string>
+    <string name="Status_WiFi_Ready">Telefon jest połączony z siecią Wi-Fi i szukamy obecnie serwerów…</string>
 </resources>
