@@ -32,11 +32,17 @@
     <string name="WebSocket_Restart">OpenMic Client is restarting</string>
 
     <!-- Status Messages -->
-    <string name="Status_USB_InitFailed">Failed to initialize! In order to use this method, You need to restart OpenMic Client.</string>
+    <string name="Status_InitFailed">Failed to initialize! In order to use this method, You need to restart OpenMic Client.</string>
     <string name="Status_USB_Disabled">Phone is not connected to USB device! Connect phone to PC via USB cable to enable USB support.</string>
     <string name="Status_USB_Connecting">Connecting to OpenMic Server via USB…</string>
     <string name="Status_USB_Need_Launch">Connected to USB device, but we failed to find OpenMic Server instance.</string>
     <string name="Status_USB_Connected">Connected to OpenMic Server via USB!</string>
+    <string name="Status_WiFi_Disabled">Phone is not connected to Wi-Fi network! Connect phone to any network to enable Wi-Fi support.</string>
+    <string name="Status_WiFi_Connecting">Connecting to OpenMic Server via Wi-Fi…</string>
+    <string name="Status_WiFi_Need_Launch">Found multiple OpenMic Servers in your network, please select server to continue.</string>
+    <string name="Status_WiFi_Ready">Phone is connected to Wi-Fi and we\'re looking for servers…</string>
+
+    <string name="Icon_Server">Server Icon</string>
 
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
