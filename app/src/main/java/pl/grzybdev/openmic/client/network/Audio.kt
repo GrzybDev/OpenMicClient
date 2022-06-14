@@ -29,7 +29,7 @@ class Audio {
             Data.socket = socket
 
             val signal = Signals.signal(IConnector::class)
-            AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTED) }
+            AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTED_OR_READY) }
 
             audioLoop()
         }
