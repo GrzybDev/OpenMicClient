@@ -4,5 +4,5 @@ enum class ConnectorEvent {
     DISABLED,
     CONNECTING,
     NEED_MANUAL_LAUNCH,
-    CONNECTED
+    CONNECTED_OR_READY
 }
