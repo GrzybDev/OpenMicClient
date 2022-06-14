@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         OpenMic.App.appPreferences = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
         OpenMic.App.mainActivity = this
 
-        val initStr = getString(R.string.Status_USB_InitFailed)
+        val initStr = getString(R.string.Status_InitFailed)
 
         TooltipCompat.setTooltipText(findViewById(R.id.usbStatus), initStr)
         TooltipCompat.setTooltipText(findViewById(R.id.wifiStatus), initStr)
@@ -109,21 +109,21 @@ class MainActivity : AppCompatActivity() {
                     ConnectorEvent.DISABLED -> getString(R.string.Status_USB_Disabled)
                     ConnectorEvent.CONNECTING -> getString(R.string.Status_USB_Connecting)
                     ConnectorEvent.NEED_MANUAL_LAUNCH -> getString(R.string.Status_USB_Need_Launch)
-                    ConnectorEvent.CONNECTED -> getString(R.string.Status_USB_Connected)
+                    ConnectorEvent.CONNECTED_OR_READY -> getString(R.string.Status_USB_Connected)
                 }
 
                 Connector.WiFi -> when (event) {
-                    ConnectorEvent.DISABLED -> ""
-                    ConnectorEvent.CONNECTING -> ""
-                    ConnectorEvent.NEED_MANUAL_LAUNCH -> ""
-                    ConnectorEvent.CONNECTED -> ""
+                    ConnectorEvent.DISABLED -> getString(R.string.Status_WiFi_Disabled)
+                    ConnectorEvent.CONNECTING -> getString(R.string.Status_WiFi_Connecting)
+                    ConnectorEvent.NEED_MANUAL_LAUNCH -> getString(R.string.Status_WiFi_Need_Launch)
+                    ConnectorEvent.CONNECTED_OR_READY -> getString(R.string.Status_WiFi_Ready)
                 }
 
                 Connector.Bluetooth -> when (event) {
                     ConnectorEvent.DISABLED -> ""
                     ConnectorEvent.CONNECTING -> ""
                     ConnectorEvent.NEED_MANUAL_LAUNCH -> ""
-                    ConnectorEvent.CONNECTED -> ""
+                    ConnectorEvent.CONNECTED_OR_READY -> ""
                 }
             }
 
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
                         usbProgress.visibility = View.GONE
                 }
 
-                ConnectorEvent.CONNECTED -> run {
+                ConnectorEvent.CONNECTED_OR_READY -> run {
                     statusView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, theme))
 
                     launchBtn.visibility = View.GONE
