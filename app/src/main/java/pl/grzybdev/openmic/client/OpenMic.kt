@@ -5,22 +5,23 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Base64
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import com.gazman.signals.Signals
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.activities.MainActivity
+import pl.grzybdev.openmic.client.dataclasses.ServerEntry
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
+import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Client
-import pl.grzybdev.openmic.client.receivers.USBReceiver
+import pl.grzybdev.openmic.client.receivers.USBStateReceiver
+import pl.grzybdev.openmic.client.receivers.WifiStateReceiver
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -124,12 +125,11 @@ class OpenMic(context: Context) {
             }
         }}
 
-        App.mainActivity?.registerReceiver(USBReceiver(), IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        App.mainActivity?.registerReceiver(USBStateReceiver(), IntentFilter(Intent.ACTION_BATTERY_CHANGED))
     }
 
     private fun initWiFi()
     {
-        connectSignal.dispatcher.onEvent(Connector.WiFi, if (checkWifiOnAndConnected()) ConnectorEvent.CONNECTED else ConnectorEvent.DISABLED)
         broadcastThread?.interrupt()
 
         val socket = DatagramSocket(AppData.communicationPort, InetAddress.getByName("0.0.0.0"))
@@ -142,33 +142,58 @@ class OpenMic(context: Context) {
             while (!Thread.interrupted()) {
                 Log.d(javaClass.name, "Waiting for broadcast on port ${AppData.communicationPort}...")
                 socket.receive(packet)
-                handleBroadcast(packet.data)
-            }
-        }
-    }
-
-    private fun checkWifiOnAndConnected(): Boolean {
-        var result = false
-        val connectivityManager = App.mainActivity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
-            result = actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-        } else {
-            connectivityManager.run {
-                connectivityManager.activeNetworkInfo?.run {
-                    result = type == ConnectivityManager.TYPE_WIFI
-                }
+                handleBroadcast(packet.data, packet.address.hostAddress!!.toString(), packet.port.toShort())
             }
         }
 
-        return result
+        @Suppress("DEPRECATION")
+        App.mainActivity?.registerReceiver(WifiStateReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    private fun handleBroadcast(encodedData: ByteArray)
+    private fun handleBroadcast(encodedData: ByteArray, senderIP: String, serverPort: Short)
     {
         Log.d(javaClass.name, "Received broadcast, analyzing it...")
         val decodedData = String(Base64.decode(encodedData, Base64.DEFAULT))
+        val data = decodedData.split(";")
+
+        if (data.size != 5)
+        {
+            Log.w(javaClass.name, "Received broadcast is invalid, ignoring...")
+            return
+        }
+
+        val entry = ServerEntry(data[3], senderIP, serverPort, getServerCompatibility(data[0], data[1]), getServerOS(data[2]), data[4])
+
+        if (!AppData.foundServers.contains(entry.serverID)) {
+            // First time we received broadcast from this server, just add it to foundServers list
+            AppData.foundServers[entry.serverID] = entry
+        } else {
+            // Second time we received broadcast from this server,
+            // if it's the only one - connect to it otherwise show select server button
+
+            if (AppData.foundServers.size == 1)
+                connectTo(Connector.WiFi, "${entry.serverIP}:${entry.serverPort}")
+            else
+                connectSignal.dispatcher.onEvent(Connector.WiFi, ConnectorEvent.NEED_MANUAL_LAUNCH)
+        }
+    }
+
+    companion object {
+        fun getServerCompatibility(serverApp: String, serverVersion: String): ServerCompatibility {
+            if (serverApp == App.mainActivity?.getString(R.string.SERVER_APP_NAME)) {
+                // It's official app, check if versions match
+
+                if (serverVersion != BuildConfig.VERSION_NAME)
+                    return ServerCompatibility.NOT_SUPPORTED
+
+                return ServerCompatibility.OFFICIAL
+            }
+
+            return ServerCompatibility.UNOFFICIAL
+        }
+
+        fun getServerOS(kernelType: String): ServerOS {
+            return ServerOS.values().find { it.kernelType == kernelType }!!
+        }
     }
 }
