@@ -15,6 +15,10 @@
     <string name="type_WiFi">Wireless (Wi-Fi)</string>
     <string name="type_BT">Wireless (Bluetooth)</string>
 
+    <!-- Server Select Activity -->
+    <string name="ServerSelect_Title">Pick server</string>
+    <string name="ServerSelect_Desc">There\'s more than one active OpenMic Server in your network, please select to which you want to connect</string>
+
     <!-- Auth Dialog -->
     <string name="AuthDialog_Title">Please enter code you see on your computer screen</string>
     <string name="AuthDialog_Button_OK">Verify</string>
