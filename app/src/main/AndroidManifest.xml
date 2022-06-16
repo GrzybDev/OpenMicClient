@@ -19,7 +19,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ServerSelectActivity"
+            android:name=".activities.ServerSelectActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
