@@ -1,9 +1,9 @@
 package pl.grzybdev.openmic.client
 
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.content.SharedPreferences
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.*
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.PowerManager
@@ -25,6 +25,7 @@ import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Client
 import pl.grzybdev.openmic.client.receivers.USBStateReceiver
 import pl.grzybdev.openmic.client.receivers.WifiStateReceiver
+import java.lang.Exception
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -144,6 +145,7 @@ class OpenMic(context: Context) {
         initReceivers()
 
         initWiFi()
+        initBT()
     }
 
     fun connectTo(connector: Connector, address: String)
@@ -222,6 +224,43 @@ class OpenMic(context: Context) {
 
             broadcastSocket.close()
         }
+    }
+
+    private fun initBT()
+    {
+        @Suppress("DEPRECATION")
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        val receiver = object : BroadcastReceiver() {
+            @SuppressLint("MissingPermission")
+            override fun onReceive(context: Context?, intent: Intent?) {
+                when (intent?.action) {
+                    BluetoothDevice.ACTION_FOUND -> {
+                        val device: BluetoothDevice? =
+                            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+
+                        Log.d(javaClass.name, "Found device: ${device?.name}")
+
+                        val bluetoothSocket = device?.createRfcommSocketToServiceRecord(UUID.fromString("6b310fa0-ab0a-4008-8b6a-89b41cb1ccad"))
+                        bluetoothAdapter?.cancelDiscovery()
+
+                        try {
+                            bluetoothSocket?.connect()
+                            Log.d(javaClass.name, "Successfully connected")
+                        } catch (e: Exception) {
+                            Log.d(javaClass.name, "Failed to connect :(")
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            }
+        }
+
+        App.mainActivity?.registerReceiver(receiver, filter)
+        val success = bluetoothAdapter?.startDiscovery()
+
+        Log.d(javaClass.name, "startDiscovery: $success")
     }
 
     private fun handleBroadcast(encodedData: ByteArray, senderIP: String)
