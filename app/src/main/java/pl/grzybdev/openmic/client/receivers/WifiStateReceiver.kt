@@ -21,7 +21,6 @@ class WifiStateReceiver : BroadcastReceiver() {
     private val connectSignal = Signals.signal(IConnector::class)
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d(javaClass.name, "onReceive: ${intent?.action}")
         if (intent?.action == ConnectivityManager.CONNECTIVITY_ACTION)
         {
             var isConnected = false
@@ -43,7 +42,6 @@ class WifiStateReceiver : BroadcastReceiver() {
                 }
             }
 
-            Log.d(javaClass.name, "Connected: $isConnected")
             connectSignal.dispatcher.onEvent(Connector.WiFi, if (isConnected) ConnectorEvent.CONNECTED_OR_READY else ConnectorEvent.DISABLED)
         }
     }
