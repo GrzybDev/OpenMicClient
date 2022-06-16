@@ -32,6 +32,7 @@ class Client(private val connector: Connector) : WebSocketListener() {
     private val usbConnectSignal = Signals.signal(IConnector::class)
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
+        isConnected = true
         AppData.currentConn = connector
 
         val packet: ClientPacket = SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, AppData.deviceID)
@@ -76,20 +77,28 @@ class Client(private val connector: Connector) : WebSocketListener() {
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-        usbConnectSignal.dispatcher.onEvent(connector, ConnectorEvent.NEED_MANUAL_LAUNCH)
-
-        DialogShared.current?.dismiss()
-
         Log.d(javaClass.name, "onClosing")
+
+        handleDisconnect()
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        usbConnectSignal.dispatcher.onEvent(connector, ConnectorEvent.NEED_MANUAL_LAUNCH)
-
-        AppData.connectLock = false
-        DialogShared.current?.dismiss()
-
         Log.d(javaClass.name, "onFailure")
         Log.d(javaClass.name, t.message.toString())
+
+        handleDisconnect()
+    }
+
+    private fun handleDisconnect()
+    {
+        AppData.connectLock = false
+        isConnected = false
+
+        DialogShared.current?.dismiss()
+
+        if (connector == Connector.USB)
+            usbConnectSignal.dispatcher.onEvent(connector, ConnectorEvent.NEED_MANUAL_LAUNCH)
+        else
+            usbConnectSignal.dispatcher.onEvent(connector, ConnectorEvent.CONNECTED_OR_READY)
     }
 }
