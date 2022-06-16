@@ -1,6 +1,7 @@
 package pl.grzybdev.openmic.client.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.res.ResourcesCompat
@@ -20,6 +22,7 @@ import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
+import pl.grzybdev.openmic.client.dataclasses.ServerEntry
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
@@ -55,14 +58,31 @@ class MainActivity : AppCompatActivity() {
         TooltipCompat.setTooltipText(findViewById(R.id.wifiStatus), initStr)
         TooltipCompat.setTooltipText(findViewById(R.id.btStatus), initStr)
 
+        initLogic()
+        initButtons()
+    }
+
+    private fun initLogic()
+    {
         connectorSignal.addListener { connector, event -> updateConnectorStatus(connector, event) }
 
         openmic = OpenMic(applicationContext)
+    }
 
+    private fun initButtons()
+    {
         val usbRetry: Button = findViewById(R.id.usbLaunchBtn)
         usbRetry.setOnClickListener {
             run {
                 connectorSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.CONNECTING)
+            }
+        }
+
+        val wifiLaunch: Button = findViewById(R.id.wifiLaunchBtn)
+        wifiLaunch.setOnClickListener {
+            run {
+                val serverSelect = Intent(this, ServerSelectActivity::class.java)
+                startActivity(serverSelect)
             }
         }
     }
@@ -92,6 +112,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateConnectorStatus(connector: Connector, event: ConnectorEvent)
     {
         runOnUiThread {
+            val connectorName: TextView = when (connector) {
+                Connector.USB -> findViewById(R.id.usbName)
+                Connector.WiFi -> findViewById(R.id.wifiName)
+                Connector.Bluetooth -> findViewById(R.id.btName)
+            }
+
             val statusView: ImageView = when (connector) {
                 Connector.USB -> findViewById(R.id.usbStatus)
                 Connector.WiFi -> findViewById(R.id.wifiStatus)
@@ -102,6 +128,12 @@ class MainActivity : AppCompatActivity() {
                 Connector.USB -> findViewById(R.id.usbLaunchBtn)
                 Connector.WiFi -> findViewById(R.id.wifiLaunchBtn)
                 Connector.Bluetooth -> findViewById(R.id.btLaunchBtn)
+            }
+
+            val progressBar: ProgressBar = when (connector) {
+                Connector.USB -> findViewById(R.id.usbProgress)
+                Connector.WiFi -> findViewById(R.id.wifiProgress)
+                Connector.Bluetooth -> findViewById(R.id.btProgress)
             }
 
             val statusText: String = when (connector) {
@@ -127,8 +159,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            val usbProgress: ProgressBar = findViewById(R.id.usbProgress)
-
             when (event) {
                 ConnectorEvent.DISABLED -> run {
                     statusView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, theme))
@@ -138,9 +168,7 @@ class MainActivity : AppCompatActivity() {
                 ConnectorEvent.CONNECTING -> run {
                     statusView.visibility = View.GONE
                     launchBtn.visibility = View.GONE
-
-                    if (connector == Connector.USB)
-                        usbProgress.visibility = View.VISIBLE
+                    progressBar.visibility = View.VISIBLE
                 }
 
                 ConnectorEvent.NEED_MANUAL_LAUNCH -> run {
@@ -148,9 +176,7 @@ class MainActivity : AppCompatActivity() {
 
                     launchBtn.visibility = View.VISIBLE
                     statusView.visibility = View.VISIBLE
-
-                    if (connector == Connector.USB)
-                        usbProgress.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 }
 
                 ConnectorEvent.CONNECTED_OR_READY -> run {
@@ -158,12 +184,18 @@ class MainActivity : AppCompatActivity() {
 
                     launchBtn.visibility = View.GONE
                     statusView.visibility = View.VISIBLE
-
-                    if (connector == Connector.USB)
-                        usbProgress.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 }
             }
 
+            // Change string to shorter one if button is visible, because long ones are... too long :P
+            val newName = when (connector) {
+                Connector.USB -> if (event == ConnectorEvent.NEED_MANUAL_LAUNCH) getString(R.string.type_USB_Short) else getString(R.string.type_USB)
+                Connector.WiFi -> if (event == ConnectorEvent.NEED_MANUAL_LAUNCH) getString(R.string.type_WiFi_Short) else getString(R.string.type_WiFi)
+                Connector.Bluetooth -> if (event == ConnectorEvent.NEED_MANUAL_LAUNCH) getString(R.string.type_BT_Short) else getString(R.string.type_BT)
+            }
+
+            connectorName.text = newName
             TooltipCompat.setTooltipText(statusView, statusText)
         }
     }
