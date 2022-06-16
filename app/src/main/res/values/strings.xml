@@ -12,8 +12,11 @@
     <string name="main_btConnect">Connect</string>
 
     <string name="type_USB">Wired (USB)</string>
+    <string name="type_USB_Short">USB</string>
     <string name="type_WiFi">Wireless (Wi-Fi)</string>
+    <string name="type_WiFi_Short">Wi-Fi</string>
     <string name="type_BT">Wireless (Bluetooth)</string>
+    <string name="type_BT_Short">Bluetooth</string>
 
     <!-- Server Select Activity -->
     <string name="ServerSelect_Title">Pick server</string>
@@ -43,6 +46,11 @@
     <string name="Status_WiFi_Ready">Phone is connected to Wi-Fi and we\'re looking for servers…</string>
 
     <string name="Icon_Server">Server Icon</string>
+    <string name="Icon_ServerCompatibility">Server Compatibility Icon</string>
+
+    <string name="OS_Windows">Windows</string>
+    <string name="OS_Linux">Linux Distro</string>
+    <string name="OS_Unknown">Unknown OS</string>
 
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>

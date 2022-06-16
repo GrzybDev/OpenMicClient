@@ -30,4 +30,11 @@
     <string name="Status_WiFi_Connecting">Łączenie z Serwerem OpenMic przez Wi-Fi…</string>
     <string name="Status_WiFi_Need_Launch">Znaleziono wiele Serwerów OpenMic w twojej sieci, wybierz serwer aby kontynuować.</string>
     <string name="Status_WiFi_Ready">Telefon jest połączony z siecią Wi-Fi i szukamy obecnie serwerów…</string>
+    <string name="Icon_ServerCompatibility">Ikona kompatybilności serwera</string>
+    <string name="OS_Windows">Windows</string>
+    <string name="OS_Linux">Dystrybucja Linuxa</string>
+    <string name="OS_Unknown">Nieznany system</string>
+    <string name="type_USB_Short">USB</string>
+    <string name="type_WiFi_Short">Wi-Fi</string>
+    <string name="type_BT_Short">Bluetooth</string>
 </resources>
