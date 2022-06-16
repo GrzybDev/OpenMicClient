@@ -7,25 +7,26 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-    <ImageView
-        android:id="@+id/serverOSIcon"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/serverOS"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_weight="1"
-        android:contentDescription="@string/Icon_Server"
-        app:srcCompat="@drawable/ic_baseline_wifi_48" />
+        android:gravity="center"
+        app:drawableTopCompat="@drawable/ic_baseline_device_unknown_24"
+        tools:text="Unknown OS" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/serverName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             android:textStyle="bold"
             tools:text="Test Server" />
@@ -34,7 +35,6 @@
             android:id="@+id/serverAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             tools:text="127.0.0.1:12345" />
     </LinearLayout>
@@ -44,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_weight="1"
+        android:contentDescription="@string/Icon_ServerCompatibility"
         app:srcCompat="@drawable/ic_baseline_not_verified_48"
         tools:ignore="ImageContrastCheck" />
 
