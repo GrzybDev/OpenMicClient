@@ -4,10 +4,10 @@ import android.util.Log
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
 
@@ -18,16 +18,18 @@ data class AuthCodeVerify(
 
 class AuthPacket {
     companion object {
-        fun handle(type: Message, data: String, socket: WebSocket) {
+        fun handle(socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.AUTH_CODE_VERIFY -> handleCodeVerify(data, socket)
+                Message.AUTH_CODE_VERIFY -> handleCodeVerify(socket, connector, data)
                 else -> {}
             }
         }
 
-        private fun handleCodeVerify(data: String, socket: WebSocket) {
+        private fun handleCodeVerify(socket: Any, connector: Connector, data: String) {
             // Only "positive" packet is handled here
-            Log.d(AuthPacket::class.java.name, "Received successful AuthCodeVerify: $data")
+            val packet: AuthCodeVerify = Json.decodeFromString(data)
+
+            Log.d(AuthPacket::class.java.name, "Received successful AuthCodeVerify: $packet")
             Log.d(AuthPacket::class.java.name, "Authorization complete, adding ${AppData.serverID} to known servers list...")
 
             val knownDevicesKey: String =
@@ -46,7 +48,7 @@ class AuthPacket {
                 apply()
             }
 
-            Audio.initAudio(socket)
+            Audio.initAudio(socket, connector)
         }
     }
 }

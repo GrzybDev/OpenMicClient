@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client.network.messages.server
 
+import android.bluetooth.BluetoothSocket
 import android.util.Log
 import com.gazman.signals.Signals
 import kotlinx.serialization.Serializable
@@ -8,14 +9,13 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
-import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
@@ -41,15 +41,15 @@ data class SystemGoodbye(
 
 class SystemPacket {
     companion object {
-        fun handle(type: Message, data: String, socket: WebSocket) {
+        fun handle(socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.SYSTEM_HELLO -> handleHello(data, socket)
-                Message.SYSTEM_GOODBYE -> handleGoodbye(data, socket)
+                Message.SYSTEM_HELLO -> handleHello(socket, connector, data)
+                Message.SYSTEM_GOODBYE -> handleGoodbye(socket, connector, data)
                 else -> {}
             }
         }
 
-        private fun handleHello(data: String, socket: WebSocket) {
+        private fun handleHello(socket: Any, connector: Connector, data: String)  {
             val packet: SystemHello = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
@@ -84,7 +84,7 @@ class SystemPacket {
                 if (knownDevices.contains(packet.serverID)) {
                     // We recognize the server!
                     Log.d(SystemPacket::class.java.name, "Server is in known devices list! Starting audio stream...")
-                    Audio.initAudio(socket)
+                    Audio.initAudio(socket, connector)
                 } else {
                     // We don't recognize the server
                     Log.d(
@@ -96,17 +96,24 @@ class SystemPacket {
                     AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTING) }
 
                     val response: ClientPacket = AuthClientSide()
-                    socket.send(Json.encodeToString(response))
 
-                    AuthDialog.show(socket)
+                    if (connector != Connector.Bluetooth) {
+                        val webSocket = socket as WebSocket
+                        webSocket.send(Json.encodeToString(response))
+                    } else {
+                        val btSocket = socket as BluetoothSocket
+                        btSocket.outputStream.write(Json.encodeToString(response).toByteArray())
+                    }
+
+                    AuthDialog.show(socket, connector)
                 }
             } else {
                 Log.d(SystemPacket::class.java.name, "Server need auth, showing auth popup...")
-                AuthDialog.show(socket)
+                AuthDialog.show(socket, connector)
             }
         }
 
-        private fun handleGoodbye(data: String, socket: WebSocket) {
+        private fun handleGoodbye(socket: Any, connector: Connector, data: String) {
             val packet: SystemGoodbye = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Server says goodbye, exit code ${packet.exitCode}")
@@ -115,7 +122,13 @@ class SystemPacket {
                 DialogShared.current?.dismiss()
 
             // TODO: Properly handle disconnect
-            socket.close(1000, "Normal disconnect")
+            if (connector != Connector.Bluetooth) {
+                val webSocket = socket as WebSocket
+                webSocket.close(1000, "Normal disconnect")
+            } else {
+                val btSocket = socket as BluetoothSocket
+                btSocket.close()
+            }
         }
     }
 }

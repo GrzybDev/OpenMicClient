@@ -4,7 +4,7 @@ import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
-import okhttp3.WebSocket
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.network.messages.Message
 import pl.grzybdev.openmic.client.network.messages.server.*
 
@@ -26,10 +26,10 @@ class Handler {
             }
         }
 
-        fun handlePacket(webSocket: WebSocket, type: Message, data: String) {
+        fun handlePacket(socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE -> SystemPacket.handle(type, data, webSocket)
-                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(type, data, webSocket)
+                Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE -> SystemPacket.handle(socket, connector, type, data)
+                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(socket, connector, type, data)
             }
         }
     }

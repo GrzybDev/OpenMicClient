@@ -1,6 +1,7 @@
 package pl.grzybdev.openmic.client.dialogs
 
 import android.app.AlertDialog
+import android.bluetooth.BluetoothSocket
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -11,8 +12,10 @@ import com.gazman.signals.Signals
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.interfaces.IError
 import pl.grzybdev.openmic.client.network.messages.ErrorCode
 import pl.grzybdev.openmic.client.network.messages.client.AuthCodeVerify
@@ -28,19 +31,19 @@ class AuthDialog {
         errorSignal.addListener { error ->
             run {
                 if (error == ErrorCode.AUTH_CODE_INVALID) {
-                    DialogData.socket?.let { show(it) }
+                    DialogData.socket?.let { show(it, AppData.currentConn!!) }
                 }
             }
         }
     }
 
     object DialogData {
-        var socket: WebSocket? = null
+        var socket: Any? = null
     }
 
     companion object {
 
-        fun show(socket: WebSocket) {
+        fun show(socket: Any, connector: Connector) {
             DialogData.socket = socket
 
             OpenMic.App.mainActivity?.runOnUiThread {
@@ -64,7 +67,14 @@ class AuthDialog {
                         )
 
                         val authPacket: ClientPacket = AuthCodeVerify(authCode)
-                        socket.send(Json.encodeToString(authPacket))
+
+                        if (connector != Connector.Bluetooth) {
+                            val webSocket = socket as WebSocket
+                            webSocket.send(Json.encodeToString(authPacket))
+                        } else {
+                            val btSocket = socket as BluetoothSocket
+                            btSocket.outputStream.write(Json.encodeToString(authPacket).toByteArray())
+                        }
                     }
                 }
 
@@ -73,7 +83,14 @@ class AuthDialog {
                         Log.d(SystemPacket::class.java.name, "Canceled auth dialog! Disconnecting...")
 
                         val goodbye: ClientPacket = SystemGoodbye(ErrorCode.CANCELED_AUTH_CODE_DIALOG.code)
-                        socket.send(Json.encodeToString(goodbye))
+
+                        if (connector != Connector.Bluetooth) {
+                            val webSocket = socket as WebSocket
+                            webSocket.send(Json.encodeToString(goodbye))
+                        } else {
+                            val btSocket = socket as BluetoothSocket
+                            btSocket.outputStream.write(Json.encodeToString(goodbye).toByteArray())
+                        }
 
                         dialog.cancel()
                     }
@@ -91,7 +108,7 @@ class AuthDialog {
                         count: Int,
                         after: Int
                     ) {
-
+                        // Not needed
                     }
 
                     override fun onTextChanged(
@@ -99,7 +116,9 @@ class AuthDialog {
                         start: Int,
                         before: Int,
                         count: Int
-                    ) {}
+                    ) {
+                        // Not needed
+                    }
 
                     override fun afterTextChanged(s: Editable?) {
                         // Disable verify button if input is empty
