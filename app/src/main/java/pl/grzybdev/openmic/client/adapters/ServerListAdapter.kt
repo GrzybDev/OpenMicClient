@@ -2,6 +2,7 @@ package pl.grzybdev.openmic.client.adapters
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,7 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
         }
 
         override fun onClick(v: View?) {
-            OpenMic.App.context?.connectTo(Connector.WiFi, serverAddress.text.toString())
+            OpenMic.App.context?.connectTo(if (serverAddress.text.split(":").size == 6) Connector.Bluetooth else Connector.WiFi, serverAddress.text.toString())
         }
     }
 
