@@ -1,15 +1,15 @@
 package pl.grzybdev.openmic.client
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.*
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
-import android.os.PowerManager
 import android.util.Base64
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
 import com.gazman.signals.Signals
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -23,9 +23,11 @@ import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
 import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Client
+import pl.grzybdev.openmic.client.network.Listener
+import pl.grzybdev.openmic.client.receivers.BTStateReceiver
 import pl.grzybdev.openmic.client.receivers.USBStateReceiver
 import pl.grzybdev.openmic.client.receivers.WifiStateReceiver
-import java.lang.Exception
+import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -37,7 +39,8 @@ import kotlin.concurrent.thread
 
 class OpenMic(context: Context) {
 
-    private var client: Client? = null
+    var client = Client(null)
+    private var listener: Listener? = null
     private lateinit var webSocket: WebSocket
 
     private val connectSignal = Signals.signal(IConnector::class)
@@ -49,6 +52,10 @@ class OpenMic(context: Context) {
 
     private var usbReceiver: USBStateReceiver? = null
     private var wifiReceiver: WifiStateReceiver? = null
+    private var btReceiver: BTStateReceiver? = null
+
+    @Suppress("DEPRECATION")
+    val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     private var lastConnState: Boolean = false
 
@@ -99,24 +106,51 @@ class OpenMic(context: Context) {
                         }
 
                         ConnectorEvent.CONNECTED_OR_READY -> run {
-                            if (!lastConnState && client?.isConnected == true) {
+                            if (!lastConnState && !client.isConnected) {
                                 Log.d(javaClass.name, "Connected, interrupting broadcast thread...")
                                 autoConnectWifi = false
                                 broadcastThread?.interrupt()
-                            } else if (lastConnState && client?.isConnected == false) {
+                            } else if (lastConnState && !client.isConnected) {
                                 Log.d(javaClass.name, "Not connected, initializing broadcast thread...")
                                 autoConnectWifi = true
                                 initWiFi()
                             }
 
-                            lastConnState = client?.isConnected == true
+                            lastConnState = listener?.isConnected == true
                             AppData.foundServers.clear()
                         }
                     }
                 }
 
                 Connector.Bluetooth -> run {
-                    TODO()
+                    when (event) {
+                        ConnectorEvent.DISABLED -> run {
+                            try {
+                                val result = bluetoothAdapter?.cancelDiscovery()
+                                Log.d(javaClass.name, "cancelDiscovery: $result")
+                            } catch (e: SecurityException) {
+                                Log.d(javaClass.name, "Cannot cancel discovery due to security exception")
+                                e.printStackTrace()
+                            }
+                        }
+
+                        ConnectorEvent.CONNECTING, ConnectorEvent.NEED_MANUAL_LAUNCH -> {
+                            // Not used
+                        }
+
+                        ConnectorEvent.CONNECTED_OR_READY -> run {
+                            if (!client.isConnected) {
+                                try {
+                                    val success = bluetoothAdapter?.startDiscovery()
+                                    Log.d(javaClass.name, "startDiscovery: $success")
+                                } catch (e: SecurityException) {
+                                    Log.d(javaClass.name, "Application doesn't have permission to start bluetooth discovery!")
+                                    e.printStackTrace()
+                                    connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.DISABLED)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }}
@@ -133,8 +167,8 @@ class OpenMic(context: Context) {
         var context: OpenMic? = null
     }
 
-    private fun restartClient() {
-        if (this::webSocket.isInitialized && client?.isConnected == true)
+    fun restartClient() {
+        if (this::webSocket.isInitialized && listener?.isConnected == true)
             webSocket.close(1012, App.mainActivity?.getString(R.string.WebSocket_Restart))
 
         AppData.communicationPort = App.appPreferences?.getInt(
@@ -142,8 +176,7 @@ class OpenMic(context: Context) {
             10000
         )!!
 
-        initReceivers()
-
+        initUSB()
         initWiFi()
         initBT()
     }
@@ -155,52 +188,106 @@ class OpenMic(context: Context) {
         }
 
         AppData.connectLock = true
-
-        if (connector != Connector.USB)
-            connectSignal.dispatcher.onEvent(connector, ConnectorEvent.CONNECTING)
-
-        Log.d(javaClass.name, "Trying to connect to $address...")
+        AppData.currentConn = connector
 
         client = Client(connector)
 
-        val httpClient = OkHttpClient.Builder()
-            .readTimeout(20, TimeUnit.SECONDS)
-            .pingInterval(20, TimeUnit.SECONDS)
-            .build()
+        if (connector != Connector.USB)
+        {
+            connectSignal.dispatcher.onEvent(connector, ConnectorEvent.CONNECTING)
 
-        val webRequest = Request.Builder()
-            .url("ws://$address:${AppData.communicationPort}")
-            .build()
+            for (c in Connector.values()) {
+                if (c == connector)
+                    continue
 
-        webSocket = httpClient.newWebSocket(webRequest, client!!)
-        httpClient.dispatcher.executorService.shutdown()
+                connectSignal.dispatcher.onEvent(c, ConnectorEvent.DISABLED)
+            }
+        }
+
+        if (connector != Connector.Bluetooth) {
+            Log.d(javaClass.name, "Trying to connect to $address...")
+
+            listener = Listener()
+
+            val httpClient = OkHttpClient.Builder()
+                .readTimeout(20, TimeUnit.SECONDS)
+                .pingInterval(20, TimeUnit.SECONDS)
+                .build()
+
+            val webRequest = Request.Builder()
+                .url("ws://$address:${AppData.communicationPort}")
+                .build()
+
+            webSocket = httpClient.newWebSocket(webRequest, listener!!)
+            httpClient.dispatcher.executorService.shutdown()
+        } else {
+            val device: BluetoothDevice? = bluetoothAdapter?.getRemoteDevice(address)
+
+            if (device == null) {
+                Log.e(javaClass.name, "BluetoothDevice is null!")
+                return
+            }
+
+            val serviceID = App.appPreferences?.getString(App.mainActivity?.getString(R.string.PREFERENCE_SERVICE_ID), "1bc0f9db-4faf-421d-8b21-455c03d890e1")
+
+            try {
+                val bluetoothSocket = device.createRfcommSocketToServiceRecord(UUID.fromString(serviceID))
+                bluetoothSocket.connect()
+                client.onOpen(bluetoothSocket)
+
+                thread(start = true) {
+                    val buffer = ByteArray(1024)
+                    var length: Int
+
+                    while (true) {
+                        try {
+                            length = bluetoothSocket.inputStream.read(buffer)
+
+                            val message = String(buffer, 0, length)
+                            client.onMessage(bluetoothSocket, message)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                            break
+                        }
+                    }
+
+                    client.handleDisconnect()
+                }
+            } catch (e: SecurityException) {
+                Log.d(javaClass.name, "Cannot create bluetooth socket due to missing permissions!")
+                e.printStackTrace()
+
+                client.handleDisconnect()
+            } catch (e: IOException) {
+                Log.d(javaClass.name, "Failed to create bluetooth socket, probably OpenMic Server is not running on target device!")
+                e.printStackTrace()
+
+                client.handleDisconnect()
+            }
+        }
     }
 
-    private fun initReceivers()
-    {
+    private fun initUSB() {
         if (usbReceiver != null) {
             App.mainActivity?.unregisterReceiver(usbReceiver)
             usbReceiver = null
         }
 
+        usbReceiver = USBStateReceiver()
+        App.mainActivity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+    }
+
+    private fun initWiFi()
+    {
         if (wifiReceiver != null) {
             App.mainActivity?.unregisterReceiver(wifiReceiver)
             wifiReceiver = null
         }
 
-        usbReceiver = USBStateReceiver()
-        wifiReceiver = WifiStateReceiver()
-
-        App.mainActivity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-
-        @Suppress("DEPRECATION")
-        App.mainActivity?.registerReceiver(wifiReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-    }
-
-    private fun initWiFi()
-    {
         broadcastThread?.interrupt()
         broadcastThread?.join()
+
+        wifiReceiver = WifiStateReceiver()
 
         broadcastThread = thread(start = true) {
             val broadcastSocket = DatagramSocket(AppData.communicationPort, InetAddress.getByName("0.0.0.0"))
@@ -224,43 +311,24 @@ class OpenMic(context: Context) {
 
             broadcastSocket.close()
         }
+
+        @Suppress("DEPRECATION")
+        App.mainActivity?.registerReceiver(wifiReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     private fun initBT()
     {
-        @Suppress("DEPRECATION")
-        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        val receiver = object : BroadcastReceiver() {
-            @SuppressLint("MissingPermission")
-            override fun onReceive(context: Context?, intent: Intent?) {
-                when (intent?.action) {
-                    BluetoothDevice.ACTION_FOUND -> {
-                        val device: BluetoothDevice? =
-                            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-
-                        Log.d(javaClass.name, "Found device: ${device?.name}")
-
-                        val bluetoothSocket = device?.createRfcommSocketToServiceRecord(UUID.fromString("6b310fa0-ab0a-4008-8b6a-89b41cb1ccad"))
-                        bluetoothAdapter?.cancelDiscovery()
-
-                        try {
-                            bluetoothSocket?.connect()
-                            Log.d(javaClass.name, "Successfully connected")
-                        } catch (e: Exception) {
-                            Log.d(javaClass.name, "Failed to connect :(")
-                            e.printStackTrace()
-                        }
-                    }
-                }
-            }
+        if (btReceiver != null) {
+            App.mainActivity?.unregisterReceiver(btReceiver)
+            btReceiver = null
         }
 
-        App.mainActivity?.registerReceiver(receiver, filter)
-        val success = bluetoothAdapter?.startDiscovery()
+        btReceiver = BTStateReceiver()
 
-        Log.d(javaClass.name, "startDiscovery: $success")
+        App.mainActivity?.registerReceiver(btReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+        App.mainActivity?.registerReceiver(btReceiver, IntentFilter(BluetoothDevice.ACTION_FOUND))
+
+        connectSignal.dispatcher.onEvent(Connector.Bluetooth, if (bluetoothAdapter?.isEnabled == true) ConnectorEvent.CONNECTED_OR_READY else ConnectorEvent.DISABLED)
     }
 
     private fun handleBroadcast(encodedData: ByteArray, senderIP: String)
