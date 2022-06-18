@@ -59,4 +59,5 @@
     <string name="PREFERENCE_APP_PORT" translatable="false">Port</string>
     <string name="PREFERENCE_APP_USB_ENABLE" translatable="false">EnableUSB</string>
     <string name="SERVER_APP_NAME" translatable="false">OpenMic Server</string>
+    <string name="PREFERENCE_SERVICE_ID" translatable="false">ServiceID</string>
 </resources>
