@@ -22,7 +22,6 @@ import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
-import pl.grzybdev.openmic.client.dataclasses.ServerEntry
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
@@ -80,6 +79,14 @@ class MainActivity : AppCompatActivity() {
 
         val wifiLaunch: Button = findViewById(R.id.wifiLaunchBtn)
         wifiLaunch.setOnClickListener {
+            run {
+                val serverSelect = Intent(this, ServerSelectActivity::class.java)
+                startActivity(serverSelect)
+            }
+        }
+
+        val btLaunch: Button = findViewById(R.id.btLaunchBtn)
+        btLaunch.setOnClickListener {
             run {
                 val serverSelect = Intent(this, ServerSelectActivity::class.java)
                 startActivity(serverSelect)
