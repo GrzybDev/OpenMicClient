@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         val usbRetry: Button = findViewById(R.id.usbLaunchBtn)
         usbRetry.setOnClickListener {
             run {
-                connectorSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.CONNECTING)
+                OpenMic.App.context?.connectTo(Connector.USB, "localhost")
             }
         }
 
