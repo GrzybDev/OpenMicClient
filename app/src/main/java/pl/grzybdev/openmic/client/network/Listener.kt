@@ -1,18 +1,21 @@
 package pl.grzybdev.openmic.client.network
 
-import android.util.Log
+import com.gazman.signals.Signals
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
+import pl.grzybdev.openmic.client.enumerators.Connector
+import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.interfaces.IConnector
 
-class Listener : WebSocketListener() {
+class Listener(private val connector: Connector) : WebSocketListener() {
 
-    var isConnected: Boolean = false
     var context = OpenMic.App.context
+    var connectSignal = Signals.signal(IConnector::class)
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
-        isConnected = true
         context?.client?.onOpen(webSocket)
     }
 
@@ -21,21 +24,16 @@ class Listener : WebSocketListener() {
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-        Log.d(javaClass.name, "onClosing")
-
         handleDisconnect()
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-        Log.d(javaClass.name, "onFailure")
-        Log.d(javaClass.name, t.message.toString())
-
         handleDisconnect()
+        connectSignal.dispatcher.onEvent(connector, ConnectorEvent.NEED_MANUAL_LAUNCH)
     }
 
     private fun handleDisconnect()
     {
-        isConnected = false
         context?.client?.handleDisconnect()
     }
 }
