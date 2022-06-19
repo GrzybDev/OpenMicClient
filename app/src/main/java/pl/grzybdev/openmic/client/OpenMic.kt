@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
-import android.net.wifi.WifiManager
 import android.util.Base64
 import android.util.Log
 import com.gazman.signals.Signals
@@ -157,8 +156,6 @@ class OpenMic(context: Context) {
 
         restartClient()
 
-        val wm = App.mainActivity?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager?
-        wm?.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "OpenMic:WifiLock")
     }
 
     object App {

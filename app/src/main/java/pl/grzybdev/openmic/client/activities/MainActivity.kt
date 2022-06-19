@@ -2,6 +2,7 @@ package pl.grzybdev.openmic.client.activities
 
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var openmic: OpenMic
+    private lateinit var wm: WifiManager
 
     private var connectorSignal = Signals.signal(IConnector::class)
 
@@ -59,6 +61,10 @@ class MainActivity : AppCompatActivity() {
 
         initLogic()
         initButtons()
+
+        wm = (applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager?)!!
+        val lock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "OpenMic:WifiLock")
+        lock.acquire()
     }
 
     private fun initLogic()
