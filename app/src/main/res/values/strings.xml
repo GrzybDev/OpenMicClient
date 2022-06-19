@@ -29,6 +29,8 @@
 
     <!-- Error Dialog -->
     <string name="ErrorDialog_Title">Server returned error!</string>
+    <string name="ErrorDialog_ClientConnectionError">Connection failed</string>
+    <string name="ErrorDialog_ClientConnectionError_BT">Connection failed, Check if device is paired with your phone before connecting and that OpenMic Server is running!</string>
     <string name="ErrorDialog_Button_OK">OK</string>
 
     <!-- WebSocket Close Messages -->
