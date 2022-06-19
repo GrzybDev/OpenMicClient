@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.BatteryManager
 import android.util.Log
 import com.gazman.signals.Signals
+import pl.grzybdev.openmic.client.AppData
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
@@ -13,8 +15,8 @@ import pl.grzybdev.openmic.client.interfaces.IConnector
 
 class USBStateReceiver : BroadcastReceiver() {
 
-    private val connectSignal = Signals.signal(IConnector::class)
     private var lastState: Boolean? = null
+    private var connectSignal = Signals.signal(IConnector::class)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
@@ -33,12 +35,11 @@ class USBStateReceiver : BroadcastReceiver() {
             if (lastState == isConnectedToPC) return
             lastState = isConnectedToPC
 
-            val event: ConnectorEvent = when (isConnectedToPC) {
-                false -> ConnectorEvent.DISABLED
-                true -> ConnectorEvent.CONNECTING
+            if (isConnectedToPC) {
+                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.CONNECTED_OR_READY)
+            } else {
+                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.DISABLED)
             }
-
-            connectSignal.dispatcher.onEvent(Connector.USB, event)
         }
     }
 
