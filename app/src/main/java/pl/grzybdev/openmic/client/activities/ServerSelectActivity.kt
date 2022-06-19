@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
 
@@ -19,7 +20,7 @@ class ServerSelectActivity : AppCompatActivity() {
         setContentView(R.layout.activity_server_select)
 
         connectorSignal.addListener {
-            _, event -> onConnectorEvent(event)
+            connector, event -> onConnectorEvent(connector, event)
         }
 
         initServerList()
@@ -38,9 +39,9 @@ class ServerSelectActivity : AppCompatActivity() {
         }
     }
 
-    private fun onConnectorEvent(event: ConnectorEvent)
+    private fun onConnectorEvent(connector: Connector, event: ConnectorEvent)
     {
-        if (event == ConnectorEvent.CONNECTING || event == ConnectorEvent.CONNECTED_OR_READY)
+        if (event == ConnectorEvent.CONNECTING || (connector == Connector.WiFi && event == ConnectorEvent.CONNECTED_OR_READY))
             finish()
     }
 }
