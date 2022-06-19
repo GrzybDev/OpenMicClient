@@ -20,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.gazman.signals.Signals
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity() {
         wifiLaunch.setOnClickListener {
             run {
                 val serverSelect = Intent(this, ServerSelectActivity::class.java)
+                AppData.showServers = Connector.WiFi
                 startActivity(serverSelect)
             }
         }
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         btLaunch.setOnClickListener {
             run {
                 val serverSelect = Intent(this, ServerSelectActivity::class.java)
+                AppData.showServers = Connector.Bluetooth
                 startActivity(serverSelect)
             }
         }

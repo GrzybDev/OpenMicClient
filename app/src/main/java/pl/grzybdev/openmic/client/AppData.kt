@@ -20,6 +20,7 @@ object AppData {
 
     val foundServers: MutableMap<String, ServerEntry> = mutableMapOf()
     val foundServersTimestamps: MutableMap<String, Long> = mutableMapOf()
+    var showServers: Connector? = null
 
     val serverAdapter = ServerListAdapter()
 }
