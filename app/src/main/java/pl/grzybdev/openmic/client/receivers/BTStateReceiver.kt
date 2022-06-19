@@ -41,7 +41,8 @@ class BTStateReceiver : BroadcastReceiver() {
 
                 if (device?.name != null) {
                     Log.d(javaClass.name, "Found Bluetooth device: ${device.name}")
-                    AppData.foundServers[device.address] = ServerEntry(device.name, device.address, ServerCompatibility.UNKNOWN, ServerOS.OTHER, device.address)
+                    AppData.foundServers[device.address] = ServerEntry(device.name, device.address, ServerCompatibility.UNKNOWN, ServerOS.OTHER, device.address, Connector.Bluetooth)
+                    AppData.serverAdapter.updateData()
                     connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.NEED_MANUAL_LAUNCH)
                 }
             }
