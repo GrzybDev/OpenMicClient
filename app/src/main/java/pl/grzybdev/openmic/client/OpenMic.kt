@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client
 
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
@@ -9,6 +10,7 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import com.gazman.signals.Signals
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -46,7 +48,9 @@ class OpenMic(context: Context) {
 
     private val deviceID: String
 
+    private var autoConnectUSB = true
     private var autoConnectWifi = true
+
     private var broadcastThread: Thread? = null
 
     private var usbReceiver: USBStateReceiver? = null
@@ -84,12 +88,15 @@ class OpenMic(context: Context) {
             when (connector) {
                 Connector.USB -> run {
                     if (event == ConnectorEvent.DISABLED) {
-                        Log.d(javaClass.name, "USB functionality disabled, disconnected from PC")
+                        autoConnectUSB = true
                     }
 
-                    if (event == ConnectorEvent.CONNECTING) {
-                        Log.d(javaClass.name, "Trying to connect to PC via USB...")
-                        connectTo(Connector.USB, "localhost")
+                    if (event == ConnectorEvent.CONNECTED_OR_READY) {
+                        if (!client.isConnected && autoConnectUSB)
+                        {
+                            autoConnectUSB = false
+                            connectTo(Connector.USB, "localhost")
+                        }
                     }
                 }
 
@@ -105,18 +112,13 @@ class OpenMic(context: Context) {
                         }
 
                         ConnectorEvent.CONNECTED_OR_READY -> run {
-                            if (!lastConnState && !client.isConnected) {
+                            if (client.isConnected && !lastConnState) {
                                 Log.d(javaClass.name, "Connected, interrupting broadcast thread...")
                                 autoConnectWifi = false
                                 broadcastThread?.interrupt()
-                            } else if (lastConnState && !client.isConnected) {
-                                Log.d(javaClass.name, "Not connected, initializing broadcast thread...")
-                                autoConnectWifi = true
-                                initWiFi()
                             }
 
-                            lastConnState = listener?.isConnected == true
-                            AppData.foundServers.clear()
+                            lastConnState = client.isConnected
                         }
                     }
                 }
@@ -142,6 +144,10 @@ class OpenMic(context: Context) {
                                 try {
                                     val success = bluetoothAdapter?.startDiscovery()
                                     Log.d(javaClass.name, "startDiscovery: $success")
+
+                                    if (!success!!) {
+                                        connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.DISABLED)
+                                    }
                                 } catch (e: SecurityException) {
                                     Log.d(javaClass.name, "Application doesn't have permission to start bluetooth discovery!")
                                     e.printStackTrace()
@@ -154,8 +160,7 @@ class OpenMic(context: Context) {
             }
         }}
 
-        restartClient()
-
+        initClient()
     }
 
     object App {
@@ -164,8 +169,8 @@ class OpenMic(context: Context) {
         var context: OpenMic? = null
     }
 
-    fun restartClient() {
-        if (this::webSocket.isInitialized && listener?.isConnected == true)
+    fun initClient() {
+        if (this::webSocket.isInitialized && client.isConnected)
             webSocket.close(1012, App.mainActivity?.getString(R.string.WebSocket_Restart))
 
         AppData.communicationPort = App.appPreferences?.getInt(
@@ -176,6 +181,8 @@ class OpenMic(context: Context) {
         initUSB()
         initWiFi()
         initBT()
+
+        AppData.currentConn = null
     }
 
     fun connectTo(connector: Connector, address: String)
@@ -186,25 +193,24 @@ class OpenMic(context: Context) {
 
         AppData.connectLock = true
         AppData.currentConn = connector
+        AppData.foundServers.clear()
+        AppData.foundServersTimestamps.clear()
 
         client = Client(connector)
 
-        if (connector != Connector.USB)
-        {
-            connectSignal.dispatcher.onEvent(connector, ConnectorEvent.CONNECTING)
+        connectSignal.dispatcher.onEvent(connector, ConnectorEvent.CONNECTING)
 
-            for (c in Connector.values()) {
-                if (c == connector)
-                    continue
+        for (c in Connector.values()) {
+            if (c == connector)
+                continue
 
-                connectSignal.dispatcher.onEvent(c, ConnectorEvent.DISABLED)
-            }
+            connectSignal.dispatcher.onEvent(c, ConnectorEvent.DISABLED)
         }
 
         if (connector != Connector.Bluetooth) {
             Log.d(javaClass.name, "Trying to connect to $address...")
 
-            listener = Listener()
+            listener = Listener(connector)
 
             val httpClient = OkHttpClient.Builder()
                 .readTimeout(20, TimeUnit.SECONDS)
@@ -259,6 +265,14 @@ class OpenMic(context: Context) {
                 Log.d(javaClass.name, "Failed to create bluetooth socket, probably OpenMic Server is not running on target device!")
                 e.printStackTrace()
 
+                App.mainActivity?.runOnUiThread {
+                    val builder: AlertDialog.Builder = AlertDialog.Builder(App.mainActivity)
+                    builder.setTitle(App.mainActivity?.getString(R.string.ErrorDialog_ClientConnectionError))
+                    builder.setMessage(App.mainActivity?.getString(R.string.ErrorDialog_ClientConnectionError_BT))
+                    builder.setPositiveButton(App.mainActivity?.getString(R.string.ErrorDialog_Button_OK)) { _, _ -> run {}}
+                    builder.show()
+                }
+
                 client.handleDisconnect()
             }
         }
@@ -293,6 +307,7 @@ class OpenMic(context: Context) {
 
             val buf = ByteArray(1024)
             val packet = DatagramPacket(buf, buf.size)
+            autoConnectWifi = true
 
             while (!Thread.interrupted()) {
                 Log.d(javaClass.name, "Waiting for broadcast on port ${AppData.communicationPort}...")
@@ -306,6 +321,7 @@ class OpenMic(context: Context) {
                 handleBroadcast(packet.data, packet.address.hostAddress!!.toString())
             }
 
+            Log.d(javaClass.name, "Broadcast thread finished")
             broadcastSocket.close()
         }
 
@@ -343,7 +359,7 @@ class OpenMic(context: Context) {
             return
         }
 
-        val entry = ServerEntry(data[3], senderIP, getServerCompatibility(data[0], data[1]), getServerOS(data[2]), data[4])
+        val entry = ServerEntry(data[3], senderIP, getServerCompatibility(data[0], data[1]), getServerOS(data[2]), data[4], Connector.WiFi)
 
         AppData.foundServersTimestamps[entry.serverID] = Date().time
 
@@ -379,7 +395,14 @@ class OpenMic(context: Context) {
             // Second time we received broadcast from this server,
             // if it's the only one - connect to it otherwise show select server button
 
-            if (AppData.foundServers.size == 1 && autoConnectWifi)
+            val entries = mutableListOf<Map.Entry<String, ServerEntry>>()
+
+            AppData.foundServers.forEach { e -> run {
+                if (e.value.connector == Connector.WiFi)
+                    entries.add(e)
+            }}
+
+            if (entries.size == 1 && autoConnectWifi)
             {
                 Log.d(javaClass.name, "Received broadcast packet from ${entry.serverID}, trying to connect because it's the only one server that sent broadcast...")
                 connectTo(Connector.WiFi, entry.serverIP)

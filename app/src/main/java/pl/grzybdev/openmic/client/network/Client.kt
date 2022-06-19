@@ -100,7 +100,7 @@ class Client(private val connector: Connector?) {
         AppData.connectLock = false
 
         DialogShared.current?.dismiss()
-        OpenMic.App.context?.restartClient()
+        OpenMic.App.context?.initClient()
     }
 
 }
