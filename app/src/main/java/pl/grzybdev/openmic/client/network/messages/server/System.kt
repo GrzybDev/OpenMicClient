@@ -84,7 +84,7 @@ class SystemPacket {
                 if (knownDevices.contains(packet.serverID)) {
                     // We recognize the server!
                     Log.d(SystemPacket::class.java.name, "Server is in known devices list! Starting audio stream...")
-                    Audio.initAudio(socket, connector)
+                    Audio.start(socket, connector)
                 } else {
                     // We don't recognize the server
                     Log.d(

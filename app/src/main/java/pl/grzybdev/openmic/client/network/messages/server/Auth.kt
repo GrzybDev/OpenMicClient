@@ -48,7 +48,7 @@ class AuthPacket {
                 apply()
             }
 
-            Audio.initAudio(socket, connector)
+            Audio.start(socket, connector)
         }
     }
 }
