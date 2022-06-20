@@ -9,5 +9,19 @@
         android:id="@+id/MainFragment"
         android:name="pl.grzybdev.openmic.client.activities.fragments.MainFragment"
         tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_Connected"
+            app:destination="@id/ConnectedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ConnectedFragment"
+        android:name="pl.grzybdev.openmic.client.activities.fragments.ConnectedFragment"
+        tools:layout="@layout/fragment_connected">
+
+        <action
+            android:id="@+id/action_Disconnected"
+            app:destination="@id/MainFragment" />
     </fragment>
 </navigation>
