@@ -1,20 +1,16 @@
 package pl.grzybdev.openmic.client.network
 
-import android.bluetooth.BluetoothSocket
+import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
-import android.media.MediaRecorder
-import android.util.Base64
-import android.util.Log
+import androidx.core.content.ContextCompat
 import com.gazman.signals.Signals
-import okhttp3.WebSocket
-import okio.ByteString.Companion.toByteString
 import pl.grzybdev.openmic.client.AppData
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
 import pl.grzybdev.openmic.client.interfaces.IConnector
-import java.io.IOException
-import kotlin.concurrent.thread
+import pl.grzybdev.openmic.client.services.AudioService
 
 
 class Audio {
@@ -27,53 +23,26 @@ class Audio {
         var channelConfig = AudioFormat.CHANNEL_IN_MONO
         var audioFormat = AudioFormat.ENCODING_PCM_16BIT
         var minBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
+
+        var intent = Intent(OpenMic.App.mainActivity, AudioService::class.java)
     }
 
     companion object {
 
-        fun initAudio(socket: Any, connector: Connector) {
-            Data.socket = socket
-            Data.connector = connector
+        fun start(socket: Any?, connector: Connector?) {
+            if (socket != null && connector != null) {
+                Data.socket = socket
+                Data.connector = connector
+            }
 
             val signal = Signals.signal(IConnector::class)
             AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTED_OR_READY) }
 
-            audioLoop()
+            ContextCompat.startForegroundService(OpenMic.App.mainActivity!!, Data.intent)
         }
 
-        private fun audioLoop() {
-            thread(start = true) {
-                while (true) {
-                    val buffer = ByteArray(Data.minBufSize)
-
-                    val recorder = AudioRecord(
-                        MediaRecorder.AudioSource.VOICE_PERFORMANCE,
-                        Data.sampleRate,
-                        Data.channelConfig,
-                        Data.audioFormat,
-                        Data.minBufSize
-                    )
-
-                    recorder.startRecording()
-
-                    while (true) {
-                        Data.minBufSize = recorder.read(buffer, 0, buffer.size)
-
-                        if (Data.connector != Connector.Bluetooth) {
-                            val webSocket = Data.socket as WebSocket
-                            webSocket.send(buffer.toByteString())
-                        } else {
-                            val btSocket = Data.socket as BluetoothSocket
-
-                            try {
-                                btSocket.outputStream.write(buffer)
-                            } catch (e: IOException) {
-                                break
-                            }
-                        }
-                    }
-                }
-            }
+        fun stop() {
+            OpenMic.App.mainActivity?.stopService(Data.intent)
         }
 
     }
