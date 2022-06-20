@@ -9,6 +9,8 @@ object AppData {
 
     var communicationPort = 10000
     var deviceID: String = ""
+    var initialized: Boolean = false
+    var isMuted: Boolean = false
 
     var connectLock: Boolean = false
     var currentConn: Connector? = null
