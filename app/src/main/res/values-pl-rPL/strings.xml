@@ -39,4 +39,11 @@
     <string name="type_BT_Short">Bluetooth</string>
     <string name="ErrorDialog_ClientConnectionError">Błąd połączenia</string>
     <string name="ErrorDialog_ClientConnectionError_BT">Sprawdź czy urządzenie jest sparowane z twoim telefonem przed połączeniem i czy Serwer OpenMic działa!</string>
+    <string name="connected_title">Słyszymy cię!</string>
+    <string name="connected_desc">To tyle! Twój piękny głos jest już transmitowany do twojego komputera (%1$s).</string>
+    <string name="connected_btn_mute">Wycisz</string>
+    <string name="connected_btn_unmute">Odcisz</string>
+    <string name="connected_btn_disconnect">Rozłącz</string>
+    <string name="connected_action_title">OpenMic działa!</string>
+    <string name="connected_action_desc">Połączono z %1$s</string>
 </resources>

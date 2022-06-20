@@ -18,6 +18,15 @@
     <string name="type_BT">Wireless (Bluetooth)</string>
     <string name="type_BT_Short">Bluetooth</string>
 
+    <!-- Connected Fragment -->
+    <string name="connected_title">We can hear you!</string>
+    <string name="connected_desc">That\'s it! Now your beautiful voice is being transmitted to your PC (%1$s).</string>
+    <string name="connected_action_title">OpenMic is working!</string>
+    <string name="connected_action_desc">Connected to %1$s</string>
+    <string name="connected_btn_mute">Mute</string>
+    <string name="connected_btn_unmute">Unmute</string>
+    <string name="connected_btn_disconnect">Disconnect</string>
+
     <!-- Server Select Activity -->
     <string name="ServerSelect_Title">Pick server</string>
     <string name="ServerSelect_Desc">There\'s more than one active OpenMic Server in your network, please select to which you want to connect</string>
