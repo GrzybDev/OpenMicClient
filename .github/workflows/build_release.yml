@@ -59,10 +59,17 @@ jobs:
       with:
         name: signedBundle
         path: ${{steps.sign_bundle.outputs.signedReleaseFile}}
+    
+    - name: Compute MD5 hashes for Build Artifact
+      run: |
+        md5sum ${{steps.sign_apk.outputs.signedReleaseFile}} | awk '{ print $1 }' > ${{steps.sign_apk.outputs.signedReleaseFile}}.md5
+        md5sum ${{steps.sign_bundle.outputs.signedReleaseFile}} | awk '{ print $1 }' > ${{steps.sign_bundle.outputs.signedReleaseFile}}.md5
 
     - name: Upload installer to release
       uses: softprops/action-gh-release@v1
       with:
         files: |
           ${{steps.sign_apk.outputs.signedReleaseFile}}
+          ${{steps.sign_apk.outputs.signedReleaseFile}}.md5
           ${{steps.sign_bundle.outputs.signedReleaseFile}}
+          ${{steps.sign_bundle.outputs.signedReleaseFile}}.md5
