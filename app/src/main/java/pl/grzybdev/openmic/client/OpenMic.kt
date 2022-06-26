@@ -107,6 +107,9 @@ class OpenMic(context: Context) {
                         }
 
                         if (event == ConnectorEvent.CONNECTED_OR_READY) {
+                            if (!autoConnectUSB)
+                                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.NEED_MANUAL_LAUNCH)
+
                             if (!client.isConnected && autoConnectUSB)
                             {
                                 autoConnectUSB = false
