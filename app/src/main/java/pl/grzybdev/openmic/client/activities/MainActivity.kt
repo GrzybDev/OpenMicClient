@@ -67,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         initButtons()
     }
 
+    override fun onBackPressed() {
+        // Do nothing when user presses back button
+    }
+
     override fun onResume() {
         super.onResume()
 
