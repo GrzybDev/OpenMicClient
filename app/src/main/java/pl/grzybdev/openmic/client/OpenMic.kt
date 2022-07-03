@@ -1,12 +1,10 @@
 package pl.grzybdev.openmic.client
 
-import android.app.ActivityManager
 import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Context
-import android.content.Context.ACTIVITY_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
@@ -36,7 +34,6 @@ import pl.grzybdev.openmic.client.receivers.BTStateReceiver
 import pl.grzybdev.openmic.client.receivers.USBStateReceiver
 import pl.grzybdev.openmic.client.receivers.WifiStateReceiver
 import java.io.IOException
-import java.lang.IllegalArgumentException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
@@ -475,19 +472,6 @@ class OpenMic(context: Context) {
 
         fun getServerOS(kernelType: String): ServerOS {
             return ServerOS.values().find { it.kernelType == kernelType }!!
-        }
-
-        @Suppress("DEPRECATION")
-        fun isServiceRunning(serviceClass: Class<*>): Boolean {
-            val manager = App.mainActivity?.getSystemService(ACTIVITY_SERVICE) as ActivityManager?
-
-            for (service in manager!!.getRunningServices(Int.MAX_VALUE)) {
-                if (serviceClass.name.equals(service.service.className)) {
-                    return true
-                }
-            }
-
-            return false
         }
     }
 }
