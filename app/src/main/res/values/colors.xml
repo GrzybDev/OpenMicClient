@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="intro_first_slide_bg">#039ae3</color>
+    <color name="intro_permissions_slide_bg">#3949AB</color>
+    <color name="intro_permissions_bt_slide_bg">#093c8f</color>
+    <color name="intro_almost_ready_slide_bg">#2E7D32</color>
+    <color name="intro_open_source_slide_bg">#00695C</color>
+
     <color name="generalIcon">#000000</color>
 
     <color name="warningIcon">#FFB300</color>
