@@ -21,7 +21,6 @@ import pl.grzybdev.openmic.client.activities.MainActivity
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.interfaces.IAudio
 import pl.grzybdev.openmic.client.network.Audio
-import pl.grzybdev.openmic.client.network.messages.Message
 import java.io.IOException
 import kotlin.concurrent.thread
 
