@@ -2,6 +2,18 @@
     <string name="app_name">OpenMic Client</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Intro Fragment -->
+    <string name="intro_first_slide_title">Welcome to OpenMic Client!</string>
+    <string name="intro_first_slide_description">This is app that allows you to connect to any OpenMic Server, so you can use microphone from your phone as virtual microphone on your PC!</string>
+    <string name="intro_permission_slide_title">Before we start…</string>
+    <string name="intro_permission_slide_description">In order to use this phone as microphone in PC you need to… give us permission to use microphone on your phone!</string>
+    <string name="intro_permission_bt_slide_title">…one more thing!</string>
+    <string name="intro_permission_bt_slide_description">Android permissions sometimes can be weird, but in order to use Bluetooth in this app you need to give us permission to localization and devices nearby. Don\'t worry, it\'s optional - if you decline these permissions you will lose ability to connect to PC via Bluetooth. Wi-Fi and USB connections will still work fine!</string>
+    <string name="intro_almost_ready_slide_title">Almost ready!</string>
+    <string name="intro_almost_ready_slide_description">Now you can connect to OpenMic Server and start using your phone as microphone in PC! If you haven\'t done that already, download and install OpenMic Server on your computer.</string>
+    <string name="intro_open_source_slide_title">Crafted with ❤️</string>
+    <string name="intro_open_source_slide_description">Application you are using is completely free and open source! It\'s community oriented project, so any contributions are welcome!</string>
+
     <!-- Main Fragment -->
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
