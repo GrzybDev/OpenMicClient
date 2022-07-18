@@ -100,7 +100,7 @@ class Client(private val connector: Connector?) {
         AppData.connectLock = false
 
         DialogShared.current?.dismiss()
-        OpenMic.App.mainActivity?.onDisconnect()
+        // OpenMic.App.mainActivity?.onDisconnect()
         Audio.stop()
 
         OpenMic.App.context?.initClient()
