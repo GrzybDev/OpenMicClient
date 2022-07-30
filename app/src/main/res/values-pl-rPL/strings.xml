@@ -56,4 +56,6 @@
     <string name="intro_almost_ready_slide_description">Możesz już się łączyć z Serwerem OpenMic i używać telefonu jako mikrofonu w komputerze! Jeżeli wcześniej tego nie zrobiłeś, pobierz i zainstaluj Serwer OpenMic na twoim komputerze.</string>
     <string name="intro_open_source_slide_title">Stworzone z  ❤️</string>
     <string name="intro_open_source_slide_description">Aplikacja której używasz jest kompletnie darmowa i otwarto źródłowa! Jest to projekt społeczności, więc każdy wkład jest mile widziany!</string>
+    <string name="intro_foss_slide_title">Używasz wersji FOSS</string>
+    <string name="intro_foss_slide_description">Ta wersja Klienta OpenMic nie zawiera żadnego zamknięto-źródłowego kodu, nie przekazuje też użytecznych danych analitycznych dla dewelopera oraz nie zawiera reklam.\n\nZamiast oglądać denerwujące reklamy - wpłać dotacje 😊 jeżeli uznasz tą aplikacje za przydatną albo będziesz jej używał w pracy. Dzięki!</string>
 </resources>

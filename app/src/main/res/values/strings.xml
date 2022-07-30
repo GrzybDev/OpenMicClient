@@ -13,6 +13,8 @@
     <string name="intro_almost_ready_slide_description">Now you can connect to OpenMic Server and start using your phone as microphone in PC! If you haven\'t done that already, download and install OpenMic Server on your computer.</string>
     <string name="intro_open_source_slide_title">Crafted with ❤️</string>
     <string name="intro_open_source_slide_description">Application you are using is completely free and open source! It\'s community oriented project, so any contributions are welcome!</string>
+    <string name="intro_foss_slide_title">You\'re using FOSS version</string>
+    <string name="intro_foss_slide_description">This version of OpenMic Client does not contain any closed-source code, it doesn\'t provide useful analytics to developer and does not contain ads.\n\nInstead of watching annoying ads - make an donation 😊 if you find this app useful or if you make any professional use. Thanks!</string>
 
     <!-- Main Fragment -->
     <string name="main_ready">Ready for action! 😎</string>
