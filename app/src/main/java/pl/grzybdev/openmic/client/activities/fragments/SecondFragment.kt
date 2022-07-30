@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client.activities
+package pl.grzybdev.openmic.client.activities.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
