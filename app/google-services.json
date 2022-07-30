@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "257886244224",
+    "project_id": "grzybdev-openmic",
+    "storage_bucket": "grzybdev-openmic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257886244224:android:31702916db578354948565",
+        "android_client_info": {
+          "package_name": "pl.grzybdev.openmic.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "257886244224-oou3u1b8j2p0lst59kf7ruab87p6b9r9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBchPNhTQCcggS09P-6ZnrLt0Bm1Yehri8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "257886244224-oou3u1b8j2p0lst59kf7ruab87p6b9r9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
