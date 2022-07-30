@@ -25,9 +25,10 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        ./gradlew assembleRelease
-        ./gradlew bundleRelease
-        mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release.apk
+        ./gradlew assembleGoogleRelease
+        ./gradlew assembleFossRelease
+        ./gradlew bundleGoogleRelease
+        ./gradlew bundleFossRelease
 
     - uses: r0adkll/sign-android-release@v1
       name: Sign app APK
