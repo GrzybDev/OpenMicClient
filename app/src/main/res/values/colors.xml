@@ -5,6 +5,7 @@
     <color name="intro_permissions_bt_slide_bg">#093c8f</color>
     <color name="intro_almost_ready_slide_bg">#2E7D32</color>
     <color name="intro_open_source_slide_bg">#00695C</color>
+    <color name="intro_foss_slide_bg">#AD1457</color>
 
     <color name="generalIcon">#000000</color>
 
