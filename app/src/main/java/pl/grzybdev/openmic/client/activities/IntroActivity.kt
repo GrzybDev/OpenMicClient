@@ -2,11 +2,12 @@ package pl.grzybdev.openmic.client.activities
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
-import pl.grzybdev.openmic.client.OpenMic
+import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
 
 class IntroActivity : AppIntro() {
@@ -57,14 +58,35 @@ class IntroActivity : AppIntro() {
             required = true
         )
 
-        askForPermissions(
-            permissions = arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.BLUETOOTH_SCAN,
-            ),
-            slideNumber = 3,
-            required = false
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            askForPermissions(
+                permissions = arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                ),
+                slideNumber = 3,
+                required = false
+            )
+        } else {
+            askForPermissions(
+                permissions = arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                ),
+                slideNumber = 3,
+                required = false
+            )
+        }
+
+        if (BuildConfig.FLAVOR == "foss")
+        {
+            addSlide(AppIntroFragment.createInstance(
+                title = getString(R.string.intro_foss_slide_title),
+                description = getString(R.string.intro_foss_slide_description),
+                backgroundColorRes = R.color.intro_foss_slide_bg,
+                imageDrawable = R.drawable.ic_baseline_attach_money_256
+            ))
+        }
 
         isColorTransitionsEnabled = true
         isSkipButtonEnabled = false
