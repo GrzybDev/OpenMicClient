@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "pl.grzybdev.openmic.client"
-        minSdk 16
+        minSdk 19
         targetSdk 32
         multiDexEnabled true
         versionCode 12
@@ -18,17 +18,34 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        foss {
+            dimension "app"
+            applicationIdSuffix ".foss"
+            versionNameSuffix "-foss"
+        }
+
+        google {
+            dimension "app"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
     buildFeatures {
         viewBinding true
     }
@@ -39,8 +56,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.7.0-alpha03'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
@@ -48,4 +65,6 @@ dependencies {
     implementation 'com.github.gazman-sdk:signals:1.5'
     implementation 'com.github.AppIntro:AppIntro:6.2.0'
     implementation "androidx.multidex:multidex:2.0.1"
+    googleImplementation platform('com.google.firebase:firebase-bom:30.3.1')
+    googleImplementation 'com.google.firebase:firebase-analytics-ktx'
 }
