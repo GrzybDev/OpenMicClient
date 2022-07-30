@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="pl.grzybdev.openmic.client.activities.FirstFragment"
-        tools:layout="@layout/fragment_first">
+        android:name="pl.grzybdev.openmic.client.activities.fragments.StartFragment"
+        tools:layout="@layout/fragment_start">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="pl.grzybdev.openmic.client.activities.SecondFragment"
+        android:name="pl.grzybdev.openmic.client.activities.fragments.SecondFragment"
         tools:layout="@layout/fragment_second">
 
         <action
