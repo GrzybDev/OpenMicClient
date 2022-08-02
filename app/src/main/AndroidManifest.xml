@@ -51,6 +51,10 @@
         </activity>
 
         <service android:name=".services.AudioService" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9830507899812507~6155068717"/>
     </application>
 
 </manifest>
