@@ -30,12 +30,12 @@ android {
             dimension "app"
             applicationIdSuffix ".foss"
             versionNameSuffix "-foss"
+            ext.useGoogleServices = false
         }
 
         google {
             dimension "app"
-            apply plugin: 'com.google.gms.google-services'
-            apply plugin: 'com.google.firebase.crashlytics'
+            ext.useGoogleServices = true
         }
     }
 
@@ -50,6 +50,14 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+}
+
+android.productFlavors.each { flavor ->
+    if (getGradle().getStartParameter().getTaskRequests().toString().toLowerCase().contains(flavor.name) && flavor.ext.useGoogleServices) {
+        println("Building [${flavor.name}] flavor with Google Services - applying plugins")
+        apply plugin: 'com.google.gms.google-services'
+        apply plugin: 'com.google.firebase.crashlytics'
     }
 }
 
