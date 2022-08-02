@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">OpenMic Client</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Intro Fragment -->
     <string name="intro_first_slide_title">Welcome to OpenMic Client!</string>
@@ -17,6 +16,18 @@
     <string name="intro_foss_slide_description">This version of OpenMic Client does not contain any closed-source code, it doesn\'t provide useful analytics to developer and does not contain ads.\n\nInstead of watching annoying ads - make an donation 😊 if you find this app useful or if you make any professional use. Thanks!</string>
 
     <!-- Main Fragment -->
+    <string name="action_settings">Settings</string>
+
+    <!-- Main Fragment | Start Fragment -->
+    <string name="start_fragment_title">Let\'s get started!</string>
+    <string name="start_fragment_description">Please select how you want to connect with PC</string>
+    <string name="start_fragment_section_wired">Wired</string>
+    <string name="start_fragment_section_wireless">Wireless</string>
+    <string name="start_fragment_wired_usb">USB</string>
+    <string name="start_fragment_wireless_wifi">Wi-Fi</string>
+    <string name="start_fragment_wireless_bluetooth">Bluetooth</string>
+    <string name="start_fragment_status_initializing">Initializing…</string>
+
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
     <string name="main_readyExplanation">App is now looking for servers 🖥\n\nPhone will connect automatically to your computer with OpenMic Server launched over:</string>
@@ -86,4 +97,8 @@
     <string name="PREFERENCE_APP_USB_ENABLE" translatable="false">EnableUSB</string>
     <string name="SERVER_APP_NAME" translatable="false">OpenMic Server</string>
     <string name="PREFERENCE_SERVICE_ID" translatable="false">ServiceID</string>
+
+    <!-- Ad Units -->
+    <string name="AD_UNIT_ID_START_TOP" translatable="false">ca-app-pub-9830507899812507/5442262623</string>
+    <string name="AD_UNIT_ID_START_BOTTOM" translatable="false">ca-app-pub-9830507899812507/5571638022</string>
 </resources>

@@ -51,11 +51,19 @@
     <string name="intro_permission_slide_title">Zanim zaczniemy…</string>
     <string name="intro_permission_slide_description">Aby użyć tego telefonu jako mikrofonu w komputerze musisz… udzielić nam uprawnień do mikrofonu na telefonie!</string>
     <string name="intro_permission_bt_slide_description">Uprawnienia Androida czasem mogą się wydawać dziwne, ale aby ta aplikacja mogła używać Bluetootha musisz udzielić jej uprawnień do lokalizacji oraz urządzeń w pobliżu. Nie martw się, jeżeli nie udzielisz nam tych uprawnień stracisz możliwość połączenia z komputerem za pomocą Bluetooth. Nadal będziesz mógł się połączyć poprzez USB oraz Wi-Fi.</string>
-    <string name="intro_permission_bt_slide_title">...jeszcze coś!</string>
+    <string name="intro_permission_bt_slide_title">…jeszcze coś!</string>
     <string name="intro_almost_ready_slide_title">Prawie gotowe!</string>
     <string name="intro_almost_ready_slide_description">Możesz już się łączyć z Serwerem OpenMic i używać telefonu jako mikrofonu w komputerze! Jeżeli wcześniej tego nie zrobiłeś, pobierz i zainstaluj Serwer OpenMic na twoim komputerze.</string>
     <string name="intro_open_source_slide_title">Stworzone z  ❤️</string>
     <string name="intro_open_source_slide_description">Aplikacja której używasz jest kompletnie darmowa i otwarto źródłowa! Jest to projekt społeczności, więc każdy wkład jest mile widziany!</string>
     <string name="intro_foss_slide_title">Używasz wersji FOSS</string>
     <string name="intro_foss_slide_description">Ta wersja Klienta OpenMic nie zawiera żadnego zamknięto-źródłowego kodu, nie przekazuje też użytecznych danych analitycznych dla dewelopera oraz nie zawiera reklam.\n\nZamiast oglądać denerwujące reklamy - wpłać dotacje 😊 jeżeli uznasz tą aplikacje za przydatną albo będziesz jej używał w pracy. Dzięki!</string>
+    <string name="start_fragment_title">Zacznijmy!</string>
+    <string name="start_fragment_description">Wybierz jak zamierzasz się połączyć z komputerem</string>
+    <string name="start_fragment_section_wired">Przewodowo</string>
+    <string name="start_fragment_section_wireless">Bezprzewodowo</string>
+    <string name="start_fragment_wired_usb">USB</string>
+    <string name="start_fragment_status_initializing">Inicjalizowanie...</string>
+    <string name="start_fragment_wireless_wifi">Wi-Fi</string>
+    <string name="start_fragment_wireless_bluetooth">Bluetooth</string>
 </resources>
