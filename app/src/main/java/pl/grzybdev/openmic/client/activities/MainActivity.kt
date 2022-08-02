@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +17,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.appopen.AppOpenAd
+import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
 
@@ -40,7 +47,13 @@ class MainActivity : AppCompatActivity() {
 
         sharedPrefs = getSharedPreferences(getString(R.string.PREFERENCE_APP), MODE_PRIVATE)
 
-        startIntro()
+        if (savedInstanceState == null) {
+            // This ain't our first rodeo ;P
+            if (BuildConfig.FLAVOR == "google")
+                MobileAds.initialize(this)
+
+            startIntro()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -84,6 +97,35 @@ class MainActivity : AppCompatActivity() {
                         Manifest.permission.RECORD_AUDIO
                     )
                 }
+            }
+
+            if (BuildConfig.FLAVOR == "google")
+            {
+                val adRequest = AdRequest.Builder().build()
+                val loadCallback = object : AppOpenAd.AppOpenAdLoadCallback() {
+                    override fun onAdLoaded(ad: AppOpenAd) {
+                        super.onAdLoaded(ad)
+                        ad.show(this@MainActivity)
+                    }
+
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        Log.d(this.javaClass.name, "onAppOpenAdFailedToLoad: ")
+                    }
+                }
+
+                val orientation = resources.configuration.orientation
+
+                AppOpenAd.load(
+                    this,
+                    getString(R.string.AD_UNIT_ID_BOOT),
+                    adRequest,
+                    when (orientation) {
+                        Configuration.ORIENTATION_LANDSCAPE -> AppOpenAd.APP_OPEN_AD_ORIENTATION_LANDSCAPE
+                        else -> AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT
+                    },
+                    loadCallback
+                )
             }
         }
     }

@@ -99,6 +99,7 @@
     <string name="PREFERENCE_SERVICE_ID" translatable="false">ServiceID</string>
 
     <!-- Ad Units -->
+    <string name="AD_UNIT_ID_BOOT" translatable="false">ca-app-pub-9830507899812507/4971666941</string>
     <string name="AD_UNIT_ID_START_TOP" translatable="false">ca-app-pub-9830507899812507/5442262623</string>
     <string name="AD_UNIT_ID_START_BOTTOM" translatable="false">ca-app-pub-9830507899812507/5571638022</string>
 </resources>
