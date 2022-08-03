@@ -53,6 +53,10 @@ class GoogleHelper
                 mainActivity.sharedPrefs.edit().putLong(activity.getString(R.string.PREFERENCE_APP_BOOT_AD_LAST_SHOWN), timeNow).apply()
             }
         }
+
+        fun showAd(adView: AdView) {
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
         }
     }
 }

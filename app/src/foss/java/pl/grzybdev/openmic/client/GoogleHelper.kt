@@ -9,5 +9,6 @@ class GoogleHelper
     companion object {
         fun initializeAds(ctx: Context) { }
         fun showStartupAd(activity: Activity, ctx: Context) { }
+        fun showAd(adView: AdView) { }
     }
 }
