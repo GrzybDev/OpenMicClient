@@ -135,6 +135,7 @@ class OpenMic(context: Context) {
 
                                 lastConnState = client.isConnected
                             }
+                            else -> {}
                         }
                     }
 
@@ -170,6 +171,8 @@ class OpenMic(context: Context) {
                                     }
                                 }
                             }
+
+                            else -> {}
                         }
                     }
                 }
