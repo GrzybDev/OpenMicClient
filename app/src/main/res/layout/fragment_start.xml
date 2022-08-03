@@ -38,13 +38,13 @@
             android:id="@+id/wiredSectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/start_fragment_section_wired"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startDesc" />
+            app:layout_constraintTop_toBottomOf="@+id/start_adView_top" />
 
         <View
             android:id="@+id/wiredSectionDividerStart"
@@ -97,8 +97,9 @@
 
                 <TextView
                     android:id="@+id/usbStatus"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/start_fragment_status_initializing" />
             </TableRow>
 
@@ -141,7 +142,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:stretchColumns="0,1,2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/wirelessSectionDividerStart">
@@ -153,7 +153,7 @@
 
                 <Button
                     android:id="@+id/wifiBtn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="@string/start_fragment_wireless_wifi"
@@ -163,12 +163,16 @@
                     android:id="@+id/wifiProgressBar"
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp" />
 
                 <ImageView
                     android:id="@+id/wifiStatusIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:src="@drawable/ic_baseline_block_48"
                     android:visibility="gone"
                     tools:visibility="visible" />
@@ -177,6 +181,9 @@
                     android:id="@+id/wifiStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="@string/start_fragment_status_initializing" />
             </TableRow>
 
@@ -203,6 +210,7 @@
                     android:id="@+id/btStatusIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
                     android:src="@drawable/ic_baseline_block_48"
                     android:visibility="gone"
                     tools:visibility="visible" />
@@ -211,6 +219,9 @@
                     android:id="@+id/btStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="-16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:text="@string/start_fragment_status_initializing" />
             </TableRow>
 
