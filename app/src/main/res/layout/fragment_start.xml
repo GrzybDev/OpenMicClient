@@ -11,6 +11,22 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <Space
+            android:id="@+id/start_adView_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Space
+            android:id="@+id/start_adView_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/startTitle"
             android:layout_width="wrap_content"
@@ -44,7 +60,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/start_adView_top" />
+            app:layout_constraintTop_toBottomOf="@+id/startDesc" />
 
         <View
             android:id="@+id/wiredSectionDividerStart"
