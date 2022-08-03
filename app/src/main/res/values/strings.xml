@@ -27,6 +27,10 @@
     <string name="start_fragment_wireless_wifi">Wi-Fi</string>
     <string name="start_fragment_wireless_bluetooth">Bluetooth</string>
     <string name="start_fragment_status_initializing">Initializing…</string>
+    <string name="start_fragment_status_usb_not_connected">Your phone is not connected to any USB device</string>
+    <string name="start_fragment_status_usb_connected">Your phone is not connected to USB device, but OpenMic Server seems to not be running on said device</string>
+    <string name="start_fragment_status_usb_checking">Checking if OpenMic Server is running on connected USB device…</string>
+    <string name="start_fragment_status_usb_ready">Seems like everything is ready! Click on button to connect to PC via USB</string>
 
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
@@ -91,6 +95,8 @@
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_INTRO_SHOWN" translatable="false">intro_shown</string>
+    <string name="PREFERENCE_APP_BOOT_AD_LAST_SHOWN" translatable="false">boot_ad_last_shown</string>
+
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>
     <string name="PREFERENCE_APP_KNOWN_DEVICES" translatable="false">KnownDevices</string>
     <string name="PREFERENCE_APP_PORT" translatable="false">Port</string>
