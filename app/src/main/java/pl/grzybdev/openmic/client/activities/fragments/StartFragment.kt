@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.gazman.signals.Signals
+import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.FragmentStartBinding
@@ -48,8 +49,11 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        GoogleHelper.showAd(view.findViewById(R.id.start_adView_top))
-        GoogleHelper.showAd(view.findViewById(R.id.start_adView_bottom))
+        if (BuildConfig.FLAVOR == "google")
+        {
+            GoogleHelper.showAd(view.findViewById(R.id.start_adView_top))
+            GoogleHelper.showAd(view.findViewById(R.id.start_adView_bottom))
+        }
 
         if (savedInstanceState == null)
         {
