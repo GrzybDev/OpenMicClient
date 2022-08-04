@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +21,7 @@ import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +44,19 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         sharedPrefs = getSharedPreferences(getString(R.string.PREFERENCE_APP), MODE_PRIVATE)
+
+        val deviceIDKey = getString(R.string.PREFERENCE_APP_DEVICE_ID)
+
+        if (!sharedPrefs.contains(deviceIDKey)) {
+            val newID = UUID.randomUUID()
+            Log.d(javaClass.name, "Device ID was not set, generated new one: $newID")
+
+            with (sharedPrefs.edit()) {
+                putString(deviceIDKey, newID.toString())
+                apply()
+            }
+        }
+
 
         if (savedInstanceState == null) {
             // This ain't our first rodeo ;P
