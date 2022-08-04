@@ -59,12 +59,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        if (BuildConfig.FLAVOR == "foss") {
+            val item = menu.findItem(R.id.action_donate)
+            item.isVisible = true
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_donate -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.INTERNAL_DONATE_URL))))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
