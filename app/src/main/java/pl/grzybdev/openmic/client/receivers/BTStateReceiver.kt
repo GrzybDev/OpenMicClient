@@ -14,7 +14,7 @@ import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.dataclasses.ServerEntry
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
 import pl.grzybdev.openmic.client.enumerators.ServerOS
 import pl.grzybdev.openmic.client.interfaces.IConnector
@@ -28,6 +28,7 @@ class BTStateReceiver : BroadcastReceiver() {
             BluetoothDevice.ACTION_FOUND -> run {
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
 
+                /*
                 if (OpenMic.App.mainActivity?.applicationContext?.let {
                         ActivityCompat.checkSelfPermission(
                             it,
@@ -43,14 +44,16 @@ class BTStateReceiver : BroadcastReceiver() {
                     Log.d(javaClass.name, "Found Bluetooth device: ${device.name}")
                     AppData.foundServers[device.address] = ServerEntry(device.name, device.address, ServerCompatibility.UNKNOWN, ServerOS.OTHER, device.address, Connector.Bluetooth)
                     AppData.serverAdapter.updateData()
-                    connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.NEED_MANUAL_LAUNCH)
+                    connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorStatus.NEED_MANUAL_LAUNCH)
                 }
+
+                 */
             }
 
             BluetoothAdapter.ACTION_STATE_CHANGED -> run {
                 when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)) {
-                    BluetoothAdapter.STATE_OFF -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.DISABLED)
-                    BluetoothAdapter.STATE_ON -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorEvent.CONNECTED_OR_READY)
+                    BluetoothAdapter.STATE_OFF -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorStatus.DISABLED)
+                    BluetoothAdapter.STATE_ON -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorStatus.CONNECTED_OR_READY)
                 }
             }
         }

@@ -8,11 +8,10 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.interfaces.IConnector
 
 
@@ -24,6 +23,8 @@ class WifiStateReceiver : BroadcastReceiver() {
         if (intent?.action == ConnectivityManager.CONNECTIVITY_ACTION)
         {
             var isConnected = false
+
+            /*
 
             val connectivityManager = OpenMic.App.mainActivity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -41,8 +42,9 @@ class WifiStateReceiver : BroadcastReceiver() {
                     }
                 }
             }
+            */
 
-            connectSignal.dispatcher.onEvent(Connector.WiFi, if (isConnected) ConnectorEvent.CONNECTED_OR_READY else ConnectorEvent.DISABLED)
+            connectSignal.dispatcher.onEvent(Connector.WiFi, if (isConnected) ConnectorStatus.CONNECTED_OR_READY else ConnectorStatus.DISABLED)
         }
     }
 

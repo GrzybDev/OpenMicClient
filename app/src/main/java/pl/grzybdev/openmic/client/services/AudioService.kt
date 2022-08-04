@@ -14,7 +14,6 @@ import com.gazman.signals.Signals
 import okhttp3.WebSocket
 import okio.ByteString.Companion.toByteString
 import pl.grzybdev.openmic.client.Action
-import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.activities.MainActivity
@@ -64,19 +63,19 @@ class AudioService : Service() {
                     audioThread.interrupt()
                     audioThread.join()
 
-                    AppData.isMuted = true
+                    // AppData.isMuted = true
                 }
 
                 Action.UNMUTE -> run {
                     Log.d(javaClass.name, "UNMUTE")
                     startAudioThread()
 
-                    AppData.isMuted = false
+                    // AppData.isMuted = false
                 }
 
                 Action.GET_MUTE_STATUS -> run {
                     Log.d(javaClass.name, "GET_MUTE_STATUS")
-                    AppData.isMuted = recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING
+                    // AppData.isMuted = recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING
                 }
 
                 else -> {
@@ -102,7 +101,7 @@ class AudioService : Service() {
         val notification: Notification =
             NotificationCompat.Builder(this, BuildConfig.APPLICATION_ID)
                 .setContentTitle(getString(R.string.connected_action_title))
-                .setContentText(getString(R.string.connected_action_desc, AppData.serverName))
+                .setContentText(getString(R.string.connected_action_desc, "SERVER_NAME"))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build()

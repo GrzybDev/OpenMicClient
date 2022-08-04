@@ -34,7 +34,7 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
 
         override fun onClick(v: View?) {
             thread(start = true) {
-                OpenMic.App.context?.connectTo(if (serverAddress.text.split(":").size == 6) Connector.Bluetooth else Connector.WiFi, serverAddress.text.toString())
+                // OpenMic.App.context?.connectTo(if (serverAddress.text.split(":").size == 6) Connector.Bluetooth else Connector.WiFi, serverAddress.text.toString())
             }
         }
     }
@@ -46,14 +46,17 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val entries = mutableListOf<Map.Entry<String, ServerEntry>>()
 
+        /*
         AppData.foundServers.forEach { entry -> run {
             if (entry.value.connector == AppData.showServers)
                 entries.add(entry)
         }}
+         */
 
         val entryMap = entries[position]
         val entry = entryMap.value
 
+        /*
         when (entry.serverOS)
         {
             ServerOS.WINDOWS -> run {
@@ -83,35 +86,40 @@ class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
                 }
             }
         }
-
+         */
         holder.serverName.text = entry.serverName
         holder.serverAddress.text = entry.serverIP
 
+        /*
         when (entry.serverCompat) {
             ServerCompatibility.OFFICIAL -> run { holder.serverVerifyStatus.setImageDrawable(OpenMic.App.mainActivity?.let { AppCompatResources.getDrawable(it, R.drawable.ic_baseline_verified_48) }) }
             ServerCompatibility.UNOFFICIAL -> run { holder.serverVerifyStatus.setImageDrawable(OpenMic.App.mainActivity?.let { AppCompatResources.getDrawable(it, R.drawable.ic_baseline_not_verified_48) }) }
             ServerCompatibility.NOT_SUPPORTED -> run { holder.serverVerifyStatus.setImageDrawable(OpenMic.App.mainActivity?.let { AppCompatResources.getDrawable(it, R.drawable.ic_baseline_block_48) }) }
             else -> run { holder.serverVerifyStatus.setImageDrawable(OpenMic.App.mainActivity?.let { AppCompatResources.getDrawable(it, R.drawable.ic_baseline_device_unknown_24) }) }
         }
+         */
     }
 
     override fun getItemCount(): Int {
         val servers = mutableListOf<String>()
 
+        /*
         AppData.foundServers.forEach { entry -> run {
             if (entry.value.connector == AppData.showServers)
                 servers.add(entry.key)
         }}
-
+         */
         return servers.size
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateData()
     {
+        /*
         OpenMic.App.mainActivity?.runOnUiThread {
             notifyDataSetChanged()
         }
+         */
     }
 
 }

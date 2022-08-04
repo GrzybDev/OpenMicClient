@@ -41,7 +41,7 @@ class USBCheckListener: WebSocketListener() {
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         Log.d(javaClass.name, "usbCheck [onFailure]: Websocket connection failed, reason: ${t.message}. Marking USB Status as Connected but not Ready...")
-        
+
         AppData.connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_CONNECTED_NO_SERVER)
     }
 }

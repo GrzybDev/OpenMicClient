@@ -1,6 +1,5 @@
 package pl.grzybdev.openmic.client.network
 
-import android.app.AlertDialog
 import android.bluetooth.BluetoothSocket
 import android.util.Log
 import com.gazman.signals.Signals
@@ -9,8 +8,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.DialogShared
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.interfaces.IError
@@ -84,6 +81,7 @@ class Client(private val connector: Connector?) {
 
             errorSignal.dispatcher.onErrorMessage(errorType)
 
+            /*
             OpenMic.App.mainActivity?.runOnUiThread {
                 val builder: AlertDialog.Builder = AlertDialog.Builder(OpenMic.App.mainActivity)
                 builder.setTitle(OpenMic.App.mainActivity?.getString(R.string.ErrorDialog_Title))
@@ -91,19 +89,21 @@ class Client(private val connector: Connector?) {
                 builder.setPositiveButton(OpenMic.App.mainActivity?.getString(R.string.ErrorDialog_Button_OK)) { _, _ -> AppData.connectLock = false }
                 builder.show()
             }
+
+             */
         }
     }
 
     fun handleDisconnect()
     {
         isConnected = false
-        AppData.connectLock = false
+        // AppData.connectLock = false
 
         DialogShared.current?.dismiss()
         // OpenMic.App.mainActivity?.onDisconnect()
         Audio.stop()
 
-        OpenMic.App.context?.initClient()
+        // bOpenMic.App.context?.initClient()
     }
 
 }

@@ -14,7 +14,7 @@ import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.network.Audio
@@ -54,6 +54,7 @@ class SystemPacket {
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
 
+            /*
             val serverCompat = OpenMic.getServerCompatibility(packet.serverApp, packet.serverVersion)
 
             if (serverCompat == ServerCompatibility.NOT_SUPPORTED) {
@@ -68,12 +69,16 @@ class SystemPacket {
             AppData.serverID = packet.serverID
             AppData.serverOS = OpenMic.getServerOS(packet.serverOS)
 
+             */
+
             if (!packet.needAuth) {
                 // Server recognizes us, make sure that we recognize server too
                 Log.d(
                     SystemPacket::class.java.name,
                     "Server doesn't need auth, checking if server is in known devices list..."
                 )
+
+                /*
 
                 val knownDevicesKey: String =
                     OpenMic.App.mainActivity?.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES) ?: ""
@@ -93,7 +98,7 @@ class SystemPacket {
                     )
 
                     val signal = Signals.signal(IConnector::class)
-                    AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTING) }
+                    // AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorStatus.CONNECTING) }
 
                     val response: ClientPacket = AuthClientSide()
 
@@ -107,6 +112,8 @@ class SystemPacket {
 
                     AuthDialog.show(socket, connector)
                 }
+
+                 */
             } else {
                 Log.d(SystemPacket::class.java.name, "Server need auth, showing auth popup...")
                 AuthDialog.show(socket, connector)

@@ -1,27 +1,9 @@
 package pl.grzybdev.openmic.client.dialogs
 
-import android.app.AlertDialog
-import android.bluetooth.BluetoothSocket
-import android.text.Editable
-import android.text.InputType
-import android.text.TextUtils
-import android.text.TextWatcher
-import android.util.Log
-import android.widget.EditText
 import com.gazman.signals.Signals
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import okhttp3.WebSocket
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.interfaces.IError
 import pl.grzybdev.openmic.client.network.messages.ErrorCode
-import pl.grzybdev.openmic.client.network.messages.client.AuthCodeVerify
-import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
-import pl.grzybdev.openmic.client.network.messages.client.SystemGoodbye
-import pl.grzybdev.openmic.client.network.messages.server.SystemPacket
 
 class AuthDialog {
 
@@ -31,7 +13,7 @@ class AuthDialog {
         errorSignal.addListener { error ->
             run {
                 if (error == ErrorCode.AUTH_CODE_INVALID) {
-                    DialogData.socket?.let { show(it, AppData.currentConn!!) }
+                    // DialogData.socket?.let { show(it, AppData.currentConn!!) }
                 }
             }
         }
@@ -45,6 +27,8 @@ class AuthDialog {
 
         fun show(socket: Any, connector: Connector) {
             DialogData.socket = socket
+
+            /*
 
             OpenMic.App.mainActivity?.runOnUiThread {
                 // Build AlertDialog
@@ -135,6 +119,7 @@ class AuthDialog {
                 // Save reference for dialog
                 DialogShared.current = dialog
             }
+             */
         }
     }
 }

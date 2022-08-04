@@ -8,7 +8,7 @@ import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.services.AudioService
 
@@ -24,7 +24,7 @@ class Audio {
         var audioFormat = AudioFormat.ENCODING_PCM_16BIT
         var minBufSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat)
 
-        var intent = Intent(OpenMic.App.mainActivity, AudioService::class.java)
+        //var intent = Intent(OpenMic.App.mainActivity, AudioService::class.java)
     }
 
     companion object {
@@ -36,13 +36,13 @@ class Audio {
             }
 
             val signal = Signals.signal(IConnector::class)
-            AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorEvent.CONNECTED_OR_READY) }
+            //AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorStatus.CONNECTED_OR_READY) }
 
-            ContextCompat.startForegroundService(OpenMic.App.mainActivity!!, Data.intent)
+            //ContextCompat.startForegroundService(OpenMic.App.mainActivity!!, Data.intent)
         }
 
         fun stop() {
-            OpenMic.App.mainActivity?.stopService(Data.intent)
+            //OpenMic.App.mainActivity?.stopService(Data.intent)
         }
 
     }

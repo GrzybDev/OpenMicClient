@@ -30,7 +30,9 @@ class AuthPacket {
             val packet: AuthCodeVerify = Json.decodeFromString(data)
 
             Log.d(AuthPacket::class.java.name, "Received successful AuthCodeVerify: $packet")
-            Log.d(AuthPacket::class.java.name, "Authorization complete, adding ${AppData.serverID} to known servers list...")
+            //Log.d(AuthPacket::class.java.name, "Authorization complete, adding ${AppData.serverID} to known servers list...")
+
+            /*
 
             val knownDevicesKey: String =
                 OpenMic.App.mainActivity?.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES) ?: ""
@@ -47,6 +49,8 @@ class AuthPacket {
                 putStringSet(knownDevicesKey, knownDevices)
                 apply()
             }
+
+             */
 
             Audio.start(socket, connector)
         }

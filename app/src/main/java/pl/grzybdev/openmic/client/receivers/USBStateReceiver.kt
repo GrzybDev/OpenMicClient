@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.BatteryManager
 import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.interfaces.IConnector
 
 
@@ -33,9 +33,9 @@ class USBStateReceiver : BroadcastReceiver() {
             lastState = isConnectedToPC
 
             if (isConnectedToPC) {
-                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.USB_CONNECTED)
+                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_CONNECTED)
             } else {
-                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorEvent.USB_NOT_CONNECTED)
+                connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_NOT_CONNECTED)
             }
         }
     }

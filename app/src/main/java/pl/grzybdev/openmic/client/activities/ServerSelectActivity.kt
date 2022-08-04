@@ -8,7 +8,7 @@ import com.gazman.signals.Signals
 import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.interfaces.IConnector
 
 class ServerSelectActivity : AppCompatActivity() {
@@ -35,13 +35,13 @@ class ServerSelectActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(applicationContext)
 
             // set adapter
-            adapter = AppData.serverAdapter
+            // adapter = AppData.serverAdapter
         }
     }
 
-    private fun onConnectorEvent(connector: Connector, event: ConnectorEvent)
+    private fun onConnectorEvent(connector: Connector, event: ConnectorStatus)
     {
-        if (event == ConnectorEvent.CONNECTING || (connector == Connector.WiFi && event == ConnectorEvent.CONNECTED_OR_READY))
+        if (event == ConnectorStatus.CONNECTING || (connector == Connector.WiFi && event == ConnectorStatus.CONNECTED_OR_READY))
             finish()
     }
 }
