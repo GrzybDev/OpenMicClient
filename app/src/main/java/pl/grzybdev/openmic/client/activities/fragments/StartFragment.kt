@@ -13,37 +13,39 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import com.gazman.signals.Signals
-import pl.grzybdev.openmic.client.BuildConfig
-import pl.grzybdev.openmic.client.GoogleHelper
-import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.databinding.FragmentStartBinding
+import pl.grzybdev.openmic.client.*
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorEvent
-import pl.grzybdev.openmic.client.interfaces.IConnector
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import pl.grzybdev.openmic.client.receivers.USBStateReceiver
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class StartFragment : Fragment() {
 
-    private var connectSignal = Signals.signal(IConnector::class)
+    private var connectListener = { c: Connector, s: ConnectorStatus -> updateConnectorStatus(c, s) }
 
     private var usbReceiver: USBStateReceiver = USBStateReceiver()
+    private var usbStatus: ConnectorStatus = ConnectorStatus.UNKNOWN
 
-    private var _binding: FragmentStartBinding? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+        // USB
+        activity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        AppData.connectSignal.addListener(connectListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        activity?.unregisterReceiver(usbReceiver)
+        AppData.connectSignal.removeListener(connectListener)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
-        return binding.root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,70 +57,88 @@ class StartFragment : Fragment() {
             GoogleHelper.showAd(view.findViewById(R.id.start_adView_bottom))
         }
 
-        if (savedInstanceState == null)
-        {
-            // Init USB
-            activity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-            connectSignal.addListener { c, e -> updateConnectorStatus(c, e) }
+        if (savedInstanceState != null) {
+            usbStatus = ConnectorStatus.values()[savedInstanceState.getInt(getString(R.string.INTERNAL_STATE_USB))]
+            updateConnectorStatus(Connector.USB, usbStatus)
+        } else {
+            val usbBtn: Button = view.findViewById(R.id.usbBtn)
+
+            usbBtn.setOnClickListener {
+                OpenMic.connectTo(Connector.USB, getString(R.string.INTERNAL_USB_ADDRESS))
+            }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        activity?.unregisterReceiver(usbReceiver)
-        _binding = null
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(getString(R.string.INTERNAL_STATE_USB), usbStatus.ordinal)
     }
 
-    private fun updateConnectorStatus(connector: Connector, event: ConnectorEvent) {
-        when (connector) {
-            Connector.USB -> updateUSBStatus(event)
-            else -> {}
+    private fun updateConnectorStatus(connector: Connector, status: ConnectorStatus) {
+        activity?.runOnUiThread {
+            when (connector) {
+                Connector.USB -> updateUSBStatus(status)
+                else -> {}
+            }
         }
     }
 
-    private fun updateUSBStatus(event: ConnectorEvent)
+    private fun updateUSBStatus(status: ConnectorStatus)
     {
+        usbStatus = status
+
         val button: Button? = view?.findViewById(R.id.usbBtn)
         val progressBar: ProgressBar? = view?.findViewById(R.id.usbProgressBar)
         val statusIcon: ImageView? = view?.findViewById(R.id.usbStatusIcon)
-        val status: TextView? = view?.findViewById(R.id.usbStatus)
+        val statusText: TextView? = view?.findViewById(R.id.usbStatus)
 
         if (button == null
             || progressBar == null
             || statusIcon == null
-            || status == null) {
-            Log.e(javaClass.name, "updateUSBStatus: Required UI elements not found")
+            || statusText == null) {
+            Log.w(javaClass.name, "updateUSBStatus: Required UI elements not found")
             return
         }
 
         progressBar.visibility = View.GONE
         statusIcon.visibility = View.VISIBLE
 
-        when (event) {
-            ConnectorEvent.USB_NOT_CONNECTED -> {
+        when (status) {
+            ConnectorStatus.USB_NOT_CONNECTED -> {
                 button.isEnabled = false
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, activity?.theme))
-                status.text = getString(R.string.start_fragment_status_usb_not_connected)
+                statusText.text = getString(R.string.start_fragment_status_usb_not_connected)
             }
 
-            ConnectorEvent.USB_CONNECTED -> {
-                button.isEnabled = false
-                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
-                status.text = getString(R.string.start_fragment_status_usb_connected)
-            }
-
-            ConnectorEvent.USB_CHECKING -> {
+            ConnectorStatus.USB_CONNECTED -> {
                 button.isEnabled = false
 
                 progressBar.visibility = View.VISIBLE
                 statusIcon.visibility = View.GONE
-                status.text = getString(R.string.start_fragment_status_usb_checking)
+                statusText.text = getString(R.string.start_fragment_status_usb_connected)
+
+                OpenMic.usbCheck(getString(R.string.INTERNAL_USB_ADDRESS))
             }
 
-            ConnectorEvent.READY -> {
+            ConnectorStatus.USB_CHECKING -> {
+                button.isEnabled = false
+
+                progressBar.visibility = View.VISIBLE
+                statusIcon.visibility = View.GONE
+                statusText.text = getString(R.string.start_fragment_status_usb_checking)
+            }
+
+            ConnectorStatus.USB_CONNECTED_NO_SERVER -> {
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_usb_connected_no_server)
+            }
+
+            ConnectorStatus.READY -> {
                 button.isEnabled = true
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
-                status.text = getString(R.string.start_fragment_status_usb_ready)
+                statusText.text = getString(R.string.start_fragment_status_usb_ready)
             }
 
             else -> { }
