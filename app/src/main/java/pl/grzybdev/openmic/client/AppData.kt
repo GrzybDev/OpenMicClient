@@ -1,28 +1,12 @@
 package pl.grzybdev.openmic.client
 
-import pl.grzybdev.openmic.client.adapters.ServerListAdapter
-import pl.grzybdev.openmic.client.dataclasses.ServerEntry
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ServerOS
+import com.gazman.signals.Signals
+import pl.grzybdev.openmic.client.interfaces.IConnector
 
 object AppData {
 
+    var connectSignal = Signals.signal(IConnector::class)
+
     var communicationPort = 10000
     var deviceID: String = ""
-    var initialized: Boolean = false
-    var isMuted: Boolean = false
-
-    var connectLock: Boolean = false
-    var currentConn: Connector? = null
-
-    // Server data
-    var serverName: String = ""
-    var serverID: String = ""
-    var serverOS: ServerOS = ServerOS.OTHER
-
-    val foundServers: MutableMap<String, ServerEntry> = mutableMapOf()
-    val foundServersTimestamps: MutableMap<String, Long> = mutableMapOf()
-    var showServers: Connector? = null
-
-    val serverAdapter = ServerListAdapter()
 }
