@@ -1,20 +1,15 @@
 package pl.grzybdev.openmic.client.activities.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.databinding.FragmentSecondBinding
+import androidx.fragment.app.Fragment
+import pl.grzybdev.openmic.client.databinding.FragmentConnectingBinding
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
-class SecondFragment : Fragment() {
+class ConnectingFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentConnectingBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,11 +18,9 @@ class SecondFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentConnectingBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onDestroyView() {
