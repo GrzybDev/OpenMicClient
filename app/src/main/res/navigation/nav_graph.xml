@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_start">
 
         <action
-            android:id="@+id/action_connect_usb"
+            android:id="@+id/action_connect"
             app:destination="@id/ConnectingFragment" />
     </fragment>
 
@@ -21,12 +21,22 @@
         tools:layout="@layout/fragment_connecting">
 
         <action
-            android:id="@+id/action_failed_to_connect"
-            app:destination="@id/MainFragment" />
+            android:id="@+id/action_cancel_connection"
+            app:destination="@id/DisconnectingFragment" />
 
         <action
             android:id="@+id/action_connected"
             app:destination="@id/ConnectedFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/DisconnectingFragment"
+        android:name="pl.grzybdev.openmic.client.activities.fragments.DisconnectingFragment"
+        tools:layout="@layout/fragment_disconnecting">
+
+        <action
+            android:id="@+id/action_disconnected"
+            app:destination="@id/MainFragment" />
     </fragment>
 
     <fragment
@@ -36,6 +46,6 @@
 
         <action
             android:id="@+id/action_disconnect"
-            app:destination="@id/MainFragment" />
+            app:destination="@id/DisconnectingFragment" />
     </fragment>
 </navigation>
