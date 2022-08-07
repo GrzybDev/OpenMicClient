@@ -6,54 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".activities.fragments.StartFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
 
-        <Space
-            android:id="@+id/start_adView"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/startTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="@string/start_fragment_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/startDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/start_fragment_description"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startTitle" />
+            <TextView
+                android:id="@+id/startTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/start_fragment_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <TextView
+                android:id="@+id/startDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/start_fragment_description"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Space
+                android:id="@+id/start_adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/startDesc"
-            tools:layout_editor_absoluteX="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/wiredSectionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="@string/start_fragment_section_wired"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
@@ -65,20 +67,14 @@
                 android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/usbRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/usbBtn"
-                    android:layout_width="138dp"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:text="@string/start_fragment_wired_usb"
-                    app:icon="@drawable/ic_baseline_usb_48" />
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/usbProgressBar"
+                app:layout_constraintTop_toTopOf="@+id/usbProgressBar">
 
                 <ProgressBar
                     android:id="@+id/usbProgressBar"
@@ -86,32 +82,59 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="48dp"
+                    tools:layout_conversion_absoluteWidth="48dp" />
 
                 <ImageView
                     android:id="@+id/usbStatusIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     android:contentDescription="@string/start_fragment_icon_connection_status"
                     android:src="@drawable/ic_baseline_block_48"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="48dp"
+                    tools:layout_conversion_absoluteWidth="48dp"
                     tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/usbStatus"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/start_fragment_status_initializing" />
-            </LinearLayout>
+                    android:text="@string/start_fragment_status_initializing"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/usbBtn"
+                    app:layout_constraintStart_toEndOf="@+id/usbStatusIcon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="19dp"
+                    tools:layout_conversion_absoluteWidth="72dp" />
+
+                <Button
+                    android:id="@+id/usbBtn"
+                    android:layout_width="138dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/start_fragment_wired_usb"
+                    app:icon="@drawable/ic_baseline_usb_48"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="48dp"
+                    tools:layout_conversion_absoluteWidth="138dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/wirelessSectionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/start_fragment_section_wireless"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
@@ -132,14 +155,6 @@
                     android:id="@+id/wifiRow"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/wifiBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/start_fragment_wireless_wifi"
-                        app:icon="@drawable/ic_baseline_wifi_48" />
 
                     <ProgressBar
                         android:id="@+id/wifiProgressBar"
@@ -166,6 +181,14 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/start_fragment_status_initializing" />
+
+                    <Button
+                        android:id="@+id/wifiBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="@string/start_fragment_wireless_wifi"
+                        app:icon="@drawable/ic_baseline_wifi_48" />
                 </TableRow>
 
                 <TableRow
@@ -173,14 +196,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="16dp">
-
-                    <Button
-                        android:id="@+id/btBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:text="@string/start_fragment_wireless_bluetooth"
-                        app:icon="@drawable/ic_baseline_wifi_48" />
 
                     <ProgressBar
                         android:id="@+id/btProgressBar"
@@ -207,6 +222,14 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/start_fragment_status_initializing" />
+
+                    <Button
+                        android:id="@+id/btBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="@string/start_fragment_wireless_bluetooth"
+                        app:icon="@drawable/ic_baseline_wifi_48" />
                 </TableRow>
 
             </TableLayout>
@@ -219,5 +242,5 @@
                 android:background="?android:attr/listDivider" />
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>
