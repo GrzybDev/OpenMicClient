@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -17,10 +18,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
+import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
+import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -69,8 +73,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+
+        if (AppData.connectionStatus >= ConnectionStatus.CONNECTING)
+        {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.connecting_fragment_disconnect_action))
+                .setMessage(getString(R.string.connecting_fragment_disconnect_action_description))
+                .setPositiveButton(R.string.connecting_fragment_disconnect_action_yes) { _, _ ->
+                    AppData.openmic.forceDisconnect(navController)
+                }
+                .setNegativeButton(R.string.connecting_fragment_disconnect_action_no) { _, _ ->
+                    // Do nothing
+                }
+                .show()
+        }
+
+        return false
+    }
+
+    override fun onBackPressed() {
+        onSupportNavigateUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
