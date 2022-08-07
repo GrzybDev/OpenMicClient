@@ -6,9 +6,5 @@ enum class ConnectorStatus {
     USB_CONNECTED,
     USB_CHECKING,
     USB_CONNECTED_NO_SERVER,
-    CONNECTING,
     READY,
-    DISABLED,
-    NEED_MANUAL_LAUNCH,
-    CONNECTED_OR_READY
 }
