@@ -69,7 +69,6 @@
     <string name="start_fragment_status_usb_not_connected">Telefon nie jest połączony z żadnym urządzeniem USB</string>
     <string name="start_fragment_status_usb_connected_no_server">Wygląda na to że Serwer OpenMic nie jest włączony na podłączonym urządzeniu USB</string>
     <string name="start_fragment_status_usb_checking">Sprawdzanie czy Serwer OpenMic działa na podłączonym urządzeniu USB…</string>
-    <string name="start_fragment_status_usb_ready">Wygląda na to że wszystko jest gotowe! Kliknij na przycisk aby połączyć się z komputerem za pomocą USB</string>
+    <string name="start_fragment_status_usb_ready">Twój telefon jest podłączony do urządzenia USB z włączonym Serwerem OpenMic</string>
     <string name="action_donate">Przekaż darowiznę autorowi</string>
-    <string name="start_fragment_status_usb_connected">Twój telefon jest podłączony do urządzenia USB</string>
 </resources>

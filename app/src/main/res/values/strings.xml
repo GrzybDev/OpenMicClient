@@ -28,10 +28,18 @@
     <string name="start_fragment_wireless_bluetooth">Bluetooth</string>
     <string name="start_fragment_status_initializing">Initializing…</string>
     <string name="start_fragment_status_usb_not_connected">Your phone is not connected to any USB device</string>
-    <string name="start_fragment_status_usb_connected">Your phone is connected to USB device</string>
     <string name="start_fragment_status_usb_connected_no_server">OpenMic Server seems to not be running on connected USB device</string>
     <string name="start_fragment_status_usb_checking">Checking if OpenMic Server is running on connected USB device…</string>
-    <string name="start_fragment_status_usb_ready">Seems like everything is ready! Click on button to connect to PC via USB</string>
+    <string name="start_fragment_status_usb_ready">Your phone is connected to USB device with OpenMic Server running</string>
+    <string name="start_fragment_icon_connection_status">Connection Status</string>
+
+    <!-- Main Fragment | Connecting Fragment -->
+    <string name="connecting_fragment_title">Connecting to PC (%1$s)…</string>
+    <string name="connecting_fragment_description">This should not take long…</string>
+    <string name="connecting_fragment_disconnect_action">We are still trying to connect to your PC!</string>
+    <string name="connecting_fragment_disconnect_action_description">Do you really want to cancel connection attempt?</string>
+    <string name="connecting_fragment_disconnect_action_yes">Yes</string>
+    <string name="connecting_fragment_disconnect_action_no">No</string>
 
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
@@ -106,13 +114,15 @@
     <string name="PREFERENCE_SERVICE_ID" translatable="false">ServiceID</string>
 
     <!-- Ad Units -->
-    <string name="AD_UNIT_ID_BOOT" translatable="false">ca-app-pub-9830507899812507/4971666941</string>
-    <string name="AD_UNIT_ID_START_TOP" translatable="false">ca-app-pub-9830507899812507/5442262623</string>
-    <string name="AD_UNIT_ID_START_BOTTOM" translatable="false">ca-app-pub-9830507899812507/5571638022</string>
+    <string name="AD_UNIT_ID_BOOT" translatable="false">ca-app-pub-3940256099942544/3419835294</string>
+    <string name="AD_UNIT_ID_START_TOP" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="AD_UNIT_ID_START_BOTTOM" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- App Internal -->
     <string name="INTERNAL_DONATE_URL" translatable="false">https://ko-fi.com/grzybdev</string>
     <string name="INTERNAL_STATE_USB" translatable="false">usbStatus</string>
     <string name="INTERNAL_USB_ADDRESS" translatable="false">localhost</string>
     <string name="action_donate">Donate to Author</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
