@@ -41,7 +41,9 @@ class ServerSelectActivity : AppCompatActivity() {
 
     private fun onConnectorEvent(connector: Connector, event: ConnectorStatus)
     {
+        /*
         if (event == ConnectorStatus.CONNECTING || (connector == Connector.WiFi && event == ConnectorStatus.CONNECTED_OR_READY))
             finish()
+         */
     }
 }
