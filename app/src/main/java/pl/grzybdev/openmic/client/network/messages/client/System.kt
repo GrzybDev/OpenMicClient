@@ -16,3 +16,7 @@ class SystemHello(
 class SystemGoodbye(
     val exitCode: Int,
     ) : ClientPacket()
+
+@Serializable
+@SerialName("System_IsAlive")
+class SystemIsAlive : ClientPacket()

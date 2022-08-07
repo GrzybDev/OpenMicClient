@@ -2,25 +2,14 @@ package pl.grzybdev.openmic.client.network.messages.server
 
 import android.bluetooth.BluetoothSocket
 import android.util.Log
-import com.gazman.signals.Signals
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dialogs.AuthDialog
 import pl.grzybdev.openmic.client.dialogs.DialogShared
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
-import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
-import pl.grzybdev.openmic.client.interfaces.IConnector
-import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
-import pl.grzybdev.openmic.client.network.messages.client.AuthClientSide
-import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
 
 @Serializable
 data class SystemHello(
@@ -45,6 +34,7 @@ class SystemPacket {
             when (type) {
                 Message.SYSTEM_HELLO -> handleHello(socket, connector, data)
                 Message.SYSTEM_GOODBYE -> handleGoodbye(socket, connector, data)
+                Message.SYSTEM_IS_ALIVE -> handleIsAlive()
                 else -> {}
             }
         }
@@ -136,6 +126,10 @@ class SystemPacket {
                 val btSocket = socket as BluetoothSocket
                 btSocket.close()
             }
+        }
+
+        private fun handleIsAlive() {
+            Log.d(SystemPacket::class.java.name, "Server is alive")
         }
     }
 }
