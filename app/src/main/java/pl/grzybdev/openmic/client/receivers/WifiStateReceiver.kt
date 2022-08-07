@@ -44,7 +44,7 @@ class WifiStateReceiver : BroadcastReceiver() {
             }
             */
 
-            connectSignal.dispatcher.onEvent(Connector.WiFi, if (isConnected) ConnectorStatus.CONNECTED_OR_READY else ConnectorStatus.DISABLED)
+            // connectSignal.dispatcher.onEvent(Connector.WiFi, if (isConnected) ConnectorStatus.CONNECTED_OR_READY else ConnectorStatus.DISABLED)
         }
     }
 

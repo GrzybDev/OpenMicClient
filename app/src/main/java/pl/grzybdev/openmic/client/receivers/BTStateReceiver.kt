@@ -51,10 +51,12 @@ class BTStateReceiver : BroadcastReceiver() {
             }
 
             BluetoothAdapter.ACTION_STATE_CHANGED -> run {
+                /*
                 when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)) {
                     BluetoothAdapter.STATE_OFF -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorStatus.DISABLED)
                     BluetoothAdapter.STATE_ON -> connectSignal.dispatcher.onEvent(Connector.Bluetooth, ConnectorStatus.CONNECTED_OR_READY)
                 }
+                 */
             }
         }
     }
