@@ -55,8 +55,7 @@ class GoogleHelper
         }
 
         fun showAd(adView: AdView) {
-            val adRequest = AdRequest.Builder().build()
-            adView.loadAd(adRequest)
+            adView.loadAd(AdRequest.Builder().build())
         }
     }
 }
