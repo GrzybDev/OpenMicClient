@@ -55,6 +55,15 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9830507899812507~6155068717"/>
+
+        <receiver
+            android:name=".receivers.signals.ConnectorSignalReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="UpdateState" />
+            </intent-filter>
+        </receiver>
+
         <receiver
             android:name=".receivers.signals.ConnectionSignalReceiver"
             android:exported="false">
