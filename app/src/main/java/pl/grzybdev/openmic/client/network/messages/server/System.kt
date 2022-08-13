@@ -52,7 +52,7 @@ class SystemPacket {
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
 
-            val serverVer = AppData.openmic.getServerVersion(packet.serverApp, packet.serverVersion)
+            val serverVer = OpenMic.getServerVersion(packet.serverApp, packet.serverVersion)
 
             if (serverVer == ServerVersion.MISMATCH) {
                 Log.d(SystemPacket::class.java.name, "Version mismatch, not initializing...")

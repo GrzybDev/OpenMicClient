@@ -49,6 +49,18 @@ class OpenMic {
             i.putExtra("state", status.ordinal)
             ctx.sendBroadcast(i)
         }
+
+        fun getServerVersion(serverApp: String, serverVersion: String): ServerVersion {
+            if (serverApp == AppData.resources?.getString(R.string.SERVER_APP_NAME)) {
+                // It's official app, check if versions match
+                if (serverVersion != BuildConfig.VERSION_NAME)
+                    return ServerVersion.MISMATCH
+
+                return ServerVersion.MATCH
+            }
+
+            return ServerVersion.UNOFFICIAL
+        }
     }
 
     fun connectTo(ctx: Context, connector: Connector, address: String) {
@@ -111,17 +123,5 @@ class OpenMic {
         }
         else
             Log.w(javaClass.name, "forceDisconnect: No listener to close...")
-    }
-
-    fun getServerVersion(serverApp: String, serverVersion: String): ServerVersion {
-        if (serverApp == AppData.resources?.getString(R.string.SERVER_APP_NAME)) {
-            // It's official app, check if versions match
-            if (serverVersion != BuildConfig.VERSION_NAME)
-                return ServerVersion.MISMATCH
-
-            return ServerVersion.MATCH
-        }
-
-        return ServerVersion.UNOFFICIAL
     }
 }
