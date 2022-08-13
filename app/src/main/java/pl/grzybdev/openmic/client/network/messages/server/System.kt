@@ -30,7 +30,7 @@ data class SystemGoodbye(
 
 class SystemPacket {
     companion object {
-        fun handle(socket: Any, connector: Connector, type: Message, data: String) {
+        fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
                 Message.SYSTEM_HELLO -> handleHello(socket, connector, data)
                 Message.SYSTEM_GOODBYE -> handleGoodbye(socket, connector, data)

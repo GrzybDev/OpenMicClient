@@ -1,12 +1,10 @@
 package pl.grzybdev.openmic.client.network.messages.server
 
+import android.content.Context
 import android.util.Log
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
@@ -18,7 +16,7 @@ data class AuthCodeVerify(
 
 class AuthPacket {
     companion object {
-        fun handle(socket: Any, connector: Connector, type: Message, data: String) {
+        fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
                 Message.AUTH_CODE_VERIFY -> handleCodeVerify(socket, connector, data)
                 else -> {}

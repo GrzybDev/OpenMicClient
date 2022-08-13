@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client.network
 
+import android.content.Context
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
@@ -26,10 +27,10 @@ class Handler {
             }
         }
 
-        fun handlePacket(socket: Any, connector: Connector, type: Message, data: String) {
+        fun handlePacket(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE, Message.SYSTEM_IS_ALIVE -> SystemPacket.handle(socket, connector, type, data)
-                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(socket, connector, type, data)
+                Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE, Message.SYSTEM_IS_ALIVE -> SystemPacket.handle(context, socket, connector, type, data)
+                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(context, socket, connector, type, data)
             }
         }
     }
