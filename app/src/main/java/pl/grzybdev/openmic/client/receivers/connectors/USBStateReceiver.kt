@@ -4,14 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.BatteryManager
+import android.util.Log
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
+import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
+import pl.grzybdev.openmic.client.singletons.AppData
 
 
 class USBStateReceiver : BroadcastReceiver() {
-
-    private var lastState: Boolean? = null
-    // private var connectSignal = Signals.signal(IConnector::class)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Intent.ACTION_BATTERY_CHANGED) {
@@ -27,14 +28,11 @@ class USBStateReceiver : BroadcastReceiver() {
 
             val isConnectedToPC = isCharging && usbCharge && !acCharge
 
-            if (lastState == isConnectedToPC) return
-            lastState = isConnectedToPC
-
-            if (isConnectedToPC) {
-                // connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_CONNECTED)
-            } else {
-                // connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_NOT_CONNECTED)
-            }
+            OpenMic.changeConnectorStatus(context!!, Connector.USB,
+                if (isConnectedToPC)
+                    ConnectorState.USB_CONNECTED
+                else
+                    ConnectorState.USB_NOT_CONNECTED)
         }
     }
 
