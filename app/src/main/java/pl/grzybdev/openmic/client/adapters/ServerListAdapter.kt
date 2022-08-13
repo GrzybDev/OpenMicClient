@@ -1,22 +1,14 @@
 package pl.grzybdev.openmic.client.adapters
 
 import android.annotation.SuppressLint
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.dataclasses.ServerEntry
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
-import pl.grzybdev.openmic.client.enumerators.ServerOS
 import kotlin.concurrent.thread
 
 class ServerListAdapter : RecyclerView.Adapter<ServerListAdapter.ViewHolder>() {
