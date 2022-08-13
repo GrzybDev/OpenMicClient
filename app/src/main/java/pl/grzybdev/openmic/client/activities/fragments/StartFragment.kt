@@ -13,25 +13,30 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import pl.grzybdev.openmic.client.*
+import pl.grzybdev.openmic.client.BuildConfig
+import pl.grzybdev.openmic.client.GoogleHelper
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
-import pl.grzybdev.openmic.client.receivers.USBStateReceiver
+import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.interfaces.IConnector
+import pl.grzybdev.openmic.client.receivers.connectors.USBStateReceiver
+import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
+import pl.grzybdev.openmic.client.singletons.AppData
 
-class StartFragment : Fragment() {
+class StartFragment : Fragment(), IConnector {
 
-    private var connectListener = { c: Connector, s: ConnectorStatus -> updateConnectorStatus(c, s) }
-
+    private var connectorSignal: ConnectorSignalReceiver = ConnectorSignalReceiver()
     private var usbReceiver: USBStateReceiver = USBStateReceiver()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        connectorSignal.addListener(this)
+        context?.registerReceiver(connectorSignal, IntentFilter("UpdateState"))
+
         // USB
         activity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-        AppData.connectSignal.addListener(connectListener)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_start, container, false)
@@ -41,7 +46,9 @@ class StartFragment : Fragment() {
         super.onDestroyView()
 
         activity?.unregisterReceiver(usbReceiver)
-        AppData.connectSignal.removeListener(connectListener)
+
+        connectorSignal.removeListener(this)
+        activity?.unregisterReceiver(connectorSignal)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,29 +57,16 @@ class StartFragment : Fragment() {
         val usbBtn: Button = view.findViewById(R.id.usbBtn)
 
         usbBtn.setOnClickListener {
-            AppData.openmic.connectTo(Connector.USB, getString(R.string.INTERNAL_USB_ADDRESS))
-            findNavController().navigate(R.id.action_connect)
+            AppData.openmic.connectTo(requireContext(), Connector.USB, getString(R.string.INTERNAL_USB_ADDRESS))
         }
 
         if (BuildConfig.FLAVOR == "google")
             GoogleHelper.showAd(view.findViewById(R.id.start_adView))
+
+        onUSBStateChange(AppData.usbState)
     }
 
-    private fun updateConnectorStatus(connector: Connector, status: ConnectorStatus) {
-        activity?.runOnUiThread {
-            when (connector) {
-                Connector.USB -> updateUSBStatus(status)
-                else -> {}
-            }
-        }
-    }
-
-    private fun updateUSBStatus(status: ConnectorStatus)
-    {
-        Log.d(javaClass.name, "Setting to: ${AppData.usbStatus}")
-
-        AppData.usbStatus = status
-
+    override fun onUSBStateChange(status: ConnectorState) {
         val button: Button? = view?.findViewById(R.id.usbBtn)
         val progressBar: ProgressBar? = view?.findViewById(R.id.usbProgressBar)
         val statusIcon: ImageView? = view?.findViewById(R.id.usbStatusIcon)
@@ -90,22 +84,23 @@ class StartFragment : Fragment() {
         statusIcon.visibility = View.VISIBLE
 
         when (status) {
-            ConnectorStatus.USB_NOT_CONNECTED -> {
+            ConnectorState.USB_NOT_CONNECTED -> {
                 button.isEnabled = false
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_usb_not_connected)
             }
 
-            ConnectorStatus.USB_CONNECTED -> {
+            ConnectorState.USB_CONNECTED -> {
                 button.isEnabled = false
 
                 progressBar.visibility = View.VISIBLE
                 statusIcon.visibility = View.GONE
+                statusText.text = ""
 
-                context?.let { AppData.openmic.usbCheck(it) }
+                AppData.openmic.usbCheck(requireContext(), true)
             }
 
-            ConnectorStatus.USB_CHECKING -> {
+            ConnectorState.USB_CHECKING -> {
                 button.isEnabled = false
 
                 progressBar.visibility = View.VISIBLE
@@ -113,13 +108,13 @@ class StartFragment : Fragment() {
                 statusText.text = getString(R.string.start_fragment_status_usb_checking)
             }
 
-            ConnectorStatus.USB_CONNECTED_NO_SERVER -> {
+            ConnectorState.USB_CONNECTED_NO_SERVER -> {
                 button.isEnabled = false
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_usb_connected_no_server)
             }
 
-            ConnectorStatus.READY -> {
+            ConnectorState.READY -> {
                 button.isEnabled = true
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_usb_ready)
