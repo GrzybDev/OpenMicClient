@@ -1,8 +1,7 @@
 package pl.grzybdev.openmic.client.interfaces
 
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
+import pl.grzybdev.openmic.client.enumerators.ConnectorState
 
-fun interface IConnector {
-    fun onEvent(connector: Connector, event: ConnectorStatus)
+interface IConnector {
+    fun onUSBStateChange(status: ConnectorState)
 }
