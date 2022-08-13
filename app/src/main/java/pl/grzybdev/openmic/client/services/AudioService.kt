@@ -10,15 +10,12 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.gazman.signals.Signals
 import okhttp3.WebSocket
 import okio.ByteString.Companion.toByteString
-import pl.grzybdev.openmic.client.Action
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.activities.MainActivity
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.interfaces.IAudio
 import pl.grzybdev.openmic.client.network.Audio
 import java.io.IOException
 import kotlin.concurrent.thread
@@ -29,7 +26,7 @@ class AudioService : Service() {
     lateinit var audioThread: Thread
     lateinit var recorder: AudioRecord
 
-    private val audioSignal = Signals.signal(IAudio::class)
+    //private val audioSignal = Signals.signal(IAudio::class)
 
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -57,6 +54,7 @@ class AudioService : Service() {
         val actionInt = intent.getIntExtra("action", -1)
 
         if (actionInt != -1) {
+            /*
             when (Action.values().find { it.code == actionInt }) {
                 Action.MUTE -> run {
                     Log.d(javaClass.name, "MUTE")
@@ -82,8 +80,9 @@ class AudioService : Service() {
                     // Invalid command?
                 }
             }
+             */
 
-            audioSignal.dispatcher.onAudioStateChanged()
+            // audioSignal.dispatcher.onAudioStateChanged()
             return START_NOT_STICKY
         }
 
