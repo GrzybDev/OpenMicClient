@@ -6,22 +6,22 @@ import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocketListener
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorState
-import pl.grzybdev.openmic.client.enumerators.ServerVersion
+import pl.grzybdev.openmic.client.enumerators.*
+import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.network.Client
 import pl.grzybdev.openmic.client.network.Listener
 import pl.grzybdev.openmic.client.network.USBCheckListener
+import pl.grzybdev.openmic.client.network.messages.client.AuthClient
 import pl.grzybdev.openmic.client.receivers.signals.ConnectionSignalReceiver
 import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
+import pl.grzybdev.openmic.client.receivers.signals.DialogSignalReceiver
 import pl.grzybdev.openmic.client.singletons.AppData
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
 
-class OpenMic {
+class OpenMic : IConnection {
 
     var wsClient = Client(null, null)
 
@@ -50,6 +50,15 @@ class OpenMic {
             ctx.sendBroadcast(i)
         }
 
+        fun showDialog(ctx: Context, type: DialogType, data: String?)
+        {
+            val i = Intent(ctx, DialogSignalReceiver::class.java)
+            i.action = "ShowDialog"
+            i.putExtra("type", type.ordinal)
+            i.putExtra("data", data)
+            ctx.sendBroadcast(i)
+        }
+
         fun getServerVersion(serverApp: String, serverVersion: String): ServerVersion {
             if (serverApp == AppData.resources?.getString(R.string.SERVER_APP_NAME)) {
                 // It's official app, check if versions match
@@ -73,6 +82,7 @@ class OpenMic {
         changeConnectionStatus(ctx, ConnectionStatus.CONNECTING)
         changeConnectorStatus(ctx, connector, ConnectorState.UNKNOWN)
 
+        AppData.connectionListeners.add(this)
         forceDisconnect()
 
         wsClient = Client(ctx, connector)
@@ -92,6 +102,9 @@ class OpenMic {
     }
 
     fun usbCheck(ctx: Context, uiDelay: Boolean = false) {
+        if (AppData.connectionStatus != ConnectionStatus.NOT_CONNECTED)
+            return
+
         Log.d(javaClass.name, "usbCheck: Checking if USB device has OpenMic Server running...")
 
         changeConnectorStatus(ctx, Connector.USB, ConnectorState.USB_CHECKING)
@@ -103,15 +116,17 @@ class OpenMic {
             .build()
 
         if (uiDelay) {
-            Timer("USBCheckDelay", false).schedule(5000) {
-                httpClient.newWebSocket(webRequest, listener as USBCheckListener)
+            Timer("USBCheckDelay", false).schedule(2500) {
+                if (listener is USBCheckListener) {
+                    httpClient.newWebSocket(webRequest, listener as USBCheckListener)
+                }
             }
         } else {
             httpClient.newWebSocket(webRequest, listener as USBCheckListener)
         }
     }
 
-    fun forceDisconnect() {
+    fun forceDisconnect(reason: String = "") {
         Log.d(javaClass.name, "forceDisconnect: Disconnecting...")
 
         if (listener != null)
@@ -119,9 +134,18 @@ class OpenMic {
             if (listener is USBCheckListener)
                 (listener as USBCheckListener).forceClose()
             else
-                (listener as Listener).handleDisconnect()
+                (listener as Listener).handleDisconnect(reason = reason)
         }
         else
             Log.w(javaClass.name, "forceDisconnect: No listener to close...")
+    }
+
+    override fun onConnectionStateChange(status: ConnectionStatus) {
+        if (status == ConnectionStatus.CONNECTED) {
+            wsClient.sendPacket(AuthClient())
+            AppData.connectionListeners.remove(this)
+        } else if (status == ConnectionStatus.DISCONNECTED) {
+            AppData.connectionListeners.remove(this)
+        }
     }
 }
