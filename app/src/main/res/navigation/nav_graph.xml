@@ -21,7 +21,7 @@
         tools:layout="@layout/fragment_connecting">
 
         <action
-            android:id="@+id/action_cancel_connection"
+            android:id="@+id/action_disconnect"
             app:destination="@id/DisconnectingFragment" />
 
         <action
@@ -47,5 +47,9 @@
         <action
             android:id="@+id/action_disconnect"
             app:destination="@id/DisconnectingFragment" />
+
+        <action
+            android:id="@+id/action_disconnected"
+            app:destination="@id/MainFragment" />
     </fragment>
 </navigation>
