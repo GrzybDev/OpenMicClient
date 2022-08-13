@@ -2,11 +2,9 @@ package pl.grzybdev.openmic.client.network.messages.server
 
 import android.bluetooth.BluetoothSocket
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.OpenMic
@@ -14,10 +12,6 @@ import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ServerVersion
 import pl.grzybdev.openmic.client.network.messages.Message
-import pl.grzybdev.openmic.client.network.messages.client.AuthClientSide
-import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
-import pl.grzybdev.openmic.client.receivers.signals.ConnectionSignalReceiver
-import pl.grzybdev.openmic.client.singletons.AppData
 import pl.grzybdev.openmic.client.singletons.ServerData
 
 @Serializable
@@ -40,14 +34,14 @@ class SystemPacket {
     companion object {
         fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.SYSTEM_HELLO -> handleHello(context, socket, connector, data)
+                Message.SYSTEM_HELLO -> handleHello(context, data)
                 Message.SYSTEM_GOODBYE -> handleGoodbye(context, socket, connector, data)
                 Message.SYSTEM_IS_ALIVE -> handleIsAlive()
                 else -> {}
             }
         }
 
-        private fun handleHello(context: Context, socket: Any, connector: Connector, data: String)  {
+        private fun handleHello(context: Context, data: String)  {
             val packet: SystemHello = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Connected to: " + packet.serverName)
@@ -67,16 +61,6 @@ class SystemPacket {
             ServerData.os = packet.serverOS
             ServerData.version = serverVer
 
-            val response: ClientPacket = AuthClientSide()
-
-            if (connector != Connector.Bluetooth) {
-                val webSocket = socket as WebSocket
-                webSocket.send(Json.encodeToString(response))
-            } else {
-                val btSocket = socket as BluetoothSocket
-                btSocket.outputStream.write(Json.encodeToString(response).toByteArray())
-            }
-
             OpenMic.changeConnectionStatus(context, ConnectionStatus.CONNECTED)
         }
 
@@ -84,11 +68,10 @@ class SystemPacket {
             val packet: SystemGoodbye = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Server says goodbye, exit code ${packet.exitCode}")
-            // AppData.dialogSignal.dispatcher.onEvent(DialogType.SERVER_DISCONNECT, packet.exitCode)
 
             if (connector != Connector.Bluetooth) {
                 val webSocket = socket as WebSocket
-                webSocket.close(1000, "Normal disconnect")
+                webSocket.close(1000, null)
             } else {
                 val btSocket = socket as BluetoothSocket
                 btSocket.close()
