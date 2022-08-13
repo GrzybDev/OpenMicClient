@@ -55,6 +55,13 @@
     <string name="dialog_auth_btn_ok">Verify</string>
     <string name="dialog_auth_btn_cancel">Cancel</string>
 
+    <!-- Dialog | Disconnected -->
+    <string name="dialog_disconnect_title">Disconnected from server</string>
+    <string name="dialog_disconnect_btn_ok">OK</string>
+    <string name="dialog_disconnect_auth_dismissed">You dismissed Authentication Dialog and have been disconnected from server</string>
+    <string name="dialog_disconnect_no_reason">Server did not give reason for disconnect</string>
+    <string name="dialog_disconnect_unknown_error">Server returned unknown error (%1$s)</string>
+
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
     <string name="main_readyExplanation">App is now looking for servers 🖥\n\nPhone will connect automatically to your computer with OpenMic Server launched over:</string>
