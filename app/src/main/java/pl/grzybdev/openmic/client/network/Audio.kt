@@ -1,16 +1,8 @@
 package pl.grzybdev.openmic.client.network
 
-import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
-import androidx.core.content.ContextCompat
-import com.gazman.signals.Signals
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
-import pl.grzybdev.openmic.client.interfaces.IConnector
-import pl.grzybdev.openmic.client.services.AudioService
 
 
 class Audio {
@@ -35,7 +27,7 @@ class Audio {
                 Data.connector = connector
             }
 
-            val signal = Signals.signal(IConnector::class)
+            // val signal = Signals.signal(IConnector::class)
             //AppData.currentConn?.let { signal.dispatcher.onEvent(it, ConnectorStatus.CONNECTED_OR_READY) }
 
             //ContextCompat.startForegroundService(OpenMic.App.mainActivity!!, Data.intent)
