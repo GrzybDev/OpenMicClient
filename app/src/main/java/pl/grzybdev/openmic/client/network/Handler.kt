@@ -30,7 +30,7 @@ class Handler {
         fun handlePacket(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
                 Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE, Message.SYSTEM_IS_ALIVE -> SystemPacket.handle(context, socket, connector, type, data)
-                Message.AUTH_CODE_VERIFY -> AuthPacket.handle(context, socket, connector, type, data)
+                Message.AUTH_CLIENT, Message.AUTH_CODE_VERIFY -> AuthPacket.handle(context, socket, connector, type, data)
             }
         }
     }
