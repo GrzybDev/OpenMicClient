@@ -1,6 +1,6 @@
 package pl.grzybdev.openmic.client.enumerators
 
-enum class ConnectorStatus {
+enum class ConnectorState {
     UNKNOWN,
     USB_NOT_CONNECTED,
     USB_CONNECTED,
