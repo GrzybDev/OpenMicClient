@@ -3,11 +3,13 @@ package pl.grzybdev.openmic.client.network
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
 import pl.grzybdev.openmic.client.singletons.AppData
 
 class Listener : WebSocketListener() {
 
     private var socket: WebSocket? = null
+    private var forceDisconnected = false
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         socket = webSocket
@@ -24,7 +26,7 @@ class Listener : WebSocketListener() {
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
         socket = webSocket
 
-        handleDisconnect()
+        handleDisconnect(code, reason)
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -33,8 +35,12 @@ class Listener : WebSocketListener() {
         handleDisconnect()
     }
 
-    fun handleDisconnect()
+    fun handleDisconnect(code: Int = 1000, reason: String = "")
     {
-        socket?.let { AppData.openmic.wsClient.handleDisconnect(it) }
+        if (forceDisconnected)
+            return
+
+        forceDisconnected = true
+        socket?.let { AppData.openmic.wsClient.handleDisconnect(it, code, reason) }
     }
 }
