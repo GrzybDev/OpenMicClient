@@ -34,12 +34,26 @@
     <string name="start_fragment_icon_connection_status">Connection Status</string>
 
     <!-- Main Fragment | Connecting Fragment -->
-    <string name="connecting_fragment_title">Connecting to PC (%1$s)…</string>
+    <string name="connecting_fragment_title">Connecting to PC…</string>
     <string name="connecting_fragment_description">This should not take long…</string>
+
     <string name="connecting_fragment_disconnect_action">We are still trying to connect to your PC!</string>
     <string name="connecting_fragment_disconnect_action_description">Do you really want to cancel connection attempt?</string>
     <string name="connecting_fragment_disconnect_action_yes">Yes</string>
     <string name="connecting_fragment_disconnect_action_no">No</string>
+
+    <!-- Main Fragment | Disconnecting Fragment -->
+    <string name="disconnecting_fragment_title">Disconnecting from PC…</string>
+    <string name="disconnecting_fragment_description">This should not take long…</string>
+
+    <!-- Dialog | Server Error -->
+    <string name="dialog_srverr_title">Oh no! Server returned error</string>
+    <string name="dialog_srverr_btn_ok">OK</string>
+
+    <!-- Dialog | Auth -->
+    <string name="dialog_auth_title">Please enter code you see on your computer screen</string>
+    <string name="dialog_auth_btn_ok">Verify</string>
+    <string name="dialog_auth_btn_cancel">Cancel</string>
 
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
@@ -123,6 +137,4 @@
     <string name="INTERNAL_STATE_USB" translatable="false">usbStatus</string>
     <string name="INTERNAL_USB_ADDRESS" translatable="false">localhost</string>
     <string name="action_donate">Donate to Author</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
