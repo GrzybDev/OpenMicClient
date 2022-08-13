@@ -1,9 +1,9 @@
 package pl.grzybdev.openmic.client.enumerators
 
 enum class ConnectionStatus {
-    UNKNOWN,
+    NOT_CONNECTED,
     CONNECTING,
     CONNECTED,
-    DISCONNECTED,
-    FAILED
+    DISCONNECTING,
+    DISCONNECTED
 }
