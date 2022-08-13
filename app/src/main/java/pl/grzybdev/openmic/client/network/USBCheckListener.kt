@@ -7,17 +7,17 @@ import kotlinx.serialization.json.Json
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import pl.grzybdev.openmic.client.AppData
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
+import pl.grzybdev.openmic.client.enumerators.ConnectorState
 import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
 import pl.grzybdev.openmic.client.network.messages.client.SystemIsAlive
+import pl.grzybdev.openmic.client.singletons.AppData
 import java.util.*
 import kotlin.concurrent.schedule
 
-class USBCheckListener(private val ctx: Context): WebSocketListener() {
+class USBCheckListener(val context: Context): WebSocketListener() {
 
     private var socket: WebSocket? = null
 
@@ -37,7 +37,8 @@ class USBCheckListener(private val ctx: Context): WebSocketListener() {
 
         // If we receive anything back, close connection and allow user to connect via USB
         webSocket.close(1000, null)
-        AppData.connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.READY)
+
+        OpenMic.changeConnectorStatus(context, Connector.USB, ConnectorState.READY)
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -51,9 +52,9 @@ class USBCheckListener(private val ctx: Context): WebSocketListener() {
         }
 
         AppData.usbTimer = Timer("USBCheckTimer", false).schedule(1000){
-            if (AppData.usbStatus == ConnectorStatus.READY && AppData.connectionStatus == ConnectionStatus.UNKNOWN) {
+            if (AppData.usbState == ConnectorState.READY && AppData.connectionStatus == ConnectionStatus.NOT_CONNECTED) {
                 Log.d(javaClass.name, "usbCheck [onOpen]: Re-checking...")
-                AppData.openmic.usbCheck(ctx)
+                AppData.openmic.usbCheck(context)
             }
         }
     }
@@ -62,7 +63,8 @@ class USBCheckListener(private val ctx: Context): WebSocketListener() {
         socket = webSocket
 
         Log.d(javaClass.name, "usbCheck [onFailure]: Websocket connection failed, reason: ${t.message}. Marking USB Status as Connected but not Ready...")
-        AppData.connectSignal.dispatcher.onEvent(Connector.USB, ConnectorStatus.USB_CONNECTED_NO_SERVER)
+
+        OpenMic.changeConnectorStatus(context, Connector.USB, ConnectorState.USB_CONNECTED_NO_SERVER)
 
         if (AppData.usbTimer != null) {
             AppData.usbTimer!!.cancel()
@@ -70,9 +72,9 @@ class USBCheckListener(private val ctx: Context): WebSocketListener() {
         }
 
         AppData.usbTimer = Timer("USBCheckTimer", false).schedule(1000){
-            if (AppData.usbStatus == ConnectorStatus.USB_CONNECTED_NO_SERVER && AppData.connectionStatus == ConnectionStatus.UNKNOWN) {
+            if (AppData.usbState == ConnectorState.USB_CONNECTED_NO_SERVER && AppData.connectionStatus == ConnectionStatus.NOT_CONNECTED) {
                 Log.d(javaClass.name, "usbCheck [onFailure]: Retrying...")
-                AppData.openmic.usbCheck(ctx)
+                AppData.openmic.usbCheck(context)
             }
         }
     }
