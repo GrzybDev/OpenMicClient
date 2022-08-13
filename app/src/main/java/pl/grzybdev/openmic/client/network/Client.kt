@@ -8,8 +8,11 @@ import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.OpenMic
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.Connector
+import pl.grzybdev.openmic.client.enumerators.DialogType
+import pl.grzybdev.openmic.client.enumerators.ServerVersion
 import pl.grzybdev.openmic.client.network.messages.ErrorCode
 import pl.grzybdev.openmic.client.network.messages.Message
 import pl.grzybdev.openmic.client.network.messages.client.ClientPacket
@@ -18,22 +21,22 @@ import pl.grzybdev.openmic.client.network.messages.server.BasePacket
 import pl.grzybdev.openmic.client.network.messages.server.ErrorPacket
 import pl.grzybdev.openmic.client.network.messages.server.ServerPacket
 import pl.grzybdev.openmic.client.singletons.AppData
+import pl.grzybdev.openmic.client.singletons.ServerData
 
 class Client(val context: Context?, private val connector: Connector?) {
 
-    fun onOpen(socket: Any) {
-        val packet: ClientPacket = SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, AppData.deviceID)
+    private var socket: Any? = null
 
-        if (connector != Connector.Bluetooth) {
-            val webSocket = socket as WebSocket
-            webSocket.send(Json.encodeToString(packet))
-        } else {
-            val btSocket = socket as BluetoothSocket
-            btSocket.outputStream.write(Json.encodeToString(packet).toByteArray())
-        }
+    fun onOpen(socket: Any) {
+        this.socket = socket
+
+        val packet: ClientPacket = SystemHello(BuildConfig.APPLICATION_ID, BuildConfig.VERSION_NAME, AppData.deviceID)
+        sendPacket(packet)
     }
 
     fun onMessage(socket: Any, text: String) {
+        this.socket = socket
+
         val json = Json { ignoreUnknownKeys = true }
         val pBase: ServerPacket = json.decodeFromString(Handler.Companion.PacketSerializer, text)
 
@@ -51,32 +54,54 @@ class Client(val context: Context?, private val connector: Connector?) {
         } else {
             Log.e(javaClass.name, "Received error packet, showing dialog...")
             val packet = pBase as ErrorPacket
-            // val dialogSignal = Signals.signal(IDialog::class)
             val errorType: ErrorCode? = ErrorCode.values().find { it.code == packet.error }
 
             if (errorType != null) {
-                // dialogSignal.dispatcher.onEvent(DialogType.SERVER_ERROR, packet.message)
+                if (errorType == ErrorCode.AUTH_CODE_INVALID)
+                    OpenMic.showDialog(context!!, DialogType.AUTH, packet.message)
+
+                OpenMic.showDialog(context!!, DialogType.SERVER_ERROR, packet.message)
             } else {
-                handleDisconnect(socket)
+                val dialogStr = context?.getString(R.string.dialog_disconnect_unknown_error, packet.message)
+
+                if (dialogStr != null) {
+                    handleDisconnect(socket, reason = dialogStr)
+                }
             }
         }
     }
 
-    fun handleDisconnect(socket: Any, code: Int = 1000)
+    fun handleDisconnect(socket: Any, code: Int = 1000, reason: String = "")
     {
         if (context == null) { return }
+        this.socket = socket
 
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTING)
 
         if (connector != Connector.Bluetooth) {
             val webSocket = socket as WebSocket
-            webSocket.close(code, null)
+            webSocket.close(code, reason)
         } else {
             val btSocket = socket as BluetoothSocket
             btSocket.close()
         }
 
+        ServerData.id = ""
+        ServerData.os = ""
+        ServerData.version = ServerVersion.UNKNOWN
+        ServerData.name = ""
+
+        OpenMic.showDialog(context, DialogType.SERVER_DISCONNECT, reason)
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTED)
     }
 
+    fun sendPacket(packet: ClientPacket) {
+        if (connector != Connector.Bluetooth) {
+            val webSocket = socket as WebSocket
+            webSocket.send(Json.encodeToString(packet))
+        } else {
+            val btSocket = socket as BluetoothSocket
+            btSocket.outputStream.write(Json.encodeToString(packet).toByteArray())
+        }
+    }
 }
