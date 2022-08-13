@@ -1,27 +1,14 @@
 package pl.grzybdev.openmic.client.receivers
 
-import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.core.app.ActivityCompat
-import com.gazman.signals.Signals
-import pl.grzybdev.openmic.client.AppData
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.dataclasses.ServerEntry
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
-import pl.grzybdev.openmic.client.enumerators.ServerCompatibility
-import pl.grzybdev.openmic.client.enumerators.ServerOS
-import pl.grzybdev.openmic.client.interfaces.IConnector
 
 class BTStateReceiver : BroadcastReceiver() {
 
-    private val connectSignal = Signals.signal(IConnector::class)
+    // private val connectSignal = Signals.signal(IConnector::class)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {

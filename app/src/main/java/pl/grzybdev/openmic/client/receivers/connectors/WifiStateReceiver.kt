@@ -6,18 +6,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
-import com.gazman.signals.Signals
-import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
-import pl.grzybdev.openmic.client.interfaces.IConnector
 
 
 class WifiStateReceiver : BroadcastReceiver() {
 
-    private val connectSignal = Signals.signal(IConnector::class)
+    // private val connectSignal = Signals.signal(IConnector::class)
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == ConnectivityManager.CONNECTIVITY_ACTION)
