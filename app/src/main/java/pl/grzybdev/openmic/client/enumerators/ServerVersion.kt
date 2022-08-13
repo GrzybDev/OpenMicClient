@@ -1,8 +1,8 @@
 package pl.grzybdev.openmic.client.enumerators
 
-enum class ServerCompatibility {
-    OFFICIAL,
-    UNOFFICIAL,
-    NOT_SUPPORTED,
-    UNKNOWN
+enum class ServerVersion {
+    UNKNOWN,
+    MATCH,
+    MISMATCH,
+    UNOFFICIAL
 }
