@@ -1,6 +1,8 @@
 package pl.grzybdev.openmic.client.receivers.signals
 
 import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.ConnectorState
@@ -9,7 +11,7 @@ import pl.grzybdev.openmic.client.singletons.AppData
 
 class ConnectorSignalReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: android.content.Context, intent: android.content.Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "UpdateState") {
             val connectorInt: Int = intent.getIntExtra("connector", -1)
             val connector: Connector = Connector.values()[connectorInt]
