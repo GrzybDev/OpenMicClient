@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package pl.grzybdev.openmic.client.receivers
+package pl.grzybdev.openmic.client.receivers.connectors
 
 import android.content.BroadcastReceiver
 import android.content.Context

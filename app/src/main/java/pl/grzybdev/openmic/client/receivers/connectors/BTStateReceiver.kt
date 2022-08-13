@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client.receivers
+package pl.grzybdev.openmic.client.receivers.connectors
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
