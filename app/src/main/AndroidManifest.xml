@@ -71,6 +71,14 @@
                 <action android:name="UpdateStatus" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".receivers.signals.DialogSignalReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="ShowDialog" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
