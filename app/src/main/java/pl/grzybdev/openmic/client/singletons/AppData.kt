@@ -1,20 +1,23 @@
-package pl.grzybdev.openmic.client
+package pl.grzybdev.openmic.client.singletons
 
-import com.gazman.signals.Signals
+import android.content.res.Resources
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
-import pl.grzybdev.openmic.client.enumerators.ConnectorStatus
+import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.interfaces.IConnector
-import pl.grzybdev.openmic.client.network.Client
-import java.util.TimerTask
+import java.util.*
 
 object AppData {
-    var openmic: OpenMic? = null
-    var client: Client? = null
+    var openmic: OpenMic = OpenMic()
+    var resources: Resources? = null
 
-    var connectSignal = Signals.signal(IConnector::class)
-    var connectionStatus = ConnectionStatus.UNKNOWN
+    var connectorListeners: MutableList<IConnector> = mutableListOf()
+    var connectionListeners: MutableList<IConnection> = mutableListOf()
 
-    var usbStatus: ConnectorStatus = ConnectorStatus.UNKNOWN
+    var connectionStatus = ConnectionStatus.NOT_CONNECTED
+
+    var usbState: ConnectorState = ConnectorState.UNKNOWN
     var usbTimer: TimerTask? = null
 
     var communicationPort = 10000
