@@ -5,9 +5,21 @@ import android.util.Log
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import pl.grzybdev.openmic.client.OpenMic
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.Connector
+import pl.grzybdev.openmic.client.enumerators.DialogType
 import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
+import pl.grzybdev.openmic.client.singletons.AppData
+import pl.grzybdev.openmic.client.singletons.ServerData
+import pl.grzybdev.openmic.client.network.messages.client.AuthClient as Client_AuthClient
+
+@Serializable
+data class AuthClient(
+    override val type: String,
+    val authorized: Boolean,
+): ServerPacket()
 
 @Serializable
 data class AuthCodeVerify(
@@ -18,39 +30,41 @@ class AuthPacket {
     companion object {
         fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
-                Message.AUTH_CODE_VERIFY -> handleCodeVerify(socket, connector, data)
+                Message.AUTH_CLIENT -> handleAuthClient(context, socket, connector, data)
+                Message.AUTH_CODE_VERIFY -> handleCodeVerify(context)
                 else -> {}
             }
         }
 
-        private fun handleCodeVerify(socket: Any, connector: Connector, data: String) {
+        private fun handleAuthClient(context: Context, socket: Any, connector: Connector, data: String) {
+            val packet = Json.decodeFromString<AuthClient>(data)
+
+            val knownDevices: Set<String> = AppData.sharedPrefs?.getStringSet(context.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES), mutableSetOf()) as Set<String>
+
+            if (packet.authorized && knownDevices.contains(ServerData.id))
+                Audio.start(socket, connector)
+            else
+                OpenMic.showDialog(context, DialogType.AUTH, null)
+        }
+
+        private fun handleCodeVerify(context: Context) {
             // Only "positive" packet is handled here
-            val packet: AuthCodeVerify = Json.decodeFromString(data)
+            Log.d(AuthPacket::class.java.name, "Authorization complete, adding ${ServerData.id} to known servers list...")
 
-            Log.d(AuthPacket::class.java.name, "Received successful AuthCodeVerify: $packet")
-            //Log.d(AuthPacket::class.java.name, "Authorization complete, adding ${AppData.serverID} to known servers list...")
+            val knownDevicesKey: String = context.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES)
 
-            /*
-
-            val knownDevicesKey: String =
-                OpenMic.App.mainActivity?.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES) ?: ""
-
-            var knownDevices: Set<String> =
-                OpenMic.App.appPreferences?.getStringSet(knownDevicesKey, mutableSetOf()) as Set<String>
-
+            var knownDevices: Set<String> = AppData.sharedPrefs?.getStringSet(knownDevicesKey, mutableSetOf()) as Set<String>
             val mutableKnownDevices = knownDevices.toMutableSet()
-            mutableKnownDevices.add(AppData.serverID)
+            mutableKnownDevices.add(ServerData.id)
 
             knownDevices = mutableKnownDevices.toSet()
 
-            with (OpenMic.App.appPreferences!!.edit()) {
+            with (AppData.sharedPrefs!!.edit()) {
                 putStringSet(knownDevicesKey, knownDevices)
                 apply()
             }
 
-             */
-
-            Audio.start(socket, connector)
+            AppData.openmic.wsClient.sendPacket(Client_AuthClient())
         }
     }
 }

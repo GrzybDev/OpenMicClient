@@ -10,5 +10,5 @@ class AuthCodeVerify(
 ) : ClientPacket()
 
 @Serializable
-@SerialName("Auth_ClientSide")
-class AuthClientSide() : ClientPacket()
+@SerialName("Auth_Client")
+class AuthClient : ClientPacket()
