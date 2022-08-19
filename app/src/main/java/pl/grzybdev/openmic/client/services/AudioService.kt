@@ -108,6 +108,7 @@ class AudioService : Service() {
         startForeground(1, notification)
 
         try {
+            /*
             recorder = AudioRecord(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaRecorder.AudioSource.VOICE_PERFORMANCE else MediaRecorder.AudioSource.VOICE_COMMUNICATION,
                 Audio.Data.sampleRate,
@@ -115,6 +116,7 @@ class AudioService : Service() {
                 Audio.Data.audioFormat,
                 Audio.Data.minBufSize
             )
+             */
         } catch (e: SecurityException) {
             e.printStackTrace()
             stopSelf()
@@ -134,9 +136,10 @@ class AudioService : Service() {
 
         recorder.startRecording()
 
-        val buffer = ByteArray(Audio.Data.minBufSize)
+        // val buffer = ByteArray(Audio.Data.minBufSize)
 
         audioThread = thread(start = true) {
+            /*
             while (!Thread.interrupted()) {
                 Audio.Data.minBufSize = recorder.read(buffer, 0, buffer.size)
 
@@ -153,6 +156,8 @@ class AudioService : Service() {
                     }
                 }
             }
+
+             */
 
             recorder.stop()
         }
