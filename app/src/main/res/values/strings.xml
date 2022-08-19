@@ -126,13 +126,13 @@
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_INTRO_SHOWN" translatable="false">intro_shown</string>
     <string name="PREFERENCE_APP_BOOT_AD_LAST_SHOWN" translatable="false">boot_ad_last_shown</string>
-
     <string name="PREFERENCE_APP_DEVICE_ID" translatable="false">DeviceID</string>
     <string name="PREFERENCE_APP_KNOWN_DEVICES" translatable="false">KnownDevices</string>
     <string name="PREFERENCE_APP_PORT" translatable="false">Port</string>
-    <string name="PREFERENCE_APP_USB_ENABLE" translatable="false">EnableUSB</string>
-    <string name="SERVER_APP_NAME" translatable="false">OpenMic Server</string>
-    <string name="PREFERENCE_SERVICE_ID" translatable="false">ServiceID</string>
+    <string name="PREFERENCE_APP_AUDIO_SAMPLE_RATE" translatable="false">AudioSampleRate</string>
+    <string name="PREFERENCE_APP_AUDIO_CHANNELS" translatable="false">AudioChannels</string>
+    <string name="PREFERENCE_APP_AUDIO_FORMAT" translatable="false">AudioFormat</string>
+    <string name="PREFERENCE_SERVER_APP_NAME" translatable="false">OpenMic Server</string>
 
     <!-- Ad Units -->
     <string name="AD_UNIT_ID_BOOT" translatable="false">ca-app-pub-3940256099942544/3419835294</string>
