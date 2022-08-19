@@ -29,7 +29,7 @@ import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.DialogType
 import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.interfaces.IDialog
@@ -286,7 +286,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                             val authCode = Integer.parseInt(input.text.toString())
                             Log.d(javaClass.name, "Entered code: $authCode")
 
-                            AppData.openmic.wsClient.sendPacket(AuthCodeVerify(authCode))
+                            AppData.openmic.client.sendPacket(AuthCodeVerify(authCode))
                         }
                     }
 

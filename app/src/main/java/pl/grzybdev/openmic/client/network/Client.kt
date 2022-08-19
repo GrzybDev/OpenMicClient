@@ -9,8 +9,8 @@ import okhttp3.WebSocket
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
-import pl.grzybdev.openmic.client.enumerators.Connector
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
+import pl.grzybdev.openmic.client.enumerators.network.Connector
 import pl.grzybdev.openmic.client.enumerators.DialogType
 import pl.grzybdev.openmic.client.enumerators.ServerVersion
 import pl.grzybdev.openmic.client.network.messages.ErrorCode

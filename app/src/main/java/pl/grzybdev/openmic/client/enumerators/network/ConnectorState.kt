@@ -1,4 +1,4 @@
-package pl.grzybdev.openmic.client.enumerators
+package pl.grzybdev.openmic.client.enumerators.network
 
 enum class ConnectorState {
     UNKNOWN,

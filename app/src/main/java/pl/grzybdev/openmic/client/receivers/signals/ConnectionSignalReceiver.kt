@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.singletons.AppData
 

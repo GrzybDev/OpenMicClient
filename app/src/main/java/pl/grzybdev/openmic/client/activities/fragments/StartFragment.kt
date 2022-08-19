@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.enumerators.network.Connector
+import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.receivers.connectors.USBStateReceiver
 import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver

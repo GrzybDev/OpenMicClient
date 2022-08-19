@@ -3,15 +3,17 @@ package pl.grzybdev.openmic.client.singletons
 import android.content.SharedPreferences
 import android.content.res.Resources
 import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
-import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
+import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.interfaces.IDialog
+import pl.grzybdev.openmic.client.network.Audio
 import java.util.*
 
 object AppData {
-    var openmic: OpenMic = OpenMic()
+    val audio = Audio()
+    val openmic = OpenMic()
 
     var sharedPrefs: SharedPreferences? = null
     var resources: Resources? = null

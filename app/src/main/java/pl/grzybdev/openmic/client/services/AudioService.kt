@@ -15,7 +15,7 @@ import okio.ByteString.Companion.toByteString
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.activities.MainActivity
-import pl.grzybdev.openmic.client.enumerators.Connector
+import pl.grzybdev.openmic.client.enumerators.network.Connector
 import pl.grzybdev.openmic.client.network.Audio
 import java.io.IOException
 import kotlin.concurrent.thread

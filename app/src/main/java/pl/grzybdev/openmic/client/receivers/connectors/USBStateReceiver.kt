@@ -4,12 +4,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.BatteryManager
-import android.util.Log
 import pl.grzybdev.openmic.client.OpenMic
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorState
-import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
-import pl.grzybdev.openmic.client.singletons.AppData
+import pl.grzybdev.openmic.client.enumerators.network.Connector
+import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 
 
 class USBStateReceiver : BroadcastReceiver() {

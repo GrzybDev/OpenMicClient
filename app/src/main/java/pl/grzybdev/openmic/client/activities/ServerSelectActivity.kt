@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.enumerators.Connector
-import pl.grzybdev.openmic.client.enumerators.ConnectorState
+import pl.grzybdev.openmic.client.enumerators.network.Connector
+import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 
 class ServerSelectActivity : AppCompatActivity() {
 
