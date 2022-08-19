@@ -26,7 +26,7 @@ import kotlin.concurrent.schedule
 
 class OpenMic : IConnection {
 
-    var wsClient = Client(null, null)
+    var client = Client(null, null)
 
     private val httpClient = OkHttpClient.Builder()
         .readTimeout(20, TimeUnit.SECONDS)
@@ -63,7 +63,7 @@ class OpenMic : IConnection {
         }
 
         fun getServerVersion(serverApp: String, serverVersion: String): ServerVersion {
-            if (serverApp == AppData.resources?.getString(R.string.SERVER_APP_NAME)) {
+            if (serverApp == AppData.resources?.getString(R.string.PREFERENCE_SERVER_APP_NAME)) {
                 // It's official app, check if versions match
                 if (serverVersion != BuildConfig.VERSION_NAME)
                     return ServerVersion.MISMATCH
@@ -88,7 +88,7 @@ class OpenMic : IConnection {
         AppData.connectionListeners.add(this)
         forceDisconnect()
 
-        wsClient = Client(ctx, connector)
+        client = Client(ctx, connector)
         Log.d(javaClass.name, "connectTo: Trying to connect to $address, via $connector...")
 
         if (connector != Connector.Bluetooth) {
@@ -145,7 +145,7 @@ class OpenMic : IConnection {
 
     override fun onConnectionStateChange(status: ConnectionStatus) {
         if (status == ConnectionStatus.CONNECTED) {
-            wsClient.sendPacket(AuthClient())
+            client.sendPacket(AuthClient())
             AppData.connectionListeners.remove(this)
         } else if (status == ConnectionStatus.DISCONNECTED) {
             AppData.connectionListeners.remove(this)
