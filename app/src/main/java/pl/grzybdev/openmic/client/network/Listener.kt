@@ -3,7 +3,6 @@ package pl.grzybdev.openmic.client.network
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import pl.grzybdev.openmic.client.enumerators.ConnectionStatus
 import pl.grzybdev.openmic.client.singletons.AppData
 
 class Listener : WebSocketListener() {
@@ -14,13 +13,13 @@ class Listener : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         socket = webSocket
 
-        AppData.openmic.wsClient.onOpen(webSocket)
+        AppData.openmic.client.onOpen(webSocket)
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         socket = webSocket
 
-        AppData.openmic.wsClient.onMessage(webSocket, text)
+        AppData.openmic.client.onMessage(webSocket, text)
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -41,6 +40,6 @@ class Listener : WebSocketListener() {
             return
 
         forceDisconnected = true
-        socket?.let { AppData.openmic.wsClient.handleDisconnect(it, code, reason) }
+        socket?.let { AppData.openmic.client.handleDisconnect(it, code, reason) }
     }
 }

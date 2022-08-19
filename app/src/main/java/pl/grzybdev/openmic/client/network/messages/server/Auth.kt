@@ -7,9 +7,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.enumerators.Connector
 import pl.grzybdev.openmic.client.enumerators.DialogType
-import pl.grzybdev.openmic.client.network.Audio
 import pl.grzybdev.openmic.client.network.messages.Message
 import pl.grzybdev.openmic.client.singletons.AppData
 import pl.grzybdev.openmic.client.singletons.ServerData
@@ -28,21 +26,21 @@ data class AuthCodeVerify(
 
 class AuthPacket {
     companion object {
-        fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
+        fun handle(context: Context, socket: Any, type: Message, data: String) {
             when (type) {
-                Message.AUTH_CLIENT -> handleAuthClient(context, socket, connector, data)
+                Message.AUTH_CLIENT -> handleAuthClient(context, socket, data)
                 Message.AUTH_CODE_VERIFY -> handleCodeVerify(context)
                 else -> {}
             }
         }
 
-        private fun handleAuthClient(context: Context, socket: Any, connector: Connector, data: String) {
+        private fun handleAuthClient(context: Context, socket: Any, data: String) {
             val packet = Json.decodeFromString<AuthClient>(data)
 
             val knownDevices: Set<String> = AppData.sharedPrefs?.getStringSet(context.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES), mutableSetOf()) as Set<String>
 
             if (packet.authorized && knownDevices.contains(ServerData.id))
-                Audio.start(socket, connector)
+                AppData.audio.start(socket)
             else
                 OpenMic.showDialog(context, DialogType.AUTH, null)
         }
@@ -64,7 +62,7 @@ class AuthPacket {
                 apply()
             }
 
-            AppData.openmic.wsClient.sendPacket(Client_AuthClient())
+            AppData.openmic.client.sendPacket(Client_AuthClient())
         }
     }
 }
