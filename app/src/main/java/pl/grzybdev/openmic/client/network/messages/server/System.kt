@@ -35,7 +35,7 @@ class SystemPacket {
         fun handle(context: Context, socket: Any, connector: Connector, type: Message, data: String) {
             when (type) {
                 Message.SYSTEM_HELLO -> handleHello(context, data)
-                Message.SYSTEM_GOODBYE -> handleGoodbye(context, socket, connector, data)
+                Message.SYSTEM_GOODBYE -> handleGoodbye(socket, connector, data)
                 Message.SYSTEM_IS_ALIVE -> handleIsAlive()
                 else -> {}
             }
@@ -64,7 +64,7 @@ class SystemPacket {
             OpenMic.changeConnectionStatus(context, ConnectionStatus.CONNECTED)
         }
 
-        private fun handleGoodbye(context: Context, socket: Any, connector: Connector, data: String) {
+        private fun handleGoodbye(socket: Any, connector: Connector, data: String) {
             val packet: SystemGoodbye = Json.decodeFromString(data)
 
             Log.d(SystemPacket::class.java.name, "Server says goodbye, exit code ${packet.exitCode}")
