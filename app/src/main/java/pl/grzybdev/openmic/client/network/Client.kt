@@ -6,6 +6,7 @@ import android.util.Log
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.WebSocket
+import okio.ByteString.Companion.toByteString
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
@@ -22,6 +23,7 @@ import pl.grzybdev.openmic.client.network.messages.server.ErrorPacket
 import pl.grzybdev.openmic.client.network.messages.server.ServerPacket
 import pl.grzybdev.openmic.client.singletons.AppData
 import pl.grzybdev.openmic.client.singletons.ServerData
+import pl.grzybdev.openmic.client.singletons.StreamData
 
 class Client(val context: Context?, private val connector: Connector?) {
 
@@ -78,6 +80,12 @@ class Client(val context: Context?, private val connector: Connector?) {
 
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTING)
 
+        if (StreamData.intentActive)
+        {
+            context.stopService(StreamData.intent)
+            StreamData.intentActive = false
+        }
+
         if (connector != Connector.Bluetooth) {
             val webSocket = socket as WebSocket
             webSocket.close(code, reason)
@@ -102,6 +110,16 @@ class Client(val context: Context?, private val connector: Connector?) {
         } else {
             val btSocket = socket as BluetoothSocket
             btSocket.outputStream.write(Json.encodeToString(packet).toByteArray())
+        }
+    }
+
+    fun sendPacketDirect(packet: ByteArray) {
+        if (connector != Connector.Bluetooth) {
+            val webSocket = socket as WebSocket
+            webSocket.send(packet.toByteString())
+        } else {
+            val btSocket = socket as BluetoothSocket
+            btSocket.outputStream.write(packet)
         }
     }
 }
