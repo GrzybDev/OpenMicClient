@@ -40,7 +40,7 @@ class AuthPacket {
             val knownDevices: Set<String> = AppData.sharedPrefs?.getStringSet(context.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES), mutableSetOf()) as Set<String>
 
             if (packet.authorized && knownDevices.contains(ServerData.id))
-                AppData.audio.start(socket)
+                AppData.audio.initialize()
             else
                 OpenMic.showDialog(context, DialogType.AUTH, null)
         }
