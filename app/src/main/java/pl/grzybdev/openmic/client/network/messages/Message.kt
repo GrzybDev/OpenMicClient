@@ -5,5 +5,6 @@ enum class Message(val type: String) {
     SYSTEM_GOODBYE("System_Goodbye"),
     SYSTEM_IS_ALIVE("System_IsAlive"),
     AUTH_CLIENT("Auth_Client"),
-    AUTH_CODE_VERIFY("Auth_CodeVerify")
+    AUTH_CODE_VERIFY("Auth_CodeVerify"),
+    STREAM_START("Stream_Start"),
 }
