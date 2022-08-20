@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
     private var dialogSignal: DialogSignalReceiver = DialogSignalReceiver()
 
     private lateinit var dialog: AlertDialog
+    private var dialogSrvActive: Boolean = false
 
     lateinit var sharedPrefs: SharedPreferences
 
@@ -233,6 +234,8 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     builder.setPositiveButton(getString(R.string.dialog_srverr_btn_ok)) {
                             _, _ ->
                     }
+
+                    dialogSrvActive = true
                 }
 
                 DialogType.SERVER_DISCONNECT -> {
@@ -246,6 +249,36 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) {
                             _, _ ->
                     }
+                }
+
+                DialogType.CLIENT_CONFIG_NOT_COMPATIBLE,
+                DialogType.CLIENT_CONFIG_INVALID,
+                DialogType.SERVER_CONFIG_NOT_COMPATIBLE -> {
+                    when (type) {
+                        DialogType.CLIENT_CONFIG_NOT_COMPATIBLE -> builder.setTitle(getString(R.string.dialog_client_cfg_error_title))
+                        DialogType.CLIENT_CONFIG_INVALID -> builder.setTitle(getString(R.string.dialog_client_cfg_invalid_title))
+                        else -> builder.setTitle(getString(R.string.dialog_server_cfg_error_title))
+                    }
+
+                    builder.setMessage(getString(R.string.dialog_cfg_error))
+
+                    builder.setPositiveButton(getString(R.string.dialog_cfg_btn_ok)) {
+                            _, _ ->
+                    }
+
+                    AppData.openmic.forceDisconnect()
+                }
+
+                DialogType.CLIENT_INTERNAL_ERROR -> {
+                    builder.setTitle(getString(R.string.dialog_internal_error_title))
+                    builder.setMessage(getString(R.string.dialog_internal_error_desc))
+
+                    builder.setPositiveButton(getString(R.string.dialog_internal_error_btn_ok)) {
+                            _, _ ->
+                    }
+
+                    dialogSrvActive = true
+                    AppData.openmic.forceDisconnect()
                 }
 
                 DialogType.AUTH -> {
@@ -299,10 +332,19 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 }
             }
 
-            if (type == DialogType.SERVER_ERROR)
-                builder.create().show()
+            if (type == DialogType.SERVER_ERROR || type == DialogType.CLIENT_INTERNAL_ERROR) {
+                val srvErrDialog = builder.create()
+                srvErrDialog.setOnDismissListener {
+                    dialogSrvActive = false
+                }
+                srvErrDialog.show()
+            }
             else
             {
+                // Ignore server disconnects when they're caused by server error
+                if (dialogSrvActive && type == DialogType.SERVER_DISCONNECT)
+                    return@runOnUiThread
+
                 dialog = builder.create()
                 dialog.show()
             }

@@ -62,6 +62,18 @@
     <string name="dialog_disconnect_no_reason">Server did not give reason for disconnect</string>
     <string name="dialog_disconnect_unknown_error">Server returned unknown error (%1$s)</string>
 
+    <!-- Dialog | Config Not Compatible -->
+    <string name="dialog_client_cfg_error_title">Server does not support client audio settings</string>
+    <string name="dialog_client_cfg_invalid_title">Your phone doesn\'t support selected settings</string>
+    <string name="dialog_server_cfg_error_title">Client does not support audio settings requested by server</string>
+    <string name="dialog_cfg_error">Unfortunately we cannot continue, please correct client and/or server settings</string>
+    <string name="dialog_cfg_btn_ok">OK</string>
+
+    <!-- Dialog | Internal Client Error -->
+    <string name="dialog_internal_error_title">Internal Client Error</string>
+    <string name="dialog_internal_error_desc">Whoops! Something bad happened while we were trying to read server message. You are now disconnected from server.</string>
+    <string name="dialog_internal_error_btn_ok">OK</string>
+
     <string name="main_ready">Ready for action! 😎</string>
     <string name="main_readyDesc">OpenMic is now looking for servers…</string>
     <string name="main_readyExplanation">App is now looking for servers 🖥\n\nPhone will connect automatically to your computer with OpenMic Server launched over:</string>
