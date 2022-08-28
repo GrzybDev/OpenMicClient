@@ -79,6 +79,14 @@
                 <action android:name="ShowDialog" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".receivers.signals.RefreshSignalReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="RefreshUI" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
