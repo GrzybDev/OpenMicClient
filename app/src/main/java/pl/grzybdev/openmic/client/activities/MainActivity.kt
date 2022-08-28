@@ -29,14 +29,15 @@ import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.databinding.ActivityMainBinding
-import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.DialogType
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.interfaces.IDialog
 import pl.grzybdev.openmic.client.network.messages.client.AuthCodeVerify
 import pl.grzybdev.openmic.client.receivers.signals.ConnectionSignalReceiver
 import pl.grzybdev.openmic.client.receivers.signals.DialogSignalReceiver
 import pl.grzybdev.openmic.client.singletons.AppData
+import pl.grzybdev.openmic.client.singletons.ServerData
 import java.util.*
 
 class MainActivity : AppCompatActivity(), IConnection, IDialog {
@@ -86,7 +87,6 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         dialog = AlertDialog.Builder(this).create()
 
         if (savedInstanceState == null) {
-            // This ain't our first rodeo ;P
             if (BuildConfig.FLAVOR == "google")
                 GoogleHelper.initializeAds(this)
 
@@ -100,22 +100,60 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         registerReceiver(connectionSignal, IntentFilter("ShowDialog"))
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        Log.d(javaClass.name, "Restoring fragment: ${AppData.connectionStatus}")
+
+        when (AppData.connectionStatus) {
+            ConnectionStatus.NOT_CONNECTED -> navController.navigate(R.id.MainFragment)
+            ConnectionStatus.CONNECTING -> navController.navigate(R.id.ConnectingFragment)
+            ConnectionStatus.CONNECTED -> navController.navigate(R.id.ConnectedFragment)
+            ConnectionStatus.DISCONNECTING -> navController.navigate(R.id.DisconnectingFragment)
+            ConnectionStatus.DISCONNECTED -> navController.navigate(R.id.MainFragment)
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
-        connectionSignal.removeListener(this)
-        unregisterReceiver(connectionSignal)
+        try {
+            connectionSignal.removeListener(this)
+            unregisterReceiver(connectionSignal)
+        }
+        catch (e: IllegalArgumentException) {
+            Log.e(javaClass.name, "Connection signal receiver not registered")
+        }
 
-        dialogSignal.removeListener(this)
-        unregisterReceiver(dialogSignal)
+        try {
+            dialogSignal.removeListener(this)
+            unregisterReceiver(dialogSignal)
+        }
+        catch (e: IllegalArgumentException) {
+            Log.e(javaClass.name, "Dialog signal receiver not registered")
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (AppData.connectionStatus >= ConnectionStatus.CONNECTING)
+        if (AppData.connectionStatus == ConnectionStatus.CONNECTING)
         {
             AlertDialog.Builder(this)
-                .setTitle(getString(R.string.connecting_fragment_disconnect_action))
-                .setMessage(getString(R.string.connecting_fragment_disconnect_action_description))
+                .setTitle(getString(R.string.connecting_fragment_disconnect_connecting_action))
+                .setMessage(getString(R.string.connecting_fragment_disconnect_connecting_action_description))
+                .setPositiveButton(R.string.connecting_fragment_disconnect_connecting_action_yes) { _, _ ->
+                    AppData.openmic.forceDisconnect()
+                }
+                .setNegativeButton(R.string.connecting_fragment_disconnect_connecting_action_no) { _, _ ->
+                    // Do nothing
+                }
+                .show()
+        }
+        else if (AppData.connectionStatus > ConnectionStatus.CONNECTING)
+        {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.connecting_fragment_disconnect_action, ServerData.name))
                 .setPositiveButton(R.string.connecting_fragment_disconnect_action_yes) { _, _ ->
                     AppData.openmic.forceDisconnect()
                 }
