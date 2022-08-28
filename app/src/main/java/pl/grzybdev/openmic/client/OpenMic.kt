@@ -137,7 +137,7 @@ class OpenMic : IConnection {
             if (listener is USBCheckListener)
                 (listener as USBCheckListener).forceClose()
             else
-                (listener as Listener).handleDisconnect(reason = reason)
+                (listener as Listener).handleDisconnect(reason = reason, client_initiated = true)
         }
         else
             Log.w(javaClass.name, "forceDisconnect: No listener to close...")

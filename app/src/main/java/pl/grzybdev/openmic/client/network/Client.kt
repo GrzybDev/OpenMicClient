@@ -51,7 +51,7 @@ class Client(val context: Context?, private val connector: Connector?) {
                 }
             } else {
                 Log.w(javaClass.name, "Unknown message type! ($mType) Disconnecting...")
-                handleDisconnect(socket, 1003)
+                handleDisconnect(socket, 1003, client_initiated = false)
             }
         } else {
             Log.e(javaClass.name, "Received error packet, showing dialog...")
@@ -67,13 +67,13 @@ class Client(val context: Context?, private val connector: Connector?) {
                 val dialogStr = context?.getString(R.string.dialog_disconnect_unknown_error, packet.message)
 
                 if (dialogStr != null) {
-                    handleDisconnect(socket, reason = dialogStr)
+                    handleDisconnect(socket, reason = dialogStr, client_initiated = false)
                 }
             }
         }
     }
 
-    fun handleDisconnect(socket: Any, code: Int = 1000, reason: String = "")
+    fun handleDisconnect(socket: Any, code: Int = 1000, reason: String = "", client_initiated: Boolean)
     {
         if (context == null) { return }
         this.socket = socket
@@ -99,7 +99,9 @@ class Client(val context: Context?, private val connector: Connector?) {
         ServerData.version = ServerVersion.UNKNOWN
         ServerData.name = ""
 
-        OpenMic.showDialog(context, DialogType.SERVER_DISCONNECT, reason)
+        if (!client_initiated)
+            OpenMic.showDialog(context, DialogType.SERVER_DISCONNECT, reason)
+
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTED)
     }
 

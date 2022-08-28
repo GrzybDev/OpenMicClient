@@ -34,12 +34,12 @@ class Listener : WebSocketListener() {
         handleDisconnect()
     }
 
-    fun handleDisconnect(code: Int = 1000, reason: String = "")
+    fun handleDisconnect(code: Int = 1000, reason: String = "", client_initiated: Boolean = false)
     {
         if (forceDisconnected)
             return
 
         forceDisconnected = true
-        socket?.let { AppData.openmic.client.handleDisconnect(it, code, reason) }
+        socket?.let { AppData.openmic.client.handleDisconnect(it, code, reason, client_initiated) }
     }
 }
