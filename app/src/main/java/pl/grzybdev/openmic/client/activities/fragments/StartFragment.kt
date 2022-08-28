@@ -1,7 +1,9 @@
 package pl.grzybdev.openmic.client.activities.fragments
 
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,14 +21,19 @@ import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.enumerators.network.Connector
 import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 import pl.grzybdev.openmic.client.interfaces.IConnector
+import pl.grzybdev.openmic.client.receivers.connectors.BTStateReceiver
 import pl.grzybdev.openmic.client.receivers.connectors.USBStateReceiver
+import pl.grzybdev.openmic.client.receivers.connectors.WifiStateReceiver
 import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
 import pl.grzybdev.openmic.client.singletons.AppData
 
 class StartFragment : Fragment(), IConnector {
 
     private var connectorSignal: ConnectorSignalReceiver = ConnectorSignalReceiver()
-    private var usbReceiver: USBStateReceiver = USBStateReceiver()
+
+    private val usbReceiver: USBStateReceiver = USBStateReceiver()
+    private val wifiReceiver: WifiStateReceiver = WifiStateReceiver()
+    private val btReceiver: BTStateReceiver = BTStateReceiver()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +45,13 @@ class StartFragment : Fragment(), IConnector {
         // USB
         activity?.registerReceiver(usbReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
+        // Wi-Fi
+        @Suppress("DEPRECATION")
+        activity?.registerReceiver(wifiReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+
+        // Bluetooth
+        activity?.registerReceiver(btReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_start, container, false)
     }
@@ -46,6 +60,8 @@ class StartFragment : Fragment(), IConnector {
         super.onDestroyView()
 
         activity?.unregisterReceiver(usbReceiver)
+        activity?.unregisterReceiver(wifiReceiver)
+        activity?.unregisterReceiver(btReceiver)
 
         connectorSignal.removeListener(this)
         activity?.unregisterReceiver(connectorSignal)
