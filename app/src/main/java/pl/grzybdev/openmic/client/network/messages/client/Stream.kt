@@ -10,3 +10,9 @@ class StreamStart(
     val channels: Int,
     val format: Int,
 ) : ClientPacket()
+
+@Serializable
+@SerialName("Stream_Volume")
+class StreamVolume(
+    val volume: Int,
+) : ClientPacket()

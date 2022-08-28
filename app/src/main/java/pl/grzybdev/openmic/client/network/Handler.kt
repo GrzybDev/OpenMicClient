@@ -34,13 +34,8 @@ class Handler {
             try {
                 when (type) {
                     Message.SYSTEM_HELLO, Message.SYSTEM_GOODBYE, Message.SYSTEM_IS_ALIVE -> SystemPacket.handle(context, socket, connector, type, data)
-                    Message.AUTH_CLIENT, Message.AUTH_CODE_VERIFY -> AuthPacket.handle(
-                        context,
-                        socket,
-                        type,
-                        data
-                    )
-                    Message.STREAM_START -> StreamPacket.handle(context, type, data)
+                    Message.AUTH_CLIENT, Message.AUTH_CODE_VERIFY -> AuthPacket.handle(context, socket, type, data)
+                    Message.STREAM_START, Message.STREAM_VOLUME -> StreamPacket.handle(context, type, data)
                 }
             }
             catch (e: Exception)

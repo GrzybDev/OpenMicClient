@@ -7,4 +7,5 @@ enum class Message(val type: String) {
     AUTH_CLIENT("Auth_Client"),
     AUTH_CODE_VERIFY("Auth_CodeVerify"),
     STREAM_START("Stream_Start"),
+    STREAM_VOLUME("Stream_Volume"),
 }

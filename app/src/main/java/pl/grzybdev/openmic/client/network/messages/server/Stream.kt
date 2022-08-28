@@ -22,6 +22,12 @@ data class StreamStart(
     val audioFormat: Int? = null,
 ) : ServerPacket()
 
+@Serializable
+data class StreamVolume(
+    override val type: String,
+    val volume: Float
+) : ServerPacket()
+
 class StreamPacket {
     companion object {
         fun handle(
@@ -31,6 +37,7 @@ class StreamPacket {
         ) {
             when (type) {
                 Message.STREAM_START -> handleStart(context, data)
+                Message.STREAM_VOLUME -> handleVolume(data)
                 else -> {}
             }
         }
@@ -54,6 +61,11 @@ class StreamPacket {
             }
 
             AppData.audio.start(context)
+        }
+
+        private fun handleVolume(data: String) {
+            val packet: StreamVolume = Json.decodeFromString(data)
+            StreamData.volume = packet.volume
         }
     }
 }
