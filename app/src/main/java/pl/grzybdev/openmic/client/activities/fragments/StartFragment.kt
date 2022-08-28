@@ -76,7 +76,7 @@ class StartFragment : Fragment(), IConnector {
             || progressBar == null
             || statusIcon == null
             || statusText == null) {
-            Log.w(javaClass.name, "updateUSBStatus: Required UI elements not found")
+            Log.w(javaClass.name, "onUSBStateChange: Required UI elements not found")
             return
         }
 
@@ -84,7 +84,7 @@ class StartFragment : Fragment(), IConnector {
         statusIcon.visibility = View.VISIBLE
 
         when (status) {
-            ConnectorState.USB_NOT_CONNECTED -> {
+            ConnectorState.NOT_READY -> {
                 button.isEnabled = false
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_usb_not_connected)

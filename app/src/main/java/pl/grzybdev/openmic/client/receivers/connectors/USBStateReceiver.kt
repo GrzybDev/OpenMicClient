@@ -29,7 +29,7 @@ class USBStateReceiver : BroadcastReceiver() {
                 if (isConnectedToPC)
                     ConnectorState.USB_CONNECTED
                 else
-                    ConnectorState.USB_NOT_CONNECTED)
+                    ConnectorState.NOT_READY)
         }
     }
 
