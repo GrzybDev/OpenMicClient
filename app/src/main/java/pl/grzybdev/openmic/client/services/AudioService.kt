@@ -76,7 +76,7 @@ class AudioService : Service() {
         val notification: Notification =
             NotificationCompat.Builder(this, BuildConfig.APPLICATION_ID)
                 .setContentTitle(getString(R.string.connected_action_title))
-                .setContentText(getString(R.string.connected_action_desc, "SERVER_NAME"))
+                .setContentText(getString(R.string.connected_action_desc, ServerData.name))
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pendingIntent)
                 .build()
