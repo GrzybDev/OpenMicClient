@@ -18,6 +18,7 @@ import pl.grzybdev.openmic.client.network.messages.client.AuthClient
 import pl.grzybdev.openmic.client.receivers.signals.ConnectionSignalReceiver
 import pl.grzybdev.openmic.client.receivers.signals.ConnectorSignalReceiver
 import pl.grzybdev.openmic.client.receivers.signals.DialogSignalReceiver
+import pl.grzybdev.openmic.client.receivers.signals.RefreshSignalReceiver
 import pl.grzybdev.openmic.client.singletons.AppData
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -59,6 +60,13 @@ class OpenMic : IConnection {
             i.action = "ShowDialog"
             i.putExtra("type", type.ordinal)
             i.putExtra("data", data)
+            ctx.sendBroadcast(i)
+        }
+
+        fun refreshUI(ctx: Context)
+        {
+            val i = Intent(ctx, RefreshSignalReceiver::class.java)
+            i.action = "RefreshUI"
             ctx.sendBroadcast(i)
         }
 
