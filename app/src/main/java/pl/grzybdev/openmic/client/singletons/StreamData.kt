@@ -17,4 +17,7 @@ object StreamData {
 
     var intent: Intent = Intent()
     var intentActive: Boolean = false
+
+    var muted: Boolean = false
+    var volume: Float = 1.0f
 }
