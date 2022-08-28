@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuCompat
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -172,9 +173,13 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        MenuCompat.setGroupDividerEnabled(menu, true)
 
         if (BuildConfig.FLAVOR == "foss") {
             val item = menu.findItem(R.id.action_donate)
+            item.isVisible = true
+        } else {
+            val item = menu.findItem(R.id.action_privacy_policy)
             item.isVisible = true
         }
 
@@ -183,9 +188,20 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
             R.id.action_donate -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.INTERNAL_DONATE_URL))))
+                true
+            }
+            R.id.action_privacy_policy -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PRIVACY_POLICY_URL))))
+                true
+            }
+            R.id.action_faq -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.FAQ_URL))))
+                true
+            }
+            R.id.action_tutorial -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TUTORIAL_URL))))
                 true
             }
             else -> super.onOptionsItemSelected(item)
