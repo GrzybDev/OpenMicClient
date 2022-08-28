@@ -73,4 +73,15 @@ class Audio {
         ContextCompat.startForegroundService(context, StreamData.intent)
     }
 
+    fun toggleMute(context: Context)
+    {
+        StreamData.muted = !StreamData.muted
+
+        val intent = StreamData.intent
+        intent.putExtra("action", Action.TOGGLE_MUTE.code)
+        ContextCompat.startForegroundService(context, intent)
+
+        OpenMic.refreshUI(context)
+    }
+
 }
