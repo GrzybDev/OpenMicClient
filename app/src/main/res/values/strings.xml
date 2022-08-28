@@ -18,6 +18,10 @@
     <!-- Main Fragment -->
     <string name="action_settings">Settings</string>
     <string name="action_donate">Donate to Author</string>
+    <string name="action_privacy_policy">Privacy Policy</string>
+    <string name="action_faq">FAQ</string>
+    <string name="action_tutorial">Tutorial</string>
+    <string name="action_about">About</string>
 
     <!-- Main Fragment | Start Fragment -->
     <string name="start_fragment_title">Let\'s get started!</string>
@@ -86,65 +90,12 @@
     <string name="dialog_internal_error_desc">Whoops! Something bad happened while we were trying to read server message. You are now disconnected from server.</string>
     <string name="dialog_internal_error_btn_ok">OK</string>
 
-    <string name="main_ready">Ready for action! 😎</string>
-    <string name="main_readyDesc">OpenMic is now looking for servers…</string>
-    <string name="main_readyExplanation">App is now looking for servers 🖥\n\nPhone will connect automatically to your computer with OpenMic Server launched over:</string>
-    <string name="main_footerText">Pro-tip: Long-press on any of the status icon to show more information</string>
-    <string name="main_usbRetry">Retry</string>
-    <string name="main_wifiSelect">Select server</string>
-    <string name="main_btConnect">Connect</string>
-
-    <string name="type_USB">Wired (USB)</string>
-    <string name="type_USB_Short">USB</string>
-    <string name="type_WiFi">Wireless (Wi-Fi)</string>
-    <string name="type_WiFi_Short">Wi-Fi</string>
-    <string name="type_BT">Wireless (Bluetooth)</string>
-    <string name="type_BT_Short">Bluetooth</string>
-
-    <!-- Connected Fragment -->
-    <string name="connected_title">We can hear you!</string>
-    <string name="connected_desc">That\'s it! Now your beautiful voice is being transmitted to your PC (%1$s).</string>
-    <string name="connected_action_title">OpenMic is working!</string>
-    <string name="connected_action_desc">Connected to %1$s</string>
-    <string name="connected_btn_mute">Mute</string>
-    <string name="connected_btn_unmute">Unmute</string>
-    <string name="connected_btn_disconnect">Disconnect</string>
-
-    <!-- Server Select Activity -->
-    <string name="ServerSelect_Title">Pick server</string>
-    <string name="ServerSelect_Desc">There\'s more than one active OpenMic Server in your network, please select to which you want to connect</string>
-
-    <!-- Auth Dialog -->
-    <string name="AuthDialog_Title">Please enter code you see on your computer screen</string>
-    <string name="AuthDialog_Button_OK">Verify</string>
-    <string name="AuthDialog_Button_Cancel">Cancel</string>
-
-    <!-- Error Dialog -->
-    <string name="ErrorDialog_Title">Server returned error!</string>
-    <string name="ErrorDialog_ClientConnectionError">Connection failed</string>
-    <string name="ErrorDialog_ClientConnectionError_BT">Connection failed, Check if device is paired with your phone before connecting and that OpenMic Server is running!</string>
-    <string name="ErrorDialog_Button_OK">OK</string>
-
-    <!-- WebSocket Close Messages -->
-    <string name="WebSocket_Restart">OpenMic Client is restarting</string>
-
-    <!-- Status Messages -->
-    <string name="Status_InitFailed">Failed to initialize! In order to use this method, You need to restart OpenMic Client.</string>
-    <string name="Status_USB_Disabled">Phone is not connected to USB device! Connect phone to PC via USB cable to enable USB support.</string>
-    <string name="Status_USB_Connecting">Connecting to OpenMic Server via USB…</string>
-    <string name="Status_USB_Need_Launch">Connected to USB device, but we failed to find OpenMic Server instance.</string>
-    <string name="Status_USB_Connected">Connected to OpenMic Server via USB!</string>
-    <string name="Status_WiFi_Disabled">Phone is not connected to Wi-Fi network! Connect phone to any network to enable Wi-Fi support.</string>
-    <string name="Status_WiFi_Connecting">Connecting to OpenMic Server via Wi-Fi…</string>
-    <string name="Status_WiFi_Need_Launch">Found multiple OpenMic Servers in your network, please select server to continue.</string>
-    <string name="Status_WiFi_Ready">Phone is connected to Wi-Fi and we\'re looking for servers…</string>
-
-    <string name="Icon_Server">Server Icon</string>
-    <string name="Icon_ServerCompatibility">Server Compatibility Icon</string>
-
-    <string name="OS_Windows">Windows</string>
-    <string name="OS_Linux">Linux Distro</string>
-    <string name="OS_Unknown">Unknown OS</string>
+    <!-- Audio Service -->
+    <string name="audio_service_notification_title">OpenMic is working!</string>
+    <string name="audio_service_notification_desc">Currently streaming to: %1$s</string>
+    <string name="audio_service_notification_btn_disconnect">Disconnect</string>
+    <string name="audio_service_notification_btn_mute">Mute</string>
+    <string name="audio_service_notification_btn_unmute">Unmute</string>
 
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
@@ -169,4 +120,7 @@
     <string name="INTERNAL_DONATE_URL" translatable="false">https://ko-fi.com/grzybdev</string>
     <string name="INTERNAL_STATE_USB" translatable="false">usbStatus</string>
     <string name="INTERNAL_USB_ADDRESS" translatable="false">localhost</string>
+    <string name="PRIVACY_POLICY_URL" translatable="false">https://openmic.grzyb.dev/privacy</string>
+    <string name="FAQ_URL" translatable="false">https://openmic.grzyb.dev/faq</string>
+    <string name="TUTORIAL_URL" translatable="false">https://openmic.grzyb.dev/tutorial</string>
 </resources>
