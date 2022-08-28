@@ -11,18 +11,22 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <Space
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView_stream_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            ads:adSize="LARGE_BANNER"
+            ads:adUnitId="@string/AD_UNIT_ID_STREAM_TOP" />
 
         <TextView
             android:id="@+id/connectedFragment_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/connected_fragment_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +78,6 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:text="@string/connected_fragment_btn_mute"
-                    app:icon="@drawable/ic_baseline_volume_off_24"
                     style="?android:attr/buttonBarButtonStyle" />
             </LinearLayout>
 
@@ -105,10 +108,14 @@
 
         </LinearLayout>
 
-        <Space
+        <com.google.android.gms.ads.AdView
             android:id="@+id/adView_stream_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:adSize="BANNER"
+            app:adUnitId="@string/AD_UNIT_ID_STREAM_BOTTOM"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/controlLayout" />
