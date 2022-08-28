@@ -17,6 +17,7 @@
 
     <!-- Main Fragment -->
     <string name="action_settings">Settings</string>
+    <string name="action_donate">Donate to Author</string>
 
     <!-- Main Fragment | Start Fragment -->
     <string name="start_fragment_title">Let\'s get started!</string>
@@ -37,10 +38,21 @@
     <string name="connecting_fragment_title">Connecting to PC…</string>
     <string name="connecting_fragment_description">This should not take long…</string>
 
-    <string name="connecting_fragment_disconnect_action">We are still trying to connect to your PC!</string>
-    <string name="connecting_fragment_disconnect_action_description">Do you really want to cancel connection attempt?</string>
+    <string name="connecting_fragment_disconnect_connecting_action">We are still trying to connect to your PC!</string>
+    <string name="connecting_fragment_disconnect_connecting_action_description">Do you really want to cancel connection attempt?</string>
+    <string name="connecting_fragment_disconnect_connecting_action_yes">Yes</string>
+    <string name="connecting_fragment_disconnect_connecting_action_no">No</string>
+    <string name="connecting_fragment_disconnect_action">Do you really want to disconnect from %1$s?</string>
     <string name="connecting_fragment_disconnect_action_yes">Yes</string>
     <string name="connecting_fragment_disconnect_action_no">No</string>
+
+    <!-- Main Fragment | Connected Fragment -->
+    <string name="connected_fragment_title">We can hear you!</string>
+    <string name="connected_fragment_description">Now we\'re transmitting your beautiful voice to your PC!</string>
+    <string name="connected_fragment_btn_disconnect">Disconnect</string>
+    <string name="connected_fragment_btn_mute">Mute</string>
+    <string name="connected_fragment_btn_unmute">Unmute</string>
+    <string name="connected_fragment_volume_slider_title">Volume</string>
 
     <!-- Main Fragment | Disconnecting Fragment -->
     <string name="disconnecting_fragment_title">Disconnecting from PC…</string>
@@ -144,16 +156,17 @@
     <string name="PREFERENCE_APP_AUDIO_SAMPLE_RATE" translatable="false">AudioSampleRate</string>
     <string name="PREFERENCE_APP_AUDIO_CHANNELS" translatable="false">AudioChannels</string>
     <string name="PREFERENCE_APP_AUDIO_FORMAT" translatable="false">AudioFormat</string>
+    <string name="PREFERENCE_APP_AUDIO_VOLUME" translatable="false">AudioVolume</string>
     <string name="PREFERENCE_SERVER_APP_NAME" translatable="false">OpenMic Server</string>
 
     <!-- Ad Units -->
     <string name="AD_UNIT_ID_BOOT" translatable="false">ca-app-pub-3940256099942544/3419835294</string>
-    <string name="AD_UNIT_ID_START_TOP" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="AD_UNIT_ID_START_BOTTOM" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="AD_UNIT_ID_START" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="AD_UNIT_ID_STREAM_TOP" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="AD_UNIT_ID_STREAM_BOTTOM" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- App Internal -->
     <string name="INTERNAL_DONATE_URL" translatable="false">https://ko-fi.com/grzybdev</string>
     <string name="INTERNAL_STATE_USB" translatable="false">usbStatus</string>
     <string name="INTERNAL_USB_ADDRESS" translatable="false">localhost</string>
-    <string name="action_donate">Donate to Author</string>
 </resources>
