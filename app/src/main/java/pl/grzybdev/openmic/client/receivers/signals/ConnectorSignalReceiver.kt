@@ -48,7 +48,14 @@ class ConnectorSignalReceiver : BroadcastReceiver() {
                 Connector.USB -> {
                     listener.onUSBStateChange(state)
                 }
-                else -> {}
+
+                Connector.WiFi -> {
+                    listener.onWiFiStateChange(state)
+                }
+
+                Connector.Bluetooth -> {
+                    listener.onBluetoothStateChange(state)
+                }
             }
         }
     }

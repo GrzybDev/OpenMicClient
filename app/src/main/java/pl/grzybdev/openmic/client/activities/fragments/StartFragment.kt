@@ -123,4 +123,64 @@ class StartFragment : Fragment(), IConnector {
             else -> { }
         }
     }
+
+    override fun onWiFiStateChange(status: ConnectorState) {
+        val button: Button? = view?.findViewById(R.id.wifiBtn)
+        val progressBar: ProgressBar? = view?.findViewById(R.id.wifiProgressBar)
+        val statusIcon: ImageView? = view?.findViewById(R.id.wifiStatusIcon)
+        val statusText: TextView? = view?.findViewById(R.id.wifiStatus)
+
+        if (button == null
+            || progressBar == null
+            || statusIcon == null
+            || statusText == null) {
+            Log.w(javaClass.name, "onWiFiStateChange: Required UI elements not found")
+            return
+        }
+
+        progressBar.visibility = View.GONE
+        statusIcon.visibility = View.VISIBLE
+
+        when (status) {
+            ConnectorState.NOT_READY -> {
+
+            }
+
+            ConnectorState.READY -> {
+
+            }
+
+            else -> {}
+        }
+    }
+
+    override fun onBluetoothStateChange(status: ConnectorState) {
+        val button: Button? = view?.findViewById(R.id.btBtn)
+        val progressBar: ProgressBar? = view?.findViewById(R.id.btProgressBar)
+        val statusIcon: ImageView? = view?.findViewById(R.id.btStatusIcon)
+        val statusText: TextView? = view?.findViewById(R.id.btStatus)
+
+        if (button == null
+            || progressBar == null
+            || statusIcon == null
+            || statusText == null) {
+            Log.w(javaClass.name, "onBluetoothStateChange: Required UI elements not found")
+            return
+        }
+
+        progressBar.visibility = View.GONE
+        statusIcon.visibility = View.VISIBLE
+
+        when (status) {
+            ConnectorState.NOT_READY -> {
+
+            }
+
+            ConnectorState.READY -> {
+
+            }
+
+            else -> {}
+        }
+    }
 }
