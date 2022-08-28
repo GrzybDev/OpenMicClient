@@ -14,6 +14,7 @@ import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.activities.MainActivity
 import pl.grzybdev.openmic.client.enumerators.audio.Action
 import pl.grzybdev.openmic.client.singletons.AppData
+import pl.grzybdev.openmic.client.singletons.ServerData
 import pl.grzybdev.openmic.client.singletons.StreamData
 import kotlin.concurrent.thread
 
@@ -50,6 +51,7 @@ class AudioService : Service() {
         if (actionInt != -1) {
             when (Action.values().find {it.code == actionInt}) {
                 Action.START -> run { startStream() }
+                Action.TOGGLE_MUTE -> run { toggleMute() }
                 else -> {}
             }
 
@@ -120,12 +122,24 @@ class AudioService : Service() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
+    private fun stopStream() {
         audioThread.interrupt()
         audioThread.join()
 
         recorder.stop()
+    }
+
+    private fun toggleMute() {
+        if (StreamData.muted) {
+            stopStream()
+        } else {
+            startStream()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        stopStream()
     }
 }
