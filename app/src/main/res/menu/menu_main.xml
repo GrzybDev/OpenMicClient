@@ -3,16 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="pl.grzybdev.openmic.client.activities.MainActivity">
 
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+    <group android:id="@+id/settings">
+        <item
+            android:id="@+id/action_settings"
+            android:title="@string/action_settings" />
+    </group>
 
-    <item
-        android:id="@+id/action_donate"
-        android:orderInCategory="101"
-        android:title="@string/action_donate"
-        android:visible="false"
-        app:showAsAction="never" />
+    <group android:id="@+id/links">
+        <item
+            android:id="@+id/action_faq"
+            android:title="@string/action_faq" />
+        <item
+            android:id="@+id/action_tutorial"
+            android:title="@string/action_tutorial" />
+        <item
+            android:id="@+id/action_about"
+            android:title="@string/action_about" />
+    </group>
+
+    <group android:id="@+id/versionDependent">
+        <item
+            android:id="@+id/action_donate"
+            android:orderInCategory="101"
+            android:title="@string/action_donate"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/action_privacy_policy"
+            android:orderInCategory="105"
+            android:title="@string/action_privacy_policy"
+            android:visible="false" />
+    </group>
+
 </menu>
