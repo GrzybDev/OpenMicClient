@@ -8,6 +8,7 @@ import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 import pl.grzybdev.openmic.client.interfaces.IConnection
 import pl.grzybdev.openmic.client.interfaces.IConnector
 import pl.grzybdev.openmic.client.interfaces.IDialog
+import pl.grzybdev.openmic.client.interfaces.IRefresh
 import pl.grzybdev.openmic.client.network.Audio
 import java.util.*
 
@@ -21,6 +22,7 @@ object AppData {
     var connectorListeners: MutableList<IConnector> = mutableListOf()
     var connectionListeners: MutableList<IConnection> = mutableListOf()
     var dialogListeners: MutableList<IDialog> = mutableListOf()
+    var refreshListeners: MutableList<IRefresh> = mutableListOf()
 
     var connectionStatus = ConnectionStatus.NOT_CONNECTED
 
