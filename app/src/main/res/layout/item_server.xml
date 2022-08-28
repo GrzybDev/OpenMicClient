@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_weight="1"
-        android:contentDescription="@string/Icon_ServerCompatibility"
+        android:contentDescription="ICON_SERVER_CONN"
         app:srcCompat="@drawable/ic_baseline_not_verified_48"
         tools:ignore="ImageContrastCheck" />
 
