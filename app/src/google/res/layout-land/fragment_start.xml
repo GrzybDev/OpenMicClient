@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:adSize="MEDIUM_RECTANGLE"
-                app:adUnitId="@string/AD_UNIT_ID_START_TOP"
+                app:adUnitId="@string/AD_UNIT_ID_START"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/startDesc" />
