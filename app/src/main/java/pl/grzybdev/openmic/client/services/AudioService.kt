@@ -53,10 +53,10 @@ class AudioService : Service() {
                 else -> {}
             }
 
-            return START_NOT_STICKY
+            return START_STICKY
         }
 
-        return START_NOT_STICKY
+        return START_STICKY
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
