@@ -12,8 +12,6 @@ import pl.grzybdev.openmic.client.singletons.AppData
 class RefreshSignalReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("RefreshSignalReceiver", "onReceive (${intent.action}")
-
         if (intent.action == "RefreshUI") {
             Log.d(javaClass.name, "Refreshing UI...")
             notifyAllListeners()
