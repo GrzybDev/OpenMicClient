@@ -5,5 +5,6 @@ enum class ConnectionStatus {
     CONNECTING,
     CONNECTED,
     DISCONNECTING,
-    DISCONNECTED
+    DISCONNECTED,
+    SELECTING_SERVER_WIFI,
 }
