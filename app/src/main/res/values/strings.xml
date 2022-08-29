@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">OpenMic Client</string>
 
-    <!-- Intro Fragment -->
+    <!-- Intro Activity -->
     <string name="intro_first_slide_title">Welcome to OpenMic Client!</string>
     <string name="intro_first_slide_description">This is app that allows you to connect to any OpenMic Server, so you can use microphone from your phone as virtual microphone on your PC!</string>
     <string name="intro_permission_slide_title">Before we start…</string>
@@ -15,7 +15,7 @@
     <string name="intro_foss_slide_title">You\'re using FOSS version</string>
     <string name="intro_foss_slide_description">This version of OpenMic Client does not contain any closed-source code, it doesn\'t provide useful analytics to developer and does not contain ads.\n\nInstead of watching annoying ads - make an donation 😊 if you find this app useful or if you make any professional use. Thanks!</string>
 
-    <!-- Main Fragment -->
+    <!-- Main Activity -->
     <string name="action_settings">Settings</string>
     <string name="action_donate">Donate to Author</string>
     <string name="action_privacy_policy">Privacy Policy</string>
@@ -23,7 +23,7 @@
     <string name="action_tutorial">Tutorial</string>
     <string name="action_about">About</string>
 
-    <!-- Main Fragment | Start Fragment -->
+    <!-- Main Activity | Start Fragment -->
     <string name="start_fragment_title">Let\'s get started!</string>
     <string name="start_fragment_description">Please select how you want to connect with PC</string>
     <string name="start_fragment_section_wired">Wired</string>
@@ -36,9 +36,11 @@
     <string name="start_fragment_status_usb_connected_no_server">OpenMic Server seems to not be running on connected USB device</string>
     <string name="start_fragment_status_usb_checking">Checking if OpenMic Server is running on connected USB device…</string>
     <string name="start_fragment_status_usb_ready">Your phone is connected to USB device with OpenMic Server running</string>
+    <string name="start_fragment_status_wifi_not_ready">Your phone is not connected to any Wi-Fi network</string>
+    <string name="start_fragment_status_wifi_ready">Phone is connected to Wi-Fi network, you can now find servers running in this network</string>
     <string name="start_fragment_icon_connection_status">Connection Status</string>
 
-    <!-- Main Fragment | Connecting Fragment -->
+    <!-- Main Activity | Connecting Fragment -->
     <string name="connecting_fragment_title">Connecting to PC…</string>
     <string name="connecting_fragment_description">This should not take long…</string>
 
@@ -50,7 +52,7 @@
     <string name="connecting_fragment_disconnect_action_yes">Yes</string>
     <string name="connecting_fragment_disconnect_action_no">No</string>
 
-    <!-- Main Fragment | Connected Fragment -->
+    <!-- Main Activity | Connected Fragment -->
     <string name="connected_fragment_title">We can hear you!</string>
     <string name="connected_fragment_description">Now we\'re transmitting your beautiful voice to your PC!</string>
     <string name="connected_fragment_btn_disconnect">Disconnect</string>
@@ -58,9 +60,14 @@
     <string name="connected_fragment_btn_unmute">Unmute</string>
     <string name="connected_fragment_volume_slider_title">Volume</string>
 
-    <!-- Main Fragment | Disconnecting Fragment -->
+    <!-- Main Activity | Disconnecting Fragment -->
     <string name="disconnecting_fragment_title">Disconnecting from PC…</string>
     <string name="disconnecting_fragment_description">This should not take long…</string>
+
+    <!-- Main Activityg | Wi-Fi Server Select Fragment -->
+    <string name="wifi_server_select_fragment_title">Select Server</string>
+    <string name="wifi_server_select_fragment_description">Please select server you want to connect to</string>
+    <string name="wifi_server_select_fragment_looking_for_servers">Looking for servers…</string>
 
     <!-- Dialog | Server Error -->
     <string name="dialog_srverr_title">Oh no! Server returned error</string>
@@ -123,4 +130,6 @@
     <string name="PRIVACY_POLICY_URL" translatable="false">https://openmic.grzyb.dev/privacy</string>
     <string name="FAQ_URL" translatable="false">https://openmic.grzyb.dev/faq</string>
     <string name="TUTORIAL_URL" translatable="false">https://openmic.grzyb.dev/tutorial</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
