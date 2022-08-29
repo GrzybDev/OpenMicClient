@@ -17,7 +17,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.GoogleHelper
+import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.network.Connector
 import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
 import pl.grzybdev.openmic.client.interfaces.IConnector
@@ -74,6 +76,12 @@ class StartFragment : Fragment(), IConnector {
 
         usbBtn.setOnClickListener {
             AppData.openmic.connectTo(requireContext(), Connector.USB, getString(R.string.INTERNAL_USB_ADDRESS))
+        }
+
+        val wifiBtn: Button = view.findViewById(R.id.wifiBtn)
+
+        wifiBtn.setOnClickListener {
+            OpenMic.changeConnectionStatus(requireContext(), ConnectionStatus.SELECTING_SERVER_WIFI)
         }
 
         if (BuildConfig.FLAVOR == "google")
@@ -159,11 +167,15 @@ class StartFragment : Fragment(), IConnector {
 
         when (status) {
             ConnectorState.NOT_READY -> {
-
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_wifi_not_ready)
             }
 
             ConnectorState.READY -> {
-
+                button.isEnabled = true
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_wifi_ready)
             }
 
             else -> {}
