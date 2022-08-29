@@ -54,6 +54,9 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
     lateinit var sharedPrefs: SharedPreferences
 
+    lateinit var wifiLock: WifiManager.WifiLock
+    lateinit var powerLock: PowerManager.WakeLock
+
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
@@ -115,6 +118,22 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             ConnectionStatus.DISCONNECTING -> navController.navigate(R.id.DisconnectingFragment)
             ConnectionStatus.DISCONNECTED -> navController.navigate(R.id.MainFragment)
         }
+
+        val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "OpenMic:WifiLock")
+
+        val pm = applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+        powerLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "OpenMic:PowerLock")
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (wifiLock.isHeld)
+            wifiLock.release()
+
+        if (powerLock.isHeld)
+            powerLock.release()
     }
 
     override fun onDestroy() {
