@@ -1,12 +1,15 @@
 package pl.grzybdev.openmic.client.activities
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.os.PowerManager
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -117,6 +120,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             ConnectionStatus.CONNECTED -> navController.navigate(R.id.ConnectedFragment)
             ConnectionStatus.DISCONNECTING -> navController.navigate(R.id.DisconnectingFragment)
             ConnectionStatus.DISCONNECTED -> navController.navigate(R.id.MainFragment)
+            ConnectionStatus.SELECTING_SERVER_WIFI -> navController.navigate(R.id.WiFiServerSelect)
         }
 
         val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -169,6 +173,13 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     // Do nothing
                 }
                 .show()
+        }
+        else if (AppData.connectionStatus == ConnectionStatus.SELECTING_SERVER_WIFI)
+        {
+            OpenMic.changeConnectionStatus(this, ConnectionStatus.NOT_CONNECTED)
+
+            val navController = findNavController(R.id.nav_host_fragment_content_main)
+            navController.navigateUp()
         }
         else if (AppData.connectionStatus > ConnectionStatus.CONNECTING)
         {
@@ -288,6 +299,10 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 ConnectionStatus.DISCONNECTED -> {
                     navController.navigate(R.id.action_disconnected)
                     OpenMic.changeConnectionStatus(this, ConnectionStatus.NOT_CONNECTED)
+                }
+
+                ConnectionStatus.SELECTING_SERVER_WIFI -> {
+                    navController.navigate(R.id.action_select_server_wifi)
                 }
             }
         }
