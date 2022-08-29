@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_connect"
             app:destination="@id/ConnectingFragment" />
+
+        <action
+            android:id="@+id/action_select_server_wifi"
+            app:destination="@id/WiFiServerSelect" />
     </fragment>
 
     <fragment
@@ -51,5 +55,19 @@
         <action
             android:id="@+id/action_disconnected"
             app:destination="@id/MainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/WiFiServerSelect"
+        android:name="pl.grzybdev.openmic.client.activities.fragments.WiFiServerSelectFragment"
+        tools:layout="@layout/fragment_wi_fi_server_select">
+
+        <action
+            android:id="@+id/action_back"
+            app:destination="@id/MainFragment" />
+
+        <action
+            android:id="@+id/action_connect"
+            app:destination="@id/ConnectingFragment" />
     </fragment>
 </navigation>
