@@ -1,13 +1,14 @@
 package pl.grzybdev.openmic.client.network
 
+import android.util.Log
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.singletons.AppData
 
-class Listener : WebSocketListener() {
+class Listener(private var socket: Any?) : WebSocketListener() {
 
-    private var socket: WebSocket? = null
     private var forceDisconnected = false
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -31,7 +32,8 @@ class Listener : WebSocketListener() {
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         socket = webSocket
 
-        handleDisconnect()
+        val unknownError = AppData.resources?.getString(R.string.dialog_failed_to_connect) ?: ""
+        handleDisconnect(reason = t.message ?: unknownError)
     }
 
     fun handleDisconnect(code: Int = 1000, reason: String = "", client_initiated: Boolean = false)
@@ -40,6 +42,6 @@ class Listener : WebSocketListener() {
             return
 
         forceDisconnected = true
-        socket?.let { AppData.openmic.client.handleDisconnect(it, code, reason, client_initiated) }
+        socket.let { AppData.openmic.client.handleDisconnect(it, code, reason, client_initiated) }
     }
 }
