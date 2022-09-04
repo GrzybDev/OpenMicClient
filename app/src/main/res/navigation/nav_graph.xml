@@ -17,6 +17,10 @@
         <action
             android:id="@+id/action_select_server_wifi"
             app:destination="@id/WiFiServerSelect" />
+
+        <action
+            android:id="@+id/action_select_device_bt"
+            app:destination="@id/BTDeviceSelect" />
     </fragment>
 
     <fragment
@@ -61,6 +65,20 @@
         android:id="@+id/WiFiServerSelect"
         android:name="pl.grzybdev.openmic.client.activities.fragments.WiFiServerSelectFragment"
         tools:layout="@layout/fragment_wi_fi_server_select">
+
+        <action
+            android:id="@+id/action_back"
+            app:destination="@id/MainFragment" />
+
+        <action
+            android:id="@+id/action_connect"
+            app:destination="@id/ConnectingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/BTDeviceSelect"
+        android:name="pl.grzybdev.openmic.client.activities.fragments.BTDeviceSelectFragment"
+        tools:layout="@layout/fragment_bt_device_select">
 
         <action
             android:id="@+id/action_back"
