@@ -122,6 +122,19 @@
     <string name="audio_service_notification_btn_mute">Mute</string>
     <string name="audio_service_notification_btn_unmute">Unmute</string>
 
+    <!-- OS Strings -->
+    <string name="os_unknown">Unknown</string>
+    <string name="os_windows">Windows</string>
+    <string name="os_macos">Mac OS</string>
+    <string name="os_linux">Linux</string>
+    <string name="os_linux_arch">Arch Linux</string>
+    <string name="os_linux_debian">Debian</string>
+    <string name="os_linux_fedora">Fedora</string>
+    <string name="os_linux_manjaro">Manjaro</string>
+    <string name="os_linux_mint">Linux Mint</string>
+    <string name="os_linux_pop">Pop! OS</string>
+    <string name="os_linux_ubuntu">Ubuntu</string>
+
     <!-- Settings Keys -->
     <string name="PREFERENCE_APP" translatable="false">OpenMic</string>
     <string name="PREFERENCE_APP_INTRO_SHOWN" translatable="false">intro_shown</string>
