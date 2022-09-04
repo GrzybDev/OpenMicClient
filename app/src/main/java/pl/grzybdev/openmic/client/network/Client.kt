@@ -73,10 +73,10 @@ class Client(val context: Context?, private val connector: Connector?) {
         }
     }
 
-    fun handleDisconnect(socket: Any, code: Int = 1000, reason: String = "", client_initiated: Boolean)
+    fun handleDisconnect(socket: Any?, code: Int = 1000, reason: String = "", client_initiated: Boolean)
     {
         if (context == null) { return }
-        this.socket = socket
+        if (this.socket != null) { this.socket = socket }
 
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTING)
 
@@ -90,8 +90,11 @@ class Client(val context: Context?, private val connector: Connector?) {
             val webSocket = socket as WebSocket
             webSocket.close(code, reason)
         } else {
-            val btSocket = socket as BluetoothSocket
-            btSocket.close()
+            if (socket != null)
+            {
+                val btSocket = socket as BluetoothSocket
+                btSocket.close()
+            }
         }
 
         ServerData.id = ""
@@ -110,8 +113,12 @@ class Client(val context: Context?, private val connector: Connector?) {
             val webSocket = socket as WebSocket
             webSocket.send(Json.encodeToString(packet))
         } else {
-            val btSocket = socket as BluetoothSocket
-            btSocket.outputStream.write(Json.encodeToString(packet).toByteArray())
+            try {
+                val btSocket = socket as BluetoothSocket
+                btSocket.outputStream.write(Json.encodeToString(packet).toByteArray())
+            } catch (e: Exception) {
+                Log.e(javaClass.name, "Error sending packet: ${e.message}")
+            }
         }
     }
 
@@ -120,8 +127,12 @@ class Client(val context: Context?, private val connector: Connector?) {
             val webSocket = socket as WebSocket
             webSocket.send(packet.toByteString())
         } else {
-            val btSocket = socket as BluetoothSocket
-            btSocket.outputStream.write(packet)
+            try {
+                val btSocket = socket as BluetoothSocket
+                btSocket.outputStream.write(packet)
+            } catch (e: Exception) {
+                Log.e(javaClass.name, "Error sending packet: ${e.message}")
+            }
         }
     }
 }
