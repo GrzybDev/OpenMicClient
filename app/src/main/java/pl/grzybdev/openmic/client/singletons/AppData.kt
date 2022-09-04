@@ -5,10 +5,7 @@ import android.content.res.Resources
 import pl.grzybdev.openmic.client.OpenMic
 import pl.grzybdev.openmic.client.enumerators.network.ConnectionStatus
 import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
-import pl.grzybdev.openmic.client.interfaces.IConnection
-import pl.grzybdev.openmic.client.interfaces.IConnector
-import pl.grzybdev.openmic.client.interfaces.IDialog
-import pl.grzybdev.openmic.client.interfaces.IRefresh
+import pl.grzybdev.openmic.client.interfaces.*
 import pl.grzybdev.openmic.client.network.Audio
 import java.util.*
 
