@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
     lateinit var sharedPrefs: SharedPreferences
 
-    lateinit var wifiLock: WifiManager.WifiLock
-    lateinit var powerLock: PowerManager.WakeLock
+    private lateinit var wifiLock: WifiManager.WifiLock
+    private lateinit var powerLock: PowerManager.WakeLock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
