@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             ConnectionStatus.DISCONNECTING -> navController.navigate(R.id.DisconnectingFragment)
             ConnectionStatus.DISCONNECTED -> navController.navigate(R.id.MainFragment)
             ConnectionStatus.SELECTING_SERVER_WIFI -> navController.navigate(R.id.WiFiServerSelect)
+            ConnectionStatus.SELECTING_DEVICE_BT -> navController.navigate(R.id.BTDeviceSelect)
         }
 
         val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -175,7 +176,8 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 }
                 .show()
         }
-        else if (AppData.connectionStatus == ConnectionStatus.SELECTING_SERVER_WIFI)
+        else if (AppData.connectionStatus == ConnectionStatus.SELECTING_SERVER_WIFI
+            || AppData.connectionStatus == ConnectionStatus.SELECTING_DEVICE_BT)
         {
             OpenMic.changeConnectionStatus(this, ConnectionStatus.NOT_CONNECTED)
 
@@ -259,7 +261,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     // You can directly ask for the permission.
                     // The registered ActivityResultCallback gets the result of this request.
                     requestPermissionLauncher.launch(
-                        Manifest.permission.RECORD_AUDIO
+                        Manifest.permission.RECORD_AUDIO,
                     )
                 }
             }
@@ -304,6 +306,10 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
                 ConnectionStatus.SELECTING_SERVER_WIFI -> {
                     navController.navigate(R.id.action_select_server_wifi)
+                }
+
+                ConnectionStatus.SELECTING_DEVICE_BT -> {
+                    navController.navigate(R.id.action_select_device_bt)
                 }
             }
         }
