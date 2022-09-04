@@ -10,8 +10,12 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import pl.grzybdev.openmic.client.OpenMic
+import pl.grzybdev.openmic.client.dataclasses.ServerEntry
+import pl.grzybdev.openmic.client.enumerators.ServerOS
+import pl.grzybdev.openmic.client.enumerators.ServerVersion
 import pl.grzybdev.openmic.client.enumerators.network.Connector
 import pl.grzybdev.openmic.client.enumerators.network.ConnectorState
+import pl.grzybdev.openmic.client.singletons.ServerData
 
 class BTStateReceiver : BroadcastReceiver() {
 
@@ -33,6 +37,9 @@ class BTStateReceiver : BroadcastReceiver() {
 
                 if (device?.name != null) {
                     Log.d(javaClass.name, "Found Bluetooth device: ${device.name}")
+
+                    ServerData.foundServers[device.address] = ServerEntry(device.name, device.address, ServerVersion.UNKNOWN, ServerOS.UNKNOWN, device.address, Connector.Bluetooth)
+                    OpenMic.refreshUI(context)
                 }
             }
 
