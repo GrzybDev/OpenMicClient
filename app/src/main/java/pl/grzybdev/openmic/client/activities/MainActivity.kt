@@ -127,6 +127,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         wifiLock = wm.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "OpenMic:WifiLock")
 
         val pm = applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+        @Suppress("DEPRECATION")
         powerLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "OpenMic:PowerLock")
     }
 
