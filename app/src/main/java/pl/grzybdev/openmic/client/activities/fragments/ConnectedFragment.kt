@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import pl.grzybdev.openmic.client.BuildConfig
+import pl.grzybdev.openmic.client.GoogleHelper
 import pl.grzybdev.openmic.client.R
 import pl.grzybdev.openmic.client.interfaces.IRefresh
 import pl.grzybdev.openmic.client.network.messages.client.StreamVolume
@@ -72,6 +74,12 @@ class ConnectedFragment : Fragment(), IRefresh {
                 volumeSlider.progress = (defaultVol * 100).toInt()
                 AppData.openmic.client.sendPacket(StreamVolume(volumeSlider.progress))
             }
+        }
+
+        if (BuildConfig.FLAVOR == "google")
+        {
+            GoogleHelper.showAd(view.findViewById(R.id.adView_stream_top))
+            GoogleHelper.showAd(view.findViewById(R.id.adView_stream_bottom))
         }
 
         onRefresh()
