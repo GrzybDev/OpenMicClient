@@ -1,5 +1,6 @@
 package pl.grzybdev.openmic.client.activities.fragments
 
+import android.annotation.SuppressLint
 import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.grzybdev.openmic.client.R
-import pl.grzybdev.openmic.client.adapters.ServerListAdapter
 import pl.grzybdev.openmic.client.interfaces.IRefresh
 import pl.grzybdev.openmic.client.receivers.signals.RefreshSignalReceiver
 import pl.grzybdev.openmic.client.singletons.AppData
@@ -37,14 +37,13 @@ class WiFiServerSelectFragment : Fragment(), IRefresh {
         super.onViewCreated(view, savedInstanceState)
 
         val serverList: RecyclerView = view.findViewById(R.id.availableServers)
-        ServerData.listAdapter.setContext(requireActivity())
 
         serverList.apply {
             // vertical layout
             layoutManager = LinearLayoutManager(requireContext())
 
             // set adapter
-            adapter = ServerData.listAdapter
+            adapter = ServerData.srvListAdapter
         }
     }
 
@@ -52,15 +51,23 @@ class WiFiServerSelectFragment : Fragment(), IRefresh {
         super.onResume()
 
         AppData.openmic.startWirelessScan(requireActivity())
+
+        ServerData.foundServers.clear()
+        ServerData.foundServersTimestamps.clear()
+
+        onRefresh()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
         refreshSignal.removeListener(this)
+        activity?.unregisterReceiver(refreshSignal)
+
         AppData.openmic.stopWirelessScan()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onRefresh() {
         val progressText = view?.findViewById<TextView>(R.id.serverPick_lookingTitle)
         val progressBar = view?.findViewById<ProgressBar>(R.id.serverPick_progressBar)
@@ -77,6 +84,8 @@ class WiFiServerSelectFragment : Fragment(), IRefresh {
             progressText.visibility = View.VISIBLE
             progressBar.visibility = View.VISIBLE
         }
+
+        ServerData.srvListAdapter.notifyDataSetChanged()
     }
 
 }
