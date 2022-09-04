@@ -26,15 +26,15 @@ data class AuthCodeVerify(
 
 class AuthPacket {
     companion object {
-        fun handle(context: Context, socket: Any, type: Message, data: String) {
+        fun handle(context: Context, type: Message, data: String) {
             when (type) {
-                Message.AUTH_CLIENT -> handleAuthClient(context, socket, data)
+                Message.AUTH_CLIENT -> handleAuthClient(context, data)
                 Message.AUTH_CODE_VERIFY -> handleCodeVerify(context)
                 else -> {}
             }
         }
 
-        private fun handleAuthClient(context: Context, socket: Any, data: String) {
+        private fun handleAuthClient(context: Context, data: String) {
             val packet = Json.decodeFromString<AuthClient>(data)
 
             val knownDevices: Set<String> = AppData.sharedPrefs?.getStringSet(context.getString(R.string.PREFERENCE_APP_KNOWN_DEVICES), mutableSetOf()) as Set<String>
