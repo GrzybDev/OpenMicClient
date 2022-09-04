@@ -36,8 +36,13 @@
     <string name="start_fragment_status_usb_connected_no_server">OpenMic Server seems to not be running on connected USB device</string>
     <string name="start_fragment_status_usb_checking">Checking if OpenMic Server is running on connected USB device…</string>
     <string name="start_fragment_status_usb_ready">Your phone is connected to USB device with OpenMic Server running</string>
+    <string name="start_fragment_status_usb_no_permissions">This app does not have required permission (Access to Internet) to use USB connection method</string>
     <string name="start_fragment_status_wifi_not_ready">Your phone is not connected to any Wi-Fi network</string>
     <string name="start_fragment_status_wifi_ready">Phone is connected to Wi-Fi network, you can now find servers running in this network</string>
+    <string name="start_fragment_status_wifi_no_permissions">This app does not have required permission (Access to Internet) to use Wi-Fi connection method</string>
+    <string name="start_fragment_status_bt_not_ready">Bluetooth is either not available or not enabled on this device!</string>
+    <string name="start_fragment_status_bt_ready">Bluetooth is enabled on this device, you can now select devices you want to connect to</string>
+    <string name="start_fragment_status_bt_no_permissions">This app does not have required permission (Bluetooth/Localization) to use Bluetooth connection method</string>
     <string name="start_fragment_icon_connection_status">Connection Status</string>
 
     <!-- Main Activity | Connecting Fragment -->
@@ -64,10 +69,22 @@
     <string name="disconnecting_fragment_title">Disconnecting from PC…</string>
     <string name="disconnecting_fragment_description">This should not take long…</string>
 
-    <!-- Main Activityg | Wi-Fi Server Select Fragment -->
+    <!-- Main Activity | Wi-Fi Server Select Fragment -->
     <string name="wifi_server_select_fragment_title">Select Server</string>
     <string name="wifi_server_select_fragment_description">Please select server you want to connect to</string>
     <string name="wifi_server_select_fragment_looking_for_servers">Looking for servers…</string>
+    <string name="wifi_server_placeholder">Server version</string>
+    <string name="wifi_server_connect">Connect to this server</string>
+
+    <!-- Main Activity | BT Device Select Fragment -->
+    <string name="bt_device_select_fragment_title">Select Device</string>
+    <string name="bt_device_select_fragment_description">Please select device you want to connect to</string>
+    <string name="bt_device_select_fragment_looking_for_servers">Looking for devices…</string>
+    <string name="bt_device_placeholder">Device</string>
+    <string name="bt_device_connect">Connect to this device</string>
+    <string name="bt_connector_failed_to_start_discovery">Failed to start bluetooth discovery, aborting…</string>
+    <string name="bt_connector_failed_to_connect">Failed to create bluetooth socket, probably OpenMic Server is not running on target device!</string>
+    <string name="bt_connector_failed_to_connect_title">Bluetooth error!</string>
 
     <!-- Dialog | Server Error -->
     <string name="dialog_srverr_title">Oh no! Server returned error</string>
@@ -84,6 +101,7 @@
     <string name="dialog_disconnect_auth_dismissed">You dismissed Authentication Dialog and have been disconnected from server</string>
     <string name="dialog_disconnect_no_reason">Server did not give reason for disconnect</string>
     <string name="dialog_disconnect_unknown_error">Server returned unknown error (%1$s)</string>
+    <string name="dialog_failed_to_connect">Failed to connect (Unknown Error)</string>
 
     <!-- Dialog | Config Not Compatible -->
     <string name="dialog_client_cfg_error_title">Server does not support client audio settings</string>
