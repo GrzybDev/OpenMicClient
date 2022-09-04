@@ -237,6 +237,10 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TUTORIAL_URL))))
                 true
             }
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
