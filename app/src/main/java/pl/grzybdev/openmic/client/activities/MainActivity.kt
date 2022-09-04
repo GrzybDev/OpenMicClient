@@ -346,6 +346,15 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     }
                 }
 
+                DialogType.BLUETOOTH_CONNECTION_ERROR -> {
+                    builder.setTitle(getString(R.string.bt_connector_failed_to_connect_title))
+                    builder.setMessage(getString(R.string.bt_connector_failed_to_connect))
+
+                    builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) {
+                            _, _ ->
+                    }
+                }
+
                 DialogType.CLIENT_CONFIG_NOT_COMPATIBLE,
                 DialogType.CLIENT_CONFIG_INVALID,
                 DialogType.SERVER_CONFIG_NOT_COMPATIBLE -> {
