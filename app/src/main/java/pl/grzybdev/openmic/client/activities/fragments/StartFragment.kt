@@ -1,8 +1,10 @@
 package pl.grzybdev.openmic.client.activities.fragments
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import pl.grzybdev.openmic.client.BuildConfig
@@ -36,6 +39,8 @@ class StartFragment : Fragment(), IConnector {
     private val usbReceiver: USBStateReceiver = USBStateReceiver()
     private val wifiReceiver: WifiStateReceiver = WifiStateReceiver()
     private val btReceiver: BTStateReceiver = BTStateReceiver()
+
+    private var usbStateLock: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,10 +89,21 @@ class StartFragment : Fragment(), IConnector {
             OpenMic.changeConnectionStatus(requireContext(), ConnectionStatus.SELECTING_SERVER_WIFI)
         }
 
+        val btBtn: Button = view.findViewById(R.id.btBtn)
+
+        btBtn.setOnClickListener {
+            OpenMic.changeConnectionStatus(requireContext(), ConnectionStatus.SELECTING_DEVICE_BT)
+        }
+
         if (BuildConfig.FLAVOR == "google")
             GoogleHelper.showAd(view.findViewById(R.id.start_adView))
 
         onUSBStateChange(AppData.usbState)
+
+        if (OpenMic.isBluetoothEnabled(requireContext()))
+            onBluetoothStateChange(ConnectorState.READY)
+        else
+            onBluetoothStateChange(ConnectorState.NOT_READY)
     }
 
     override fun onUSBStateChange(status: ConnectorState) {
@@ -115,13 +131,19 @@ class StartFragment : Fragment(), IConnector {
             }
 
             ConnectorState.USB_CONNECTED -> {
+                if (usbStateLock)
+                    return
+
                 button.isEnabled = false
 
                 progressBar.visibility = View.VISIBLE
                 statusIcon.visibility = View.GONE
                 statusText.text = ""
 
-                AppData.openmic.usbCheck(requireContext(), true)
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED)
+                    AppData.openmic.usbCheck(requireContext(), true)
+                else
+                    OpenMic.changeConnectorStatus(requireContext(), Connector.USB, ConnectorState.NO_PERMISSION)
             }
 
             ConnectorState.USB_CHECKING -> {
@@ -136,6 +158,14 @@ class StartFragment : Fragment(), IConnector {
                 button.isEnabled = false
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_usb_connected_no_server)
+            }
+
+            ConnectorState.NO_PERMISSION -> {
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_usb_no_permissions)
+
+                usbStateLock = true
             }
 
             ConnectorState.READY -> {
@@ -168,11 +198,23 @@ class StartFragment : Fragment(), IConnector {
         when (status) {
             ConnectorState.NOT_READY -> {
                 button.isEnabled = false
-                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_wifi_not_ready)
             }
 
+            ConnectorState.NO_PERMISSION -> {
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_wifi_no_permissions)
+            }
+
             ConnectorState.READY -> {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED)
+                {
+                    OpenMic.changeConnectorStatus(requireContext(), Connector.WiFi, ConnectorState.NO_PERMISSION)
+                    return
+                }
+
                 button.isEnabled = true
                 statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
                 statusText.text = getString(R.string.start_fragment_status_wifi_ready)
@@ -201,11 +243,27 @@ class StartFragment : Fragment(), IConnector {
 
         when (status) {
             ConnectorState.NOT_READY -> {
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_block_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_bt_not_ready)
+            }
 
+            ConnectorState.NO_PERMISSION -> {
+                button.isEnabled = false
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_warning_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_bt_no_permissions)
             }
 
             ConnectorState.READY -> {
+                if (!OpenMic.haveBluetoothPermissions(requireContext()))
+                {
+                    OpenMic.changeConnectorStatus(requireContext(), Connector.Bluetooth, ConnectorState.NO_PERMISSION)
+                    return
+                }
 
+                button.isEnabled = true
+                statusIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_check_48, activity?.theme))
+                statusText.text = getString(R.string.start_fragment_status_bt_ready)
             }
 
             else -> {}
