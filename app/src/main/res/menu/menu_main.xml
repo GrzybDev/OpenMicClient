@@ -32,6 +32,12 @@
             android:orderInCategory="105"
             android:title="@string/action_privacy_policy"
             android:visible="false" />
+
+        <item
+            android:id="@+id/action_tac"
+            android:orderInCategory="105"
+            android:title="@string/action_tac"
+            android:visible="false" />
     </group>
 
 </menu>
