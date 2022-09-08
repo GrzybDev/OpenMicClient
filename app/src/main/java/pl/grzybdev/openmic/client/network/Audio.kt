@@ -13,6 +13,7 @@ import pl.grzybdev.openmic.client.enumerators.audio.Action
 import pl.grzybdev.openmic.client.enumerators.audio.Channels
 import pl.grzybdev.openmic.client.enumerators.audio.Format
 import pl.grzybdev.openmic.client.network.messages.client.StreamStart
+import pl.grzybdev.openmic.client.network.messages.client.StreamVolume
 import pl.grzybdev.openmic.client.services.AudioService
 import pl.grzybdev.openmic.client.singletons.AppData
 import pl.grzybdev.openmic.client.singletons.StreamData
@@ -21,9 +22,9 @@ import pl.grzybdev.openmic.client.singletons.StreamData
 class Audio {
 
     fun initialize() {
-        StreamData.sampleRate = AppData.sharedPrefs?.getInt(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_SAMPLE_RATE), 44100)!!
-        val channels = AppData.sharedPrefs?.getInt(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_CHANNELS), AudioFormat.CHANNEL_IN_MONO)!!
-        val format = AppData.sharedPrefs?.getInt(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_FORMAT), AudioFormat.ENCODING_PCM_16BIT)!!
+        StreamData.sampleRate = AppData.sharedPrefs?.getString(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_SAMPLE_RATE), "44100")!!.toInt()
+        val channels = AppData.sharedPrefs?.getString(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_CHANNELS), AudioFormat.CHANNEL_IN_MONO.toString())!!.toInt()
+        val format = AppData.sharedPrefs?.getString(AppData.resources?.getString(R.string.PREFERENCE_APP_AUDIO_FORMAT), AudioFormat.ENCODING_PCM_16BIT.toString())!!.toInt()
 
         StreamData.bufferSize = AudioRecord.getMinBufferSize(StreamData.sampleRate, channels, format)
 
@@ -71,6 +72,12 @@ class Audio {
         StreamData.intentActive = true
 
         ContextCompat.startForegroundService(context, StreamData.intent)
+
+        val defaultVol = AppData.sharedPrefs?.getFloat(context.getString(R.string.PREFERENCE_APP_AUDIO_VOLUME), 1f)
+
+        if (defaultVol != null) {
+            AppData.openmic.client.sendPacket(StreamVolume((defaultVol * 100).toInt()))
+        }
     }
 
     fun toggleMute(context: Context)
