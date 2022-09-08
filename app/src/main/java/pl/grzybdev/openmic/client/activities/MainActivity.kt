@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        sharedPrefs = getSharedPreferences(getString(R.string.PREFERENCE_APP), MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", MODE_PRIVATE)
         AppData.sharedPrefs = sharedPrefs
 
         val deviceIDKey = getString(R.string.PREFERENCE_APP_DEVICE_ID)
@@ -201,6 +201,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         return false
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("onSupportNavigateUp()"))
     override fun onBackPressed() {
         onSupportNavigateUp()
     }
