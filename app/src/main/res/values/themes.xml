@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.OpenMicClient" parent="Base.Theme.OpenMicClient" />
+
+    <style name="Theme.OpenMicClient.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OpenMicClient.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.OpenMicClient.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
