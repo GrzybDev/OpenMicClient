@@ -72,7 +72,6 @@ class ConnectedFragment : Fragment(), IRefresh {
 
             if (defaultVol != null) {
                 volumeSlider.progress = (defaultVol * 100).toInt()
-                AppData.openmic.client.sendPacket(StreamVolume(volumeSlider.progress))
             }
         }
 
