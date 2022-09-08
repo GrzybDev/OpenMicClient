@@ -1,34 +1,41 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/network_header">
 
         <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:key="@string/PREFERENCE_APP_PORT"
+            app:title="@string/port_title"
+            android:inputType="number"
+            app:defaultValue="10000"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/audio_header">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+        <ListPreference
+            app:defaultValue="16"
+            app:entries="@array/channel_entries"
+            app:entryValues="@array/channel_values"
+            app:key="@string/PREFERENCE_APP_AUDIO_CHANNELS"
+            app:title="@string/channel_title"
+            app:useSimpleSummaryProvider="true" />
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+        <ListPreference
+            app:defaultValue="2"
+            app:entries="@array/format_entries"
+            app:entryValues="@array/format_values"
+            app:key="@string/PREFERENCE_APP_AUDIO_FORMAT"
+            app:title="@string/format_title"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="@string/PREFERENCE_APP_AUDIO_SAMPLE_RATE"
+            app:title="@string/sample_rate_title"
+            android:inputType="number"
+            app:defaultValue="44100"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
