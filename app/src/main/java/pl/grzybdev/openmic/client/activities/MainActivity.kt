@@ -213,8 +213,11 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             val item = menu.findItem(R.id.action_donate)
             item.isVisible = true
         } else {
-            val item = menu.findItem(R.id.action_privacy_policy)
-            item.isVisible = true
+            val priv = menu.findItem(R.id.action_privacy_policy)
+            priv.isVisible = true
+
+            val terms = menu.findItem(R.id.action_tac)
+            terms.isVisible = true
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -228,6 +231,10 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             }
             R.id.action_privacy_policy -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PRIVACY_POLICY_URL))))
+                true
+            }
+            R.id.action_tac -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))))
                 true
             }
             R.id.action_faq -> {
