@@ -26,6 +26,6 @@ object AppData {
     var usbState: ConnectorState = ConnectorState.UNKNOWN
     var usbTimer: TimerTask? = null
 
-    var communicationPort = 10000
+    var communicationPort = -1
     var deviceID: String = ""
 }
