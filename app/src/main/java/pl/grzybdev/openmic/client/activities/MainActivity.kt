@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         }
 
         AppData.deviceID = sharedPrefs.getString(deviceIDKey, "INVALID").toString()
+        AppData.communicationPort = sharedPrefs.getString(getString(R.string.PREFERENCE_APP_PORT), "10000")!!.toInt()
         AppData.resources = resources
 
         dialog = AlertDialog.Builder(this).create()
