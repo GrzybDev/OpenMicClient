@@ -1,7 +1,6 @@
 package pl.grzybdev.openmic.client.activities
 
 import android.Manifest
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +8,7 @@ import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import pl.grzybdev.openmic.client.BuildConfig
 import pl.grzybdev.openmic.client.R
+import pl.grzybdev.openmic.client.singletons.AppData
 
 class IntroActivity : AppIntro() {
 
@@ -98,11 +98,9 @@ class IntroActivity : AppIntro() {
         super.onDonePressed(currentFragment)
         // Decide what to do when the user clicks on "Done"
 
-        val sharedPref = getSharedPreferences(getString(R.string.PREFERENCE_APP), Context.MODE_PRIVATE)
-
-        with (sharedPref.edit()) {
-            putBoolean(getString(R.string.PREFERENCE_APP_INTRO_SHOWN), true)
-            apply()
+        with (AppData.sharedPrefs?.edit()) {
+            this?.putBoolean(getString(R.string.PREFERENCE_APP_INTRO_SHOWN), true)
+            this?.apply()
         }
 
         finish()
