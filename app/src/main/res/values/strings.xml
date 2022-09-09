@@ -193,4 +193,7 @@
     <string name="about_social_linkedin">LinkedIn</string>
     <string name="about_social_reddit">Reddit</string>
     <string name="about_social_twitter">Twitter</string>
+
+    <string name="about_contact">Send e-mail to Author using:</string>
+    <string name="about_visit_website">Visit website using:</string>
 </resources>
