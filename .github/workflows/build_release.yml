@@ -96,6 +96,10 @@ jobs:
       with:
         files: |
           ${{steps.sign_apk_google.outputs.signedReleaseFile}}
+          ${{steps.sign_apk_google.outputs.signedReleaseFile}}.md5
+          ${{steps.sign_apk_foss.outputs.signedReleaseFile}}
           ${{steps.sign_apk_foss.outputs.signedReleaseFile}}.md5
           ${{steps.sign_bundle_google.outputs.signedReleaseFile}}
+          ${{steps.sign_bundle_google.outputs.signedReleaseFile}}.md5
+          ${{steps.sign_bundle_foss.outputs.signedReleaseFile}}
           ${{steps.sign_bundle_foss.outputs.signedReleaseFile}}.md5
