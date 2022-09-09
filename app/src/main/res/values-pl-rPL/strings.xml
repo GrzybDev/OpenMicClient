@@ -39,7 +39,7 @@
     <string name="start_fragment_status_wifi_no_permissions">Ta aplikacja nie ma wymaganych uprawnień (Dostęp do Internetu) aby móc łączyć się za pomocą Wi-Fi</string>
     <string name="start_fragment_status_bt_not_ready">Bluetooth jest albo nie dostępny na tym urządzeniu albo nie jest włączony!</string>
     <string name="start_fragment_status_bt_ready">Bluetooth jest włączony na tym urządzeniu, możesz wybrać urządzenie z którym chcesz się połączyć</string>
-    <string name="start_fragment_status_bt_no_permissions">Ta aplikacja nei ma wymaganych uprawnień (Bluetooth/Lokalizacja) aby móc łączyć się za pomocą Bluetooth</string>
+    <string name="start_fragment_status_bt_no_permissions">Ta aplikacja nie ma wymaganych uprawnień (Bluetooth/Lokalizacja) aby móc łączyć się za pomocą Bluetooth</string>
     <string name="start_fragment_icon_connection_status">Status Połączenia</string>
     <string name="connecting_fragment_title">Łączenie z komputerem…</string>
     <string name="connecting_fragment_description">To nie powinno trwać długo…</string>
