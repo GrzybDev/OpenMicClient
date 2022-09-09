@@ -227,23 +227,23 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_donate -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.INTERNAL_DONATE_URL))))
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.INTERNAL_DONATE_URL))), getString(R.string.about_visit_website)))
                 true
             }
             R.id.action_privacy_policy -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PRIVACY_POLICY_URL))))
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PRIVACY_POLICY_URL))), getString(R.string.about_visit_website)))
                 true
             }
             R.id.action_tac -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))))
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))), getString(R.string.about_visit_website)))
                 true
             }
             R.id.action_faq -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.FAQ_URL))))
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.FAQ_URL))), getString(R.string.about_visit_website)))
                 true
             }
             R.id.action_tutorial -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TUTORIAL_URL))))
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TUTORIAL_URL))), getString(R.string.about_visit_website)))
                 true
             }
             R.id.action_settings -> {
