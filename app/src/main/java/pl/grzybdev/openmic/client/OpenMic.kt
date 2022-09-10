@@ -108,7 +108,6 @@ class OpenMic : IConnection {
         }
 
         fun getServerOS(kernelType: String): ServerOS {
-            Log.d("OpenMic", "Kernel type: $kernelType")
             val os = ServerOS.values().find { it.kernelType == kernelType.lowercase() }
             return os ?: ServerOS.LINUX // Assume it's linux if kernelType is not specifically "unknown"
         }
