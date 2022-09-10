@@ -76,7 +76,7 @@ class Client(val context: Context?, private val connector: Connector?) {
     fun handleDisconnect(socket: Any?, code: Int = 1000, reason: String = "", client_initiated: Boolean)
     {
         if (context == null) { return }
-        if (this.socket != null) { this.socket = socket }
+        if (this.socket == null) { this.socket = socket }
 
         OpenMic.changeConnectionStatus(context, ConnectionStatus.DISCONNECTING)
 
@@ -86,15 +86,19 @@ class Client(val context: Context?, private val connector: Connector?) {
             StreamData.intentActive = false
         }
 
-        if (connector != Connector.Bluetooth) {
-            val webSocket = socket as WebSocket
-            webSocket.close(code, reason)
-        } else {
-            if (socket != null)
-            {
-                val btSocket = socket as BluetoothSocket
+        if (this.socket != null) {
+            if (connector != Connector.Bluetooth) {
+                Log.d(javaClass.name, "Closing websocket...")
+
+                val webSocket = this.socket as WebSocket
+                webSocket.close(code, reason)
+            } else {
+                Log.d(javaClass.name, "Closing bluetooth socket...")
+                val btSocket = this.socket as BluetoothSocket
                 btSocket.close()
             }
+        } else {
+            Log.d(javaClass.name, "Socket is null, not closing...")
         }
 
         ServerData.id = ""
