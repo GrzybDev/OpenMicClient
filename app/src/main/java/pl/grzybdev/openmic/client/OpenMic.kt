@@ -297,7 +297,12 @@ class OpenMic : IConnection {
         Log.d(javaClass.name, "stopWirelessScan: Stopping broadcast thread...")
 
         broadcastThread?.interrupt()
-        broadcastThread?.join()
+
+        try {
+            broadcastThread?.join()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
 
         broadcastThread = null
     }
