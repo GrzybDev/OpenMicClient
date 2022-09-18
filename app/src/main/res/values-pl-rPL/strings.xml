@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Klient OpenMic</string>
+    <string name="app_name">OpenMic</string>
     <string name="intro_first_slide_title">Witaj w aplikacji klienckiej OpenMic!</string>
     <string name="intro_first_slide_description">Ta aplikacja pozwoli ci połączyć się z Serwerami OpenMic, umożliwiając użycie mikrofonu telefonu jako wirtualnego mikrofonu w twoim komputerze!</string>
     <string name="intro_permission_slide_title">Jednak zanim zaczniemy…</string>

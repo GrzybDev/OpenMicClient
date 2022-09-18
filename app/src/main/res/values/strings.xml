@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenMic Client</string>
+    <string name="app_name">OpenMic</string>
 
     <!-- Intro Activity -->
     <string name="intro_first_slide_title">Welcome to OpenMic Client!</string>
