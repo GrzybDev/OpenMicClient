@@ -50,6 +50,16 @@ class IntroActivity : AppIntro() {
             imageDrawable = R.drawable.ic_baseline_code_256
         ))
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            askForPermissions(
+                permissions = arrayOf(
+                    Manifest.permission.POST_NOTIFICATIONS,
+                ),
+                slideNumber = 1,
+                required = false
+            )
+        }
+
         askForPermissions(
             permissions = arrayOf(
                 Manifest.permission.RECORD_AUDIO,
@@ -63,6 +73,7 @@ class IntroActivity : AppIntro() {
                 permissions = arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT
                 ),
                 slideNumber = 3,
                 required = false

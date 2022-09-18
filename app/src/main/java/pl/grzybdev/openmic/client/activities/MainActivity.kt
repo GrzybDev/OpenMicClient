@@ -283,6 +283,24 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 }
             }
 
+            var requestBluetooth =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+
+            val requestMultiplePermissions =
+                registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                requestMultiplePermissions.launch(
+                    arrayOf(
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    )
+                )
+            } else {
+                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                requestBluetooth.launch(enableBtIntent)
+            }
+
             if (BuildConfig.FLAVOR == "google")
                 GoogleHelper.showStartupAd(this, this)
         }
