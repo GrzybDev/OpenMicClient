@@ -16,6 +16,7 @@
             "GooglePlay": [
                 {
                     "type": "external",
+                    "id": "gplayPublic",
                     "url": "https://play.google.com/store/apps/details?id=pl.grzybdev.openmic.client"
                 },
                 {
