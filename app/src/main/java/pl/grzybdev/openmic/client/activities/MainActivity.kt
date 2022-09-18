@@ -1,6 +1,7 @@
 package pl.grzybdev.openmic.client.activities
 
 import android.Manifest
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -8,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.text.Editable
@@ -73,7 +75,8 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        sharedPrefs = getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", MODE_PRIVATE)
+        sharedPrefs =
+            getSharedPreferences(BuildConfig.APPLICATION_ID + "_preferences", MODE_PRIVATE)
         AppData.sharedPrefs = sharedPrefs
 
         val deviceIDKey = getString(R.string.PREFERENCE_APP_DEVICE_ID)
@@ -82,14 +85,15 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             val newID = UUID.randomUUID()
             Log.d(javaClass.name, "Device ID was not set, generated new one: $newID")
 
-            with (sharedPrefs.edit()) {
+            with(sharedPrefs.edit()) {
                 putString(deviceIDKey, newID.toString())
                 apply()
             }
         }
 
         AppData.deviceID = sharedPrefs.getString(deviceIDKey, "INVALID").toString()
-        AppData.communicationPort = sharedPrefs.getString(getString(R.string.PREFERENCE_APP_PORT), "10000")!!.toInt()
+        AppData.communicationPort =
+            sharedPrefs.getString(getString(R.string.PREFERENCE_APP_PORT), "10000")!!.toInt()
         AppData.resources = resources
 
         dialog = AlertDialog.Builder(this).create()
@@ -149,23 +153,20 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
         try {
             connectionSignal.removeListener(this)
             unregisterReceiver(connectionSignal)
-        }
-        catch (e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             Log.e(javaClass.name, "Connection signal receiver not registered")
         }
 
         try {
             dialogSignal.removeListener(this)
             unregisterReceiver(dialogSignal)
-        }
-        catch (e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             Log.e(javaClass.name, "Dialog signal receiver not registered")
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        if (AppData.connectionStatus == ConnectionStatus.CONNECTING)
-        {
+        if (AppData.connectionStatus == ConnectionStatus.CONNECTING) {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.connecting_fragment_disconnect_connecting_action))
                 .setMessage(getString(R.string.connecting_fragment_disconnect_connecting_action_description))
@@ -176,19 +177,21 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     // Do nothing
                 }
                 .show()
-        }
-        else if (AppData.connectionStatus == ConnectionStatus.SELECTING_SERVER_WIFI
-            || AppData.connectionStatus == ConnectionStatus.SELECTING_DEVICE_BT)
-        {
+        } else if (AppData.connectionStatus == ConnectionStatus.SELECTING_SERVER_WIFI
+            || AppData.connectionStatus == ConnectionStatus.SELECTING_DEVICE_BT
+        ) {
             OpenMic.changeConnectionStatus(this, ConnectionStatus.NOT_CONNECTED)
 
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             navController.navigateUp()
-        }
-        else if (AppData.connectionStatus > ConnectionStatus.CONNECTING)
-        {
+        } else if (AppData.connectionStatus > ConnectionStatus.CONNECTING) {
             AlertDialog.Builder(this)
-                .setTitle(getString(R.string.connecting_fragment_disconnect_action, ServerData.name))
+                .setTitle(
+                    getString(
+                        R.string.connecting_fragment_disconnect_action,
+                        ServerData.name
+                    )
+                )
                 .setPositiveButton(R.string.connecting_fragment_disconnect_action_yes) { _, _ ->
                     AppData.openmic.forceDisconnect()
                 }
@@ -227,23 +230,58 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_donate -> {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.INTERNAL_DONATE_URL))), getString(R.string.about_visit_website)))
+                startActivity(
+                    Intent.createChooser(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.INTERNAL_DONATE_URL))
+                        ), getString(R.string.about_visit_website)
+                    )
+                )
                 true
             }
             R.id.action_privacy_policy -> {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PRIVACY_POLICY_URL))), getString(R.string.about_visit_website)))
+                startActivity(
+                    Intent.createChooser(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.PRIVACY_POLICY_URL))
+                        ), getString(R.string.about_visit_website)
+                    )
+                )
                 true
             }
             R.id.action_tac -> {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))), getString(R.string.about_visit_website)))
+                startActivity(
+                    Intent.createChooser(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))
+                        ), getString(R.string.about_visit_website)
+                    )
+                )
                 true
             }
             R.id.action_faq -> {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.FAQ_URL))), getString(R.string.about_visit_website)))
+                startActivity(
+                    Intent.createChooser(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.FAQ_URL))
+                        ), getString(R.string.about_visit_website)
+                    )
+                )
                 true
             }
             R.id.action_tutorial -> {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.TUTORIAL_URL))), getString(R.string.about_visit_website)))
+                startActivity(
+                    Intent.createChooser(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(getString(R.string.TUTORIAL_URL))
+                        ), getString(R.string.about_visit_website)
+                    )
+                )
                 true
             }
             R.id.action_settings -> {
@@ -361,8 +399,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 DialogType.SERVER_ERROR -> {
                     builder.setTitle(getString(R.string.dialog_srverr_title))
                     builder.setMessage(data)
-                    builder.setPositiveButton(getString(R.string.dialog_srverr_btn_ok)) {
-                            _, _ ->
+                    builder.setPositiveButton(getString(R.string.dialog_srverr_btn_ok)) { _, _ ->
                     }
 
                     dialogSrvActive = true
@@ -376,8 +413,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     else
                         builder.setMessage(data)
 
-                    builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) {
-                            _, _ ->
+                    builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) { _, _ ->
                     }
                 }
 
@@ -385,8 +421,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     builder.setTitle(getString(R.string.bt_connector_failed_to_connect_title))
                     builder.setMessage(getString(R.string.bt_connector_failed_to_connect))
 
-                    builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) {
-                            _, _ ->
+                    builder.setPositiveButton(getString(R.string.dialog_disconnect_btn_ok)) { _, _ ->
                     }
                 }
 
@@ -401,8 +436,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
                     builder.setMessage(getString(R.string.dialog_cfg_error))
 
-                    builder.setPositiveButton(getString(R.string.dialog_cfg_btn_ok)) {
-                            _, _ ->
+                    builder.setPositiveButton(getString(R.string.dialog_cfg_btn_ok)) { _, _ ->
                     }
 
                     AppData.openmic.forceDisconnect()
@@ -412,8 +446,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     builder.setTitle(getString(R.string.dialog_internal_error_title))
                     builder.setMessage(getString(R.string.dialog_internal_error_desc))
 
-                    builder.setPositiveButton(getString(R.string.dialog_internal_error_btn_ok)) {
-                            _, _ ->
+                    builder.setPositiveButton(getString(R.string.dialog_internal_error_btn_ok)) { _, _ ->
                     }
 
                     dialogSrvActive = true
@@ -435,6 +468,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                         ) {
                             // Not needed
                         }
+
                         override fun onTextChanged(
                             s: CharSequence?,
                             start: Int,
@@ -446,7 +480,8 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
 
                         override fun afterTextChanged(s: Editable?) {
                             // Disable verify button if input is empty
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !TextUtils.isEmpty(s)
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled =
+                                !TextUtils.isEmpty(s)
                         }
                     })
 
@@ -477,9 +512,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                     dialogSrvActive = false
                 }
                 srvErrDialog.show()
-            }
-            else
-            {
+            } else {
                 // Ignore server disconnects when they're caused by server error
                 if (dialogSrvActive && type == DialogType.SERVER_DISCONNECT)
                     return@runOnUiThread
@@ -488,8 +521,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                 dialog.show()
             }
 
-            if (type == DialogType.AUTH)
-            {
+            if (type == DialogType.AUTH) {
                 // Disable verify button (initially)
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                 dialog.setOnCancelListener {
