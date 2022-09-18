@@ -39,6 +39,7 @@ class ConnectedFragment : Fragment(), IRefresh {
         refreshSignal.removeListener(this)
     }
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

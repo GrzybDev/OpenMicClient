@@ -19,6 +19,7 @@ import pl.grzybdev.openmic.client.singletons.ServerData
 
 class BTStateReceiver : BroadcastReceiver() {
 
+    @Suppress("DEPRECATION")
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             BluetoothDevice.ACTION_FOUND -> run {
