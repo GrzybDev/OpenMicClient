@@ -42,6 +42,11 @@ class SettingsActivity : AppCompatActivity() {
                     false
                 }
             }
+
+            val sampleRate: EditTextPreference? = findPreference(getString(R.string.PREFERENCE_APP_AUDIO_SAMPLE_RATE))
+            sampleRate?.setOnBindEditTextListener { editText ->
+                editText.inputType = android.text.InputType.TYPE_CLASS_NUMBER
+            }
         }
     }
 }
