@@ -33,6 +33,10 @@
             app:destination="@id/DisconnectingFragment" />
 
         <action
+            android:id="@+id/action_disconnected"
+            app:destination="@id/MainFragment" />
+
+        <action
             android:id="@+id/action_connected"
             app:destination="@id/ConnectedFragment" />
     </fragment>
