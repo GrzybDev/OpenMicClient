@@ -1,0 +1,32 @@
+{
+    "android": {
+        "checksum": "MD5",
+        "type": "multiple",
+        "variants": {
+            "FOSS": [
+                {
+                    "type": "direct",
+                    "file": "app-foss-release-signed.apk"
+                },
+                {
+                    "type": "direct",
+                    "file": "app-foss-release.aab"
+                }
+            ],
+            "GooglePlay": [
+                {
+                    "type": "external",
+                    "url": "https://play.google.com/store/apps/details?id=pl.grzybdev.openmic.client"
+                },
+                {
+                    "type": "direct",
+                    "file": "app-google-release-signed.apk"
+                },
+                {
+                    "type": "direct",
+                    "file": "app-google-release.aab"
+                }
+            ]
+        }
+    }
+}
