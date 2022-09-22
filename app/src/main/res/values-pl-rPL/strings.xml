@@ -79,7 +79,7 @@
     <string name="dialog_disconnect_title">Rozłączono z serwerem</string>
     <string name="dialog_disconnect_btn_ok">OK</string>
     <string name="dialog_disconnect_auth_dismissed">Anulowałeś okno autoryzacji i zostałeś rozłączony z serwerem</string>
-    <string name="dialog_disconnect_no_reason">Serwer nie podał powodu rozłączone</string>
+    <string name="dialog_disconnect_no_reason">Serwer nie podał powodu rozłączenia</string>
     <string name="dialog_disconnect_unknown_error">Serwer podał nieznany błąd (%1$s)</string>
     <string name="dialog_failed_to_connect">Nie udało się połączyć (Nieznany Błąd)</string>
     <string name="dialog_client_cfg_error_title">Serwer nie obsługuje ustawień audio klienta</string>
