@@ -48,7 +48,10 @@ class AudioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val actionInt = intent.getIntExtra("action", -1)
+        var actionInt = intent.getIntExtra("action", -1)
+
+        if (actionInt == -1)
+            actionInt = intent.getIntExtra("command", -1)
 
         if (actionInt != -1) {
             when (Action.values().find {it.code == actionInt}) {
@@ -90,7 +93,7 @@ class AudioService : Service() {
         val notificationIntent = Intent(this, MainActivity::class.java)
 
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
         } else {
             PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
@@ -105,14 +108,18 @@ class AudioService : Service() {
         val intent = Intent(this, AudioService::class.java)
 
         val disconnectIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            intent.putExtra("command", Action.DISCONNECT.code)
             PendingIntent.getService(this, Action.DISCONNECT.code, intent, PendingIntent.FLAG_MUTABLE)
         } else {
+            intent.putExtra("command", Action.DISCONNECT.code)
             PendingIntent.getService(this, Action.DISCONNECT.code, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         val toggleMuteIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            intent.putExtra("command", Action.TOGGLE_MUTE_SELF.code)
             PendingIntent.getService(this, Action.TOGGLE_MUTE_SELF.code, intent, PendingIntent.FLAG_MUTABLE)
         } else {
+            intent.putExtra("command", Action.TOGGLE_MUTE_SELF.code)
             PendingIntent.getService(this, Action.TOGGLE_MUTE_SELF.code, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
