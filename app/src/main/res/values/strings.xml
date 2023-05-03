@@ -159,13 +159,8 @@
     <string name="INTERNAL_DONATE_URL" translatable="false">https://ko-fi.com/grzybdev</string>
     <string name="INTERNAL_STATE_USB" translatable="false">usbStatus</string>
     <string name="INTERNAL_USB_ADDRESS" translatable="false">localhost</string>
-    <string name="PRIVACY_POLICY_URL" translatable="false">https://openmic.grzyb.dev/legal/privacy</string>
-    <string name="TERMS_AND_CONDITIONS_URL" translatable="false">https://openmic.grzyb.dev/legal/terms</string>
-    <string name="FAQ_URL" translatable="false">https://openmic.grzyb.dev/faq</string>
-    <string name="TUTORIAL_URL" translatable="false">https://openmic.grzyb.dev/tutorial</string>
     <string name="AUTHOR_SEND_MAIL" translatable="false">mailto:openmic@grzyb.dev</string>
     <string name="AUTHOR_WEBSITE_URL" translatable="false">https://grzyb.dev</string>
-    <string name="OPENMIC_WEBSITE_URL" translatable="false">https://openmic.grzyb.dev</string>
     <string name="OPENMIC_GITHUB_URL" translatable="false">https://github.com/GrzybDev/OpenMicClient.git</string>
     <string name="AUTHOR_LINKEDIN_URL" translatable="false">https://www.linkedin.com/in/grzybdev/</string>
     <string name="AUTHOR_REDDIT_URL" translatable="false">https://www.reddit.com/u/_GrzybDev_</string>

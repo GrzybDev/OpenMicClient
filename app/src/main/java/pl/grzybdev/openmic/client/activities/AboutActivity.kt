@@ -27,11 +27,6 @@ class AboutActivity : AppCompatActivity() {
             startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.AUTHOR_WEBSITE_URL))), getString(R.string.about_visit_website)))
         }
 
-        val openmic_webpage = findViewById<Button>(R.id.about_btn_openmic_website)
-        openmic_webpage.setOnClickListener {
-            startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.OPENMIC_WEBSITE_URL))), getString(R.string.about_visit_website)))
-        }
-
         val openmic_github = findViewById<Button>(R.id.about_btn_source)
         openmic_github.setOnClickListener {
             startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.OPENMIC_GITHUB_URL))), getString(R.string.about_visit_website)))

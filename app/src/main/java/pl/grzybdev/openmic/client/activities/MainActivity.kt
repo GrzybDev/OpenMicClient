@@ -217,11 +217,7 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
             val item = menu.findItem(R.id.action_donate)
             item.isVisible = true
         } else {
-            val priv = menu.findItem(R.id.action_privacy_policy)
-            priv.isVisible = true
-
-            val terms = menu.findItem(R.id.action_tac)
-            terms.isVisible = true
+            // Google-specific buttons
         }
 
         return super.onCreateOptionsMenu(menu)
@@ -235,50 +231,6 @@ class MainActivity : AppCompatActivity(), IConnection, IDialog {
                         Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse(getString(R.string.INTERNAL_DONATE_URL))
-                        ), getString(R.string.about_visit_website)
-                    )
-                )
-                true
-            }
-            R.id.action_privacy_policy -> {
-                startActivity(
-                    Intent.createChooser(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(getString(R.string.PRIVACY_POLICY_URL))
-                        ), getString(R.string.about_visit_website)
-                    )
-                )
-                true
-            }
-            R.id.action_tac -> {
-                startActivity(
-                    Intent.createChooser(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(getString(R.string.TERMS_AND_CONDITIONS_URL))
-                        ), getString(R.string.about_visit_website)
-                    )
-                )
-                true
-            }
-            R.id.action_faq -> {
-                startActivity(
-                    Intent.createChooser(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(getString(R.string.FAQ_URL))
-                        ), getString(R.string.about_visit_website)
-                    )
-                )
-                true
-            }
-            R.id.action_tutorial -> {
-                startActivity(
-                    Intent.createChooser(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(getString(R.string.TUTORIAL_URL))
                         ), getString(R.string.about_visit_website)
                     )
                 )

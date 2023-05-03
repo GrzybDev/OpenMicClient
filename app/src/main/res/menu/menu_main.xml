@@ -10,12 +10,6 @@
 
     <group android:id="@+id/links">
         <item
-            android:id="@+id/action_faq"
-            android:title="@string/action_faq" />
-        <item
-            android:id="@+id/action_tutorial"
-            android:title="@string/action_tutorial" />
-        <item
             android:id="@+id/action_about"
             android:title="@string/action_about" />
     </group>
@@ -27,17 +21,6 @@
             android:title="@string/action_donate"
             android:visible="false" />
 
-        <item
-            android:id="@+id/action_privacy_policy"
-            android:orderInCategory="105"
-            android:title="@string/action_privacy_policy"
-            android:visible="false" />
-
-        <item
-            android:id="@+id/action_tac"
-            android:orderInCategory="105"
-            android:title="@string/action_tac"
-            android:visible="false" />
     </group>
 
 </menu>
