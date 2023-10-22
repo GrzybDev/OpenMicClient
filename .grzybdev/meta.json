@@ -1,6 +1,6 @@
 {
   "name": "OpenMic (Client)",
-  "suite": "openmic",
+  "group": "openmic",
   "target": [1],
   "type": 0,
   "theme": 0
